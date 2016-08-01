@@ -31,11 +31,11 @@ C와 C++를 이용하여 제작 중입니다.
 -- cd <하위 디렉터리명> :: 하위 디렉터리로 이동한다<br>
 -- cd.. :: 상위 디렉터리로 이동한다<br>
 
-&nbsp;&nbsp;&nbsp;**1-1. git clone**
+&nbsp;&nbsp;&nbsp;**1-1. git clone**<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-- github에 올라와 있는 파일을 (현재 디렉터리에) 다운 받는 명령어<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-- 최초 한 번만 하면 된다.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--**사용법 :: git clone https://github.com/ssoso27/Mc_MiniGames.git**<br>
-&nbsp;&nbsp;&nbsp;**1-2. git pull**
+&nbsp;&nbsp;&nbsp;**1-2. git pull**<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-- 현재 디렉터리의 프로젝트를 github에 올라온 최신 버전으로 업데이트 하는 명령어<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-- 항상 최신 버전을 유지하기 위해, 다른 팀원이 git pull을 했다면 git push를 해야한다.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--**사용법 :: git pull**<br>
