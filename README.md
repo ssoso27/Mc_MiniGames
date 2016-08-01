@@ -34,22 +34,22 @@ C와 C++를 이용하여 제작 중입니다.
 &nbsp;&nbsp;&nbsp;**1-1. git clone**
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-- github에 올라와 있는 파일을 (현재 디렉터리에) 다운 받는 명령어<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-- 최초 한 번만 하면 된다.<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--** *사용법 :: git clone https://github.com/ssoso27/Mc_MiniGames.git*  **<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--* **사용법 :: git clone https://github.com/ssoso27/Mc_MiniGames.git** *<br>
 &nbsp;&nbsp;&nbsp;**1-2. git pull**
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-- 현재 디렉터리의 프로젝트를 github에 올라온 최신 버전으로 업데이트 하는 명령어<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-- 항상 최신 버전을 유지하기 위해, 다른 팀원이 git pull을 했다면 git push를 해야한다.<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--** *사용법 :: git pull* **<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--* **사용법 :: git pull** *<br>
 
 #### 2. git add
 -- 파일을 준비 영역에 추가하는 명령어<br>
--- ** *사용법 :: git add <파일 또는 폴더명>* **<br>
+-- * **사용법 :: git add <파일 또는 폴더명>** *<br>
 ####3. git commit
 -- (git add로 추가된) 준비 영역의 파일을 최종 확정하는 명령어<br>
--- ** *사용법 :: git commit -m <파일 또는 폴더명> [파일에 대한 설명 문구]* **<br>
+-- * **사용법 :: git commit -m <파일 또는 폴더명> [파일에 대한 설명 문구]** *<br>
 ####4. git push
 -- (git commit으로 확정된) 파일을 원격 서버에 올리는 명령어<br>
 -- 아마 처음엔 로그인 하라고 에러 메시지가 나올텐데, 침착하게 자기 아이디랑 비번을 입력하면 된다.<br>
--- ** *사용법 :: git push* **<br>
+-- * **사용법 :: git push** *<br>
 
 ####* 석 줄 요약
 -- 한 번도 clone을 안 했을 경우, clone을 한다.<br>
