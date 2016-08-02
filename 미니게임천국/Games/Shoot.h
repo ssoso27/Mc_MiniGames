@@ -56,10 +56,6 @@ namespace SB_Shoot
 
 	// ÇÔ¼ö
 
-	void Init();
-	void Update();
-	void Render();
-	void Release();
 	void Shoot();
 
 

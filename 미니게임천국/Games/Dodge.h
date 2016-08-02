@@ -50,10 +50,6 @@ namespace SH_Dodge
 	void MoveCoord(int);
 	void DotInit();
 	void StatusPrint();
-	void Init();
-	void Update();
-	void Render();
-	void Release();
 	void Dodge();
 
 }
