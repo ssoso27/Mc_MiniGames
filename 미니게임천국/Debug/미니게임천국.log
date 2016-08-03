@@ -1,6 +1,0 @@
-﻿  Main.cpp
-c:\users\samsungpc\desktop\미니게임천국\games\tetris.h(10): warning C4005: 'BOARD_WIDTH': 매크로 재정의
-  c:\users\samsungpc\desktop\미니게임천국\games\dodge.h(8): note: 'BOARD_WIDTH'의 이전 정의를 참조하십시오.
-c:\users\samsungpc\desktop\미니게임천국\games\tetris.h(11): warning C4005: 'BOARD_HEIGHT': 매크로 재정의
-  c:\users\samsungpc\desktop\미니게임천국\games\dodge.h(9): note: 'BOARD_HEIGHT'의 이전 정의를 참조하십시오.
-  미니게임천국.vcxproj -> C:\Users\samsungpc\Desktop\미니게임천국\Debug\미니게임천국.exe
