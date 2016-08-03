@@ -1,5 +1,9 @@
 #pragma once
 
+	// 상수
+
+	#define FirstX 30
+	#define FirstY 20
 
 	// 열거형
 
@@ -19,3 +23,5 @@
 	} BALL;
 
 	// 함수 원형
+
+	void BallDirect(int);
