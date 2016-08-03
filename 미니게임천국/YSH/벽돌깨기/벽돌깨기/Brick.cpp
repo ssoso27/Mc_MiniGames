@@ -1,10 +1,7 @@
 #include "Header.h"
-//#include "Brick.h"
-
+#include "Brick.h"
 
 	// 열거형 
-
-typedef enum _DIRECT {UP, UP_RIGHT, DOWN_RIGHT, DOWN, DOWN_LEFT, UP_LEFT } DIRECT;
 
 	enum ControlKeys
 	{
@@ -16,17 +13,6 @@ typedef enum _DIRECT {UP, UP_RIGHT, DOWN_RIGHT, DOWN, DOWN_LEFT, UP_LEFT } DIREC
 	};
 
 	// 구조체
-
-	typedef struct _BALL
-	{
-		int X, Y;
-		int IsReady; // 준비? 이동?
-		int Life; 
-		DIRECT Direction; // 공 이동방향
-		clock_t MoveTime; 
-		clock_t OldTime;
-		
-	} BALL;
 
 	// 전역 변수
 
@@ -71,7 +57,7 @@ typedef enum _DIRECT {UP, UP_RIGHT, DOWN_RIGHT, DOWN, DOWN_LEFT, UP_LEFT } DIREC
 
 		while (1)
 		{
-			
+
 
 			if (_kbhit())
 			{

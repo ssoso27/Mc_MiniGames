@@ -150,6 +150,7 @@
     <ClCompile Include="Screen.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Brick.h" />
     <ClInclude Include="Header.h" />
     <ClInclude Include="Screen.h" />
   </ItemGroup>
