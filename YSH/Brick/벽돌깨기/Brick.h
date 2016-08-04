@@ -5,6 +5,8 @@
 	#define BAR_FIRST_X 30 // Bar Ã¹ x[0]ÁÂÇ¥
 	#define BAR_FIRST_Y 20 // Bar Ã¹ yÁÂÇ¥
 
+	#define BLOCK_NUM 20 // Block °¹¼ö 	
+
 	#define BOARD_WIDTH 78
 	#define BOARD_HEIGH 24
 
@@ -33,6 +35,13 @@
 		clock_t OldTime;
 		clock_t MoveTime;
 	} BAR;
+
+	typedef struct _BLOCK
+	{
+		int X;
+		int Y;
+		int Life;
+	} BLOCK;
 
 	// ÇÔ¼ö ¿øÇü
 

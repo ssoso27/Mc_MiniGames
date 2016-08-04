@@ -1,25 +1,63 @@
 #include "Header.h"
 #include "Brick.h"
 
-	// 열거형 
+// 열거형 
 
-	enum ControlKeys
+enum ControlKeys
+{
+	UP = 72,
+	DOWN = 80,
+	LEFT = 75,
+	RIGHT = 77,
+	SPACE = 32
+};
+
+// 구조체
+
+// 전역 변수
+
+BALL Ball;
+BAR Bar;
+BLOCK Block[30];
+
+// 함수
+
+int OverlapBlock(int End, int x, int y) // 중복Block 존재? 
+{
+	for (int i = 0; i < End; i++)
 	{
-		UP = 72,
-		DOWN = 80,
-		LEFT = 75,
-		RIGHT = 77,
-		SPACE = 32
-	};
+		if (Block[i].Y == y) // y동일
+		{
+			if (Block[i].X == x || (Block[i].X + 1) == x
+				|| Block[i].X == (x + 1) || (Block[i].X + 1) == (x + 1)) // x동일
+				return 1; // 중복 있음
+		}
+	} // 중복 검사 종료
+	return 0; // 중복 없음
+}
 
-	// 구조체
+	void SetBlock(int BlockCount)
+	{
+		int x, y, i;
+		srand((unsigned)time(NULL));
+		for (int i = 0; i < BlockCount; i++)
+		{
+			Block[i].Life = 1; // Block[i]의 Life 지정
 
-	// 전역 변수
+			while (1)
+			{
+				x = rand() % BOARD_WIDTH; // 0 <= x < 가로길이
+				y = rand() % BOARD_HEIGH; // 0 <= y < 세로길이
 
-	BALL Ball;
-	BAR Bar;
-
-	// 함수
+				if (OverlapBlock(i, x, y) == 0) // 0~i번 까지의 블럭 중 중복이 없으면
+				{
+					Block[i].X = x;
+					Block[i].Y = y;
+					break;
+				}
+			} // while 문 끝
+		} // for문 끝
+	}
 
 	void BallDirect(int key)
 	{
@@ -159,6 +197,9 @@
 		Ball.IsReady = 1;
 		Ball.MoveTime = 200;
 
+		// Block 생성
+		SetBlock(BLOCK_NUM);
+
 	}
 
 	void Update()
@@ -173,10 +214,17 @@
 	{
 		ScreenClear();
 
-		ScreenPrint(Ball.X, Ball.Y, "●"); // 공 표시
-		for (int i = 0; i < Bar.Length; i++)
+		ScreenPrint(Ball.X, Ball.Y, "●"); // Ball 표시
+
+		for (int i = 0; i < Bar.Length; i++) // Bar 표시
 		{
 			ScreenPrint(Bar.X[i], Bar.Y, "▣");
+		}
+
+		for (int i = 0; i < BLOCK_NUM; i++) // Block 표시
+		{
+			if (Block[i].Life != 0) // Life가 남아있으면
+				ScreenPrint(Block[i].X, Block[i].Y, "■"); 
 		}
 
 		ScreenFlipping();
