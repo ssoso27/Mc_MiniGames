@@ -2,8 +2,11 @@
 
 	// 상수
 
-	#define FirstX 30
-	#define FirstY 20
+	#define FirstX 30 // Ball 첫 x좌표
+	#define FirstY 20 // Ball 첫 y좌표
+
+	#define BOARD_WIDTH 78
+	#define BOARD_HEIGH 24
 
 	// 열거형
 
@@ -21,6 +24,15 @@
 		clock_t OldTime;
 
 	} BALL;
+
+	typedef struct _BAR
+	{
+		int X[3];
+		int Y;
+		int Length;
+		clock_t OldTime;
+		clock_t MoveTime;
+	} BAR;
 
 	// 함수 원형
 
