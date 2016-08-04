@@ -2,8 +2,8 @@
 
 	// »ó¼ö
 
-	#define FirstX 30 // Ball Ã¹ xÁÂÇ¥
-	#define FirstY 20 // Ball Ã¹ yÁÂÇ¥
+	#define BAR_FIRST_X 30 // Bar Ã¹ x[0]ÁÂÇ¥
+	#define BAR_FIRST_Y 20 // Bar Ã¹ yÁÂÇ¥
 
 	#define BOARD_WIDTH 78
 	#define BOARD_HEIGH 24

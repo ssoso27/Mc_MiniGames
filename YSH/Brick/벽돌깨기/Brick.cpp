@@ -16,9 +16,6 @@
 
 	// 전역 변수
 
-	char *KeyInput[] = { "위", "아래", "좌", "우", "스페이스" }; // KeyInput[k_Index]
-	int k_Index = -1;
-
 	BALL Ball;
 	BAR Bar;
 
@@ -38,21 +35,14 @@
 	void KeyControl(int key) // 키조작
 	{
 		clock_t CurTime = clock();
+		int direction;
 		
 		if (CurTime - Bar.OldTime > Bar.MoveTime)
 		{
 			switch (key)
 			{
-			case UP:
-				k_Index = 0;
-				break;
-
-			case DOWN:
-				k_Index = 1;
-				break;
-
 			case LEFT:
-				k_Index = 2;
+				Bar.OldTime = clock();
 				if (Bar.X[0] > 0)
 				{
 					Bar.X[0]--;
@@ -62,7 +52,7 @@
 				break;
 
 			case RIGHT:
-				k_Index = 3;
+				Bar.OldTime = clock();
 				if (Bar.X[2] < BOARD_WIDTH)
 				{
 					Bar.X[0]++;
@@ -72,8 +62,17 @@
 				break;
 
 			case SPACE:
-				k_Index = 4;
-				(Ball.IsReady == 0) ? (Ball.IsReady = 1) : (Ball.IsReady = 0); // Ball.IsReady 바꿈 
+				(Ball.IsReady == 1) ? (Ball.IsReady = 0) : (Ball.IsReady = 1); // Ball.IsReady 바꿈 
+				Bar.OldTime = clock();
+				break;
+
+			case '0': case '1': case '2': case '3': case '4': case '5':
+				direction = key - '0';
+				Ball.IsReady = 1;
+				Ball.X = Bar.X[1];
+				Ball.Y = Bar.Y - 1;
+				Ball.Direction = (DIRECT) direction;
+				Ball.OldTime = clock();
 				break;
 			}
 		}
@@ -116,14 +115,25 @@
 					Ball.Y++;
 					break;
 
+				case TOP_LEFT:
+					Ball.X--;
+					Ball.Y--;
+					break;
+
 				}
 			}
 			if (Ball.X < 0 || Ball.X >BOARD_WIDTH || Ball.Y < 0 || Ball.Y > BOARD_HEIGH) // 벽에 충돌
 			{
 				Ball.IsReady = 1;
-				Ball.X = FirstX;
-				Ball.Y = FirstY;
+				Ball.Direction = TOP;
+				Ball.X = Bar.X[1];
+				Ball.Y = Bar.Y - 1;
 			}
+		}
+		else // 준비 상태면
+		{
+			Ball.X = Bar.X[1];
+			Ball.Y = Bar.Y - 1;
 		}
 	}
 
@@ -131,13 +141,6 @@
 
 	void Init()
 	{
-		// 공 초기화
-		Ball.X = FirstX;
-		Ball.Y = FirstY;
-		Ball.Direction = TOP;
-		Ball.OldTime = clock();
-		Ball.IsReady = 1;
-		Ball.MoveTime = 200;
 
 		// 바 초기화
 		Bar.X[0] = 30;
@@ -147,6 +150,15 @@
 		Bar.Length = 3;
 		Bar.OldTime = clock();
 		Bar.MoveTime = 100;
+
+		// 공 초기화
+		Ball.X = Bar.X[1];
+		Ball.Y = Bar.Y-1;
+		Ball.Direction = TOP;
+		Ball.OldTime = clock();
+		Ball.IsReady = 1;
+		Ball.MoveTime = 200;
+
 	}
 
 	void Update()
@@ -160,9 +172,6 @@
 	void Render()
 	{
 		ScreenClear();
-
-		if (k_Index >= 0)
-			ScreenPrint(10, 10, KeyInput[k_Index]);
 
 		ScreenPrint(Ball.X, Ball.Y, "●"); // 공 표시
 		for (int i = 0; i < Bar.Length; i++)
