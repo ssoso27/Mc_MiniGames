@@ -20,42 +20,69 @@ BALL Ball;
 BAR Bar;
 BLOCK Block[30];
 
-int StateTable[4][6] = { // 공과의 충돌 시 상태 변화 테이블
+int WallStateTable[4][6] = { // 벽과의 충돌 시 상태 변화 테이블
 	{3, 2, -1, -1, -1, 4},
 	{-1, 5, 4, -1, -1, -1},
 	{-1, -1, 1, 0, 5, -1},
 	{-1, -1, -1, -1, 2, 1}
 };
-
+int BlockStateTable[6] = { 3, 2, 1, 0, 5, 4 }; // 블럭과의 충돌 시 상태 변화 테이블
+ 
 // 함수
 
-int Collision(int x, int y) // 벽과 Ball의 충돌 체크
+int Collision(int x, int y) // 충돌 체크
 {
+	int count = 0; // 블럭 충돌 개수
+
+	// 블럭과의 충돌
+
+	for (int i = 0; i < BLOCK_COUNT; i++)
+	{
+		if (Block[i].Life > 0) // Life가 남은 Block에 한해서
+		{
+			if (Block[i].Y == y) // y가 동일
+			{
+				if (Block[i].X == x || Block[i].X == (x + 1) ||
+					(Block[i].X + 1) == x || (Block[i].X + 1) == (x + 1)) // x 또는 x+1이 동일
+				{
+					Ball.Direction = (DIRECT) BlockStateTable[Ball.Direction];
+					Block[i].Life--;
+					count++;
+				}
+			}
+		}
+	}
+	
+	if (count > 0)
+		return 1;
+
+	// 벽과의 충돌
+
 	// ↑ ([0])
 	if (y < 0)
 	{
-		Ball.Direction = (DIRECT) StateTable[0][Ball.Direction];
+		Ball.Direction = (DIRECT) WallStateTable[0][Ball.Direction];
 		return 1; // 충돌 O
 	}
 	
 	// → ([1])
 	if (x > BOARD_WIDTH)
 	{
-		Ball.Direction = (DIRECT)StateTable[1][Ball.Direction];
+		Ball.Direction = (DIRECT)WallStateTable[1][Ball.Direction];
 		return 1;
 	}
 	
 	// ↓ ([2])
 	if (y > BOARD_HEIGH)
 	{
-		Ball.Direction = (DIRECT)StateTable[2][Ball.Direction];
+		Ball.Direction = (DIRECT)WallStateTable[2][Ball.Direction];
 		return 1;
 	}
 
 	// ← ([3])
 	if (x < 0)
 	{
-		Ball.Direction = (DIRECT)StateTable[3][Ball.Direction];
+		Ball.Direction = (DIRECT)WallStateTable[3][Ball.Direction];
 		return 1;
 	}
 
@@ -153,7 +180,7 @@ int OverlapBlock(int End, int x, int y) // 중복Block 존재?
 
 				break;
 
-			case '0': case '1': case '2': case '3': case '4': case '5':
+			case '0': case '1': case '2': case '3': case '4': case '5': // Ball 방향 변경 
 				direction = key - '0';
 				Ball.IsReady = 1;
 				Ball.X = Bar.X[1];
@@ -266,7 +293,7 @@ int OverlapBlock(int End, int x, int y) // 중복Block 존재?
 		Ball.MoveTime = 100;
 
 		// Block 생성
-		SetBlock(BLOCK_NUM);
+		SetBlock(BLOCK_COUNT);
 
 	}
 
@@ -289,9 +316,9 @@ int OverlapBlock(int End, int x, int y) // 중복Block 존재?
 			ScreenPrint(Bar.X[i], Bar.Y, "▣");
 		}
 
-		for (int i = 0; i < BLOCK_NUM; i++) // Block 표시
+		for (int i = 0; i < BLOCK_COUNT; i++) // Block 표시
 		{
-			if (Block[i].Life != 0) // Life가 남아있으면
+			if (Block[i].Life > 0) // Life가 남아있으면
 				ScreenPrint(Block[i].X, Block[i].Y, "■"); 
 		}
 
