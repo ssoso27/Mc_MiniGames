@@ -20,6 +20,8 @@ BALL Ball;
 BAR Bar;
 BLOCK Block[30];
 
+int BlockCount = BLOCK_COUNT; // (수정필요) stage에 따라 수정해야함. 상수 지우고. 
+
 int WallStateTable[4][6] = { // 벽과의 충돌 시 상태 변화 테이블
 	{3, 2, -1, -1, -1, 4},
 	{-1, 5, 4, -1, -1, -1},
@@ -51,7 +53,7 @@ int Collision(int x, int y) // 충돌 체크
 
 	// 블럭과의 충돌
 
-	for (int i = 0; i < BLOCK_COUNT; i++)
+	for (int i = 0; i < BlockCount; i++)
 	{
 		if (Block[i].Life > 0) // Life가 남은 Block에 한해서
 		{
@@ -295,7 +297,7 @@ int OverlapBlock(int End, int x, int y) // 중복Block 존재?
 		Ball.MoveTime = 100;
 
 		// Block 생성
-		SetBlock(BLOCK_COUNT);
+		SetBlock(BlockCount);
 
 	}
 
@@ -318,7 +320,7 @@ int OverlapBlock(int End, int x, int y) // 중복Block 존재?
 			ScreenPrint(Bar.X[i], Bar.Y, "▣");
 		}
 
-		for (int i = 0; i < BLOCK_COUNT; i++) // Block 표시
+		for (int i = 0; i < BlockCount; i++) // Block 표시
 		{
 			if (Block[i].Life > 0) // Life가 남아있으면
 				ScreenPrint(Block[i].X, Block[i].Y, "■"); 
