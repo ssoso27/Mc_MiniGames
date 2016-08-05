@@ -34,6 +34,21 @@ int Collision(int x, int y) // 충돌 체크
 {
 	int count = 0; // 블럭 충돌 개수
 
+	// Bar와의 충돌
+
+	for (int i = 0; i < Bar.Length; i++)
+	{
+		if (y == Bar.Y)
+		{
+			if ((x >= Bar.X[0] && x <= Bar.X[2] + 1) ||
+				((x + 1) >= Bar.X[0] && (x + 1) <= Bar.X[2] + 1))
+			{
+				Ball.Direction = (DIRECT) BlockStateTable[Ball.Direction];
+				return 1;
+			}
+		}
+	}
+
 	// 블럭과의 충돌
 
 	for (int i = 0; i < BLOCK_COUNT; i++)
@@ -126,17 +141,6 @@ int OverlapBlock(int End, int x, int y) // 중복Block 존재?
 		} // for문 끝
 	}
 
-	void BallDirect(int key)
-	{
-		int direction;
-		direction = key - '0';
-		if (direction >= 0 && direction <= 5)
-		{
-			Ball.Direction = (DIRECT) direction;
-			Ball.IsReady = 0;
-		}
-	}
-
 	void KeyControl(int key) // 키조작
 	{
 		clock_t CurTime = clock();
@@ -170,7 +174,7 @@ int OverlapBlock(int End, int x, int y) // 중복Block 존재?
 				//(Ball.IsReady == 1) ? (Ball.IsReady = 0) : (Ball.IsReady = 1); // Ball.IsReady 바꿈 
 				if (Ball.IsReady == 1) 
 				{
-					Bar.OldTime = clock();
+					Ball.OldTime = clock();
 					Ball.IsReady = 0; // 준비 O -> 준비 X
 				}
 				else
@@ -191,8 +195,6 @@ int OverlapBlock(int End, int x, int y) // 중복Block 존재?
 			}
 		}
 
-		if (Ball.IsReady == 0)
-			BallDirect(_getch()); // Ball의 방향을 정함
 	}
 
 	void BallMove(clock_t CurTime) // Ball의 이동

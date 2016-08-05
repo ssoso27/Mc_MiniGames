@@ -1,3 +1,3 @@
 ﻿  Brick.cpp
-c:\users\samsungpc\documents\mc_minigames\ysh\brick\벽돌깨기\brick.cpp(108): warning C4101: 'i' :참조되지 않은 지역 변수입니다.
+c:\users\samsungpc\documents\mc_minigames\ysh\brick\벽돌깨기\brick.cpp(123): warning C4101: 'i' :참조되지 않은 지역 변수입니다.
   벽돌깨기.vcxproj -> C:\Users\samsungpc\Documents\Mc_MiniGames\YSH\Brick\Debug\벽돌깨기.exe
