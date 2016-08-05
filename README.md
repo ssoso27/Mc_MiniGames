@@ -58,12 +58,12 @@ C와 C++를 이용하여 제작 중입니다.
 #### 2. git add
 -- 파일을 준비 영역에 추가하는 명령어<br>
 -- **사용법 :: git add <파일 또는 폴더명>**<br>
--- ex) git add YSH/ 
--- ex) git add test.cpp 
+-- ex) git add YSH/ <br>
+-- ex) git add test.cpp <br>
 ####3. git commit
 -- (git add로 추가된) 준비 영역의 파일을 최종 확정하는 명령어<br>
 -- **사용법 :: git commit -m <파일 또는 폴더명> "파일에 대한 설명 문구"**<br>
--- ex) git commit -m YSH/ "커밋 테스트"
+-- ex) git commit -m YSH/ "커밋 테스트" <br>
 ####4. git push
 -- (git commit으로 확정된) 파일을 원격 서버에 올리는 명령어<br>
 -- 아마 처음엔 로그인 하라고 에러 메시지가 나올텐데, 침착하게 자기 아이디랑 비번을 입력하면 된다.<br>
