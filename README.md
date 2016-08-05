@@ -59,6 +59,7 @@ C와 C++를 이용하여 제작 중입니다.
 -- 파일을 준비 영역에 추가하는 명령어<br>
 -- **사용법 :: git add <파일 또는 폴더명>**<br>
 -- ex) git add YSH/ 
+-- ex) git add test.cpp 
 ####3. git commit
 -- (git add로 추가된) 준비 영역의 파일을 최종 확정하는 명령어<br>
 -- **사용법 :: git commit -m <파일 또는 폴더명> "파일에 대한 설명 문구"**<br>
