@@ -46,3 +46,7 @@
 	// 함수 원형
 
 	void BallDirect(int);
+	void Init();
+	void Update();
+	void Render();
+	void Release();

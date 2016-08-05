@@ -20,7 +20,47 @@ BALL Ball;
 BAR Bar;
 BLOCK Block[30];
 
+int StateTable[4][6] = { // 공과의 충돌 시 상태 변화 테이블
+	{3, 2, -1, -1, -1, 4},
+	{-1, 5, 4, -1, -1, -1},
+	{-1, -1, 1, 0, 5, -1},
+	{-1, -1, -1, -1, 2, 1}
+};
+
 // 함수
+
+int Collision(int x, int y) // 벽과 Ball의 충돌 체크
+{
+	// ↑ ([0])
+	if (y < 0)
+	{
+		Ball.Direction = (DIRECT) StateTable[0][Ball.Direction];
+		return 1; // 충돌 O
+	}
+	
+	// → ([1])
+	if (x > BOARD_WIDTH)
+	{
+		Ball.Direction = (DIRECT)StateTable[1][Ball.Direction];
+		return 1;
+	}
+	
+	// ↓ ([2])
+	if (y > BOARD_HEIGH)
+	{
+		Ball.Direction = (DIRECT)StateTable[2][Ball.Direction];
+		return 1;
+	}
+
+	// ← ([3])
+	if (x < 0)
+	{
+		Ball.Direction = (DIRECT)StateTable[3][Ball.Direction];
+		return 1;
+	}
+
+	return 0; // 충돌 X
+}
 
 int OverlapBlock(int End, int x, int y) // 중복Block 존재? 
 {
@@ -75,7 +115,7 @@ int OverlapBlock(int End, int x, int y) // 중복Block 존재?
 		clock_t CurTime = clock();
 		int direction;
 		
-		if (CurTime - Bar.OldTime > Bar.MoveTime)
+		if (CurTime - Bar.OldTime > Bar.MoveTime) // Ball 이동제한시간 경과 시 
 		{
 			switch (key)
 			{
@@ -100,8 +140,17 @@ int OverlapBlock(int End, int x, int y) // 중복Block 존재?
 				break;
 
 			case SPACE:
-				(Ball.IsReady == 1) ? (Ball.IsReady = 0) : (Ball.IsReady = 1); // Ball.IsReady 바꿈 
-				Bar.OldTime = clock();
+				//(Ball.IsReady == 1) ? (Ball.IsReady = 0) : (Ball.IsReady = 1); // Ball.IsReady 바꿈 
+				if (Ball.IsReady == 1) 
+				{
+					Bar.OldTime = clock();
+					Ball.IsReady = 0; // 준비 O -> 준비 X
+				}
+				else
+				{
+					Init(); // 준비X -> 게임 초기화 
+				}
+
 				break;
 
 			case '0': case '1': case '2': case '3': case '4': case '5':
@@ -131,31 +180,50 @@ int OverlapBlock(int End, int x, int y) // 중복Block 존재?
 				switch (Ball.Direction)
 				{
 				case TOP:
-					Ball.Y--;
+					if (Collision(Ball.X, Ball.Y -1 ) == 0) // 이동할 좌표에서 충돌이 안 일어나면 
+					{
+						Ball.Y--; // 이동한다
+					}
+					// 충돌이 일어났을 경우, Collision에서 Ball.Direction이 변경된다.
 					break;
 
 				case TOP_RIGHT:
-					Ball.X++;
-					Ball.Y--;
+					if (Collision(Ball.X + 1, Ball.Y - 1) == 0)
+					{
+						Ball.X++;
+						Ball.Y--;
+					}
 					break;
 
 				case BOT_RIGHT:
-					Ball.X++;
-					Ball.Y++;
+					if (Collision(Ball.X + 1, Ball.Y + 1)== 0)
+					{
+						Ball.X++;
+						Ball.Y++;
+					}
 					break;
 
 				case BOTTOM:
-					Ball.Y++;
+					if (Collision(Ball.X, Ball.Y + 1) == 0)
+					{
+						Ball.Y++;
+					}
 					break;
 
 				case BOT_LEFT:
-					Ball.X--;
-					Ball.Y++;
+					if (Collision(Ball.X - 1, Ball.Y + 1) == 0)
+					{
+						Ball.X--;
+						Ball.Y++;
+					}
 					break;
 
 				case TOP_LEFT:
-					Ball.X--;
-					Ball.Y--;
+					if (Collision(Ball.X - 1, Ball.Y - 1) == 0)
+					{
+						Ball.X--;
+						Ball.Y--;
+					}
 					break;
 
 				}
@@ -195,7 +263,7 @@ int OverlapBlock(int End, int x, int y) // 중복Block 존재?
 		Ball.Direction = TOP;
 		Ball.OldTime = clock();
 		Ball.IsReady = 1;
-		Ball.MoveTime = 200;
+		Ball.MoveTime = 100;
 
 		// Block 생성
 		SetBlock(BLOCK_NUM);
