@@ -16,11 +16,23 @@ enum ControlKeys
 
 // 전역 변수
 
+//구조체 변수
+
 BALL Ball;
 BAR Bar;
 BLOCK Block[30];
+GAMESTATUS GameStatus;
 
-int BlockCount = BLOCK_COUNT; // (수정필요) stage에 따라 수정해야함. 상수 지우고. 
+// 출력 관련
+
+char StatString[500]; // 화면 출력 문구 저장용 char[]
+int PrintTime = 3 * 1000;
+clock_t Stat_OldTime = clock(); // PrintTime의 OldTime
+
+// 플레이 관련
+
+int BlockCount = BLOCK_COUNT; // 출력 Block의 갯수
+								// (수정필요) stage에 따라 수정해야함. 상수 지우고. 
 
 int WallStateTable[4][6] = { // 벽과의 충돌 시 상태 변화 테이블
 	{3, 2, -1, -1, -1, 4},
@@ -31,6 +43,44 @@ int WallStateTable[4][6] = { // 벽과의 충돌 시 상태 변화 테이블
 int BlockStateTable[6] = { 3, 2, 1, 0, 5, 4 }; // 블럭과의 충돌 시 상태 변화 테이블
  
 // 함수
+
+void StautsPrint() // 상태에 따른 스크린 출력
+{
+	switch (GameStatus) 
+	{
+	case INIT:
+		sprintf(StatString,"INIT 화면");
+		GameStatus = READY;
+		break;
+
+	case READY:
+		sprintf(StatString, "READY 화면");
+		GameStatus = RUNNING;
+		break;
+
+	case RUNNING:
+		sprintf(StatString, "RUNNING 화면");
+		GameStatus = STOP;
+		break;
+
+	case STOP:
+		sprintf(StatString, "STOP 화면");
+		break;
+
+	case SUCCESS:
+		sprintf(StatString, "SUCCESS 화면");
+		break;
+
+	case FAILED:
+		sprintf(StatString, "FAILED 화면");
+		break;
+
+	case RESULT:
+		sprintf(StatString, "RESULT 화면");
+		break;
+
+	}
+}
 
 int Collision(int x, int y) // 충돌 체크
 {
