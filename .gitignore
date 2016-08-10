@@ -1,4 +1,4 @@
 *.sdf
-/[Dd]ebug/
-/[Rr]elease/
+**/[Dd]ebug/
+**/[Rr]elease/
 
