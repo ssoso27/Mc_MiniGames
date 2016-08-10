@@ -4,7 +4,7 @@
 namespace SH_Dodge
 {
 	// 열거형
-
+	//테스트용주석
 	enum ControlKeys
 	{
 		UP = 72,
