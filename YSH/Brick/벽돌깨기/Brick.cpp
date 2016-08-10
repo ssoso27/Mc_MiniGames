@@ -9,7 +9,8 @@ enum ControlKeys
 	DOWN = 80,
 	LEFT = 75,
 	RIGHT = 77,
-	SPACE = 32
+	SPACE = 32,
+	ESC = 27
 };
 
 // 구조체
@@ -44,27 +45,49 @@ int BlockStateTable[6] = { 3, 2, 1, 0, 5, 4 }; // 블럭과의 충돌 시 상태 변화 테�
  
 // 함수
 
-void StautsPrint() // 상태에 따른 스크린 출력
+void StatusPrint() // 상태에 따른 스크린 출력
 {
+	clock_t CurTime = clock();
+
 	switch (GameStatus) 
 	{
+	case START:
+		sprintf(StatString, "[START 화면]");
+		ScreenPrint(30, 10, StatString);
+		break;
+
 	case INIT:
-		sprintf(StatString,"INIT 화면");
-		GameStatus = READY;
+		if (CurTime - Stat_OldTime < PrintTime)
+		{
+			sprintf(StatString, "[INIT 화면]");
+			ScreenPrint(30, 10, StatString);
+		}
+		else
+		{
+			GameStatus = READY;
+			Stat_OldTime = CurTime;
+		}
 		break;
 
 	case READY:
-		sprintf(StatString, "READY 화면");
-		GameStatus = RUNNING;
+		if (CurTime - Stat_OldTime < PrintTime)
+		{
+			sprintf(StatString, "[READY 화면]");
+			ScreenPrint(30, 10, StatString);
+		}
+		else
+		{
+			GameStatus = RUNNING;
+			Stat_OldTime = CurTime;
+		}
 		break;
 
 	case RUNNING:
-		sprintf(StatString, "RUNNING 화면");
-		GameStatus = STOP;
 		break;
 
 	case STOP:
 		sprintf(StatString, "STOP 화면");
+		ScreenPrint(10, 30, StatString);
 		break;
 
 	case SUCCESS:
@@ -328,6 +351,8 @@ int OverlapBlock(int End, int x, int y) // 중복Block 존재?
 
 	void Init()
 	{
+		// 상태 초기화
+		GameStatus = START;
 
 		// 바 초기화
 		Bar.X[0] = 30;
@@ -355,25 +380,32 @@ int OverlapBlock(int End, int x, int y) // 중복Block 존재?
 	{
 		clock_t CurTime = clock(); // 현재 시각
 
-		BallMove(CurTime);// 공 움직임
-		
+		if (GameStatus == RUNNING)
+		{
+			BallMove(CurTime);// 공 움직임
+		}
 	}
 
 	void Render()
 	{
 		ScreenClear();
+		
+		StatusPrint();
 
-		ScreenPrint(Ball.X, Ball.Y, "●"); // Ball 표시
-
-		for (int i = 0; i < Bar.Length; i++) // Bar 표시
+		if (GameStatus == RUNNING || GameStatus == STOP)
 		{
-			ScreenPrint(Bar.X[i], Bar.Y, "▣");
-		}
+			ScreenPrint(Ball.X, Ball.Y, "●"); // Ball 표시
 
-		for (int i = 0; i < BlockCount; i++) // Block 표시
-		{
-			if (Block[i].Life > 0) // Life가 남아있으면
-				ScreenPrint(Block[i].X, Block[i].Y, "■"); 
+			for (int i = 0; i < Bar.Length; i++) // Bar 표시
+			{
+				ScreenPrint(Bar.X[i], Bar.Y, "▣");
+			}
+
+			for (int i = 0; i < BlockCount; i++) // Block 표시
+			{
+				if (Block[i].Life > 0) // Life가 남아있으면
+					ScreenPrint(Block[i].X, Block[i].Y, "■");
+			}
 		}
 
 		ScreenFlipping();
@@ -402,10 +434,31 @@ int OverlapBlock(int End, int x, int y) // 중복Block 존재?
 				if ((key == 'q') || (key == 'Q'))
 					break;
 				
-				KeyControl(key);
 
-			}
-			Update();
-			Render();
+				if (key == SPACE) // RUNNING 외에서 SPACE 입력
+				{
+					switch (GameStatus)
+					{						case START:
+						GameStatus = INIT;
+						break;
+
+					case RUNNING:
+						GameStatus = STOP;
+						break;
+
+					default:
+						break;
+					}	
+				}
+
+				if (GameStatus == RUNNING) // RUNNING 상태일 때의 키조작
+				{
+					KeyControl(key);
+				}
+
 		}
+
+		Update();
+		Render();
 	}
+}
