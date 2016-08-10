@@ -21,7 +21,7 @@
 	{
 		int BlockCount;
 		clock_t LimitTime;
-	};
+	} STAGE_INFO;
 
 	typedef struct _BALL
 	{
@@ -38,6 +38,7 @@
 	{
 		int X[3];
 		int Y;
+		int Life;
 		int Length;
 		clock_t OldTime;
 		clock_t MoveTime;

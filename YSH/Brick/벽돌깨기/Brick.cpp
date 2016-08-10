@@ -23,6 +23,7 @@ BALL Ball;
 BAR Bar;
 BLOCK Block[30];
 GAMESTATUS GameStatus;
+STAGE_INFO StageInfo;
 
 // 출력 관련
 
@@ -84,7 +85,7 @@ void StatusPrint() // 상태에 따른 스크린 출력
 
 	case RUNNING:
 		break;
-		 // 테스트용 주석 
+
 	case STOP:
 		sprintf(StatString, "[STOP 화면]");
 		ScreenPrint(30, 10, StatString);
@@ -165,7 +166,17 @@ int Collision(int x, int y) // 충돌 체크
 	// ↓ ([2])
 	if (y > BOARD_HEIGH)
 	{
-		Ball.Direction = (DIRECT)WallStateTable[2][Ball.Direction];
+		// Ball 상태 초기화
+		Ball.Direction = TOP;
+		Ball.IsReady = 1;
+		Ball.X = Bar.X[1];
+		Ball.Y = Bar.Y - 1;
+
+		Bar.Life--; // Bar 라이프 감소
+		if (Bar.Life < 1) // 라이프가 없으면
+		{
+			GameStatus = FAILED; // 미션 실패
+		}
 		return 1;
 	}
 
@@ -276,6 +287,7 @@ int OverlapBlock(int End, int x, int y) // 중복Block 존재?
 
 	void BallMove(clock_t CurTime) // Ball의 이동
 	{
+		char temp[20];
 		if (Ball.IsReady == 0) // 준비상태가 아니면
 		{
 			if (CurTime - Ball.OldTime > Ball.MoveTime) // 이동제한시간 경과
@@ -286,6 +298,8 @@ int OverlapBlock(int End, int x, int y) // 중복Block 존재?
 				switch (Ball.Direction)
 				{
 				case TOP:
+					sprintf(temp, "TOP");
+					ScreenPrint(10, 2, temp);
 					if (Collision(Ball.X, Ball.Y -1 ) == 0) // 이동할 좌표에서 충돌이 안 일어나면 
 					{
 						Ball.Y--; // 이동한다
@@ -355,12 +369,13 @@ int OverlapBlock(int End, int x, int y) // 중복Block 존재?
 	{
 		// 상태 초기화
 		GameStatus = START;
-
+		
 		// 바 초기화
 		Bar.X[0] = 30;
 		Bar.X[1] = 32;
 		Bar.X[2] = 34;
 		Bar.Y = 20;
+		Bar.Life = 3;
 		Bar.Length = 3;
 		Bar.OldTime = clock();
 		Bar.MoveTime = 100;
@@ -393,6 +408,12 @@ int OverlapBlock(int End, int x, int y) // 중복Block 존재?
 		ScreenClear();
 		
 		StatusPrint();
+
+		// 상단바 출력
+
+		char TheTopBar[81];
+		//sprintf(TheTopBar, "현 스테이지 : %d",  );
+		ScreenPrint(0, 2, "================================================================================");
 
 		if (GameStatus == RUNNING || GameStatus == STOP)
 		{
