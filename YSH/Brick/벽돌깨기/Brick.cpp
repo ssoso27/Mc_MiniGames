@@ -86,8 +86,8 @@ void StatusPrint() // 상태에 따른 스크린 출력
 		break;
 
 	case STOP:
-		sprintf(StatString, "STOP 화면");
-		ScreenPrint(10, 30, StatString);
+		sprintf(StatString, "[STOP 화면]");
+		ScreenPrint(30, 10, StatString);
 		break;
 
 	case SUCCESS:
@@ -216,7 +216,7 @@ int OverlapBlock(int End, int x, int y) // 중복Block 존재?
 		} // for문 끝
 	}
 
-	void KeyControl(int key) // 키조작
+	void KeyControl(int key) // (RUNNING에서의) 키조작
 	{
 		clock_t CurTime = clock();
 		int direction;
@@ -256,7 +256,6 @@ int OverlapBlock(int End, int x, int y) // 중복Block 존재?
 				{
 					Init(); // 준비X -> 게임 초기화 
 				}
-
 				break;
 
 			case '0': case '1': case '2': case '3': case '4': case '5': // Ball 방향 변경 
@@ -266,6 +265,9 @@ int OverlapBlock(int End, int x, int y) // 중복Block 존재?
 				Ball.Y = Bar.Y - 1;
 				Ball.Direction = (DIRECT) direction;
 				Ball.OldTime = clock();
+				break;
+
+			default:
 				break;
 			}
 		}
@@ -434,16 +436,31 @@ int OverlapBlock(int End, int x, int y) // 중복Block 존재?
 				if ((key == 'q') || (key == 'Q'))
 					break;
 				
+				// RUNNING 외 상태에서의 키조작
 
-				if (key == SPACE) // RUNNING 외에서 SPACE 입력
+				if (key == ESC)
 				{
 					switch (GameStatus)
-					{						case START:
-						GameStatus = INIT;
-						break;
-
+					{
 					case RUNNING:
 						GameStatus = STOP;
+						break;
+
+					case STOP:
+						GameStatus = RUNNING;
+						break;
+
+					default:
+						break;
+					}
+				}
+
+				if (key == SPACE) 
+				{
+					switch (GameStatus)
+					{	
+					case START:
+						GameStatus = INIT;
 						break;
 
 					default:
@@ -451,7 +468,9 @@ int OverlapBlock(int End, int x, int y) // 중복Block 존재?
 					}	
 				}
 
-				if (GameStatus == RUNNING) // RUNNING 상태일 때의 키조작
+				// RUNNING 상태일 때의 키조작
+
+				if (GameStatus == RUNNING) 				
 				{
 					KeyControl(key);
 				}
