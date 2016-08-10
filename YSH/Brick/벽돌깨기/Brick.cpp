@@ -84,7 +84,7 @@ void StatusPrint() // 상태에 따른 스크린 출력
 
 	case RUNNING:
 		break;
-
+		 // 테스트용 주석 
 	case STOP:
 		sprintf(StatString, "[STOP 화면]");
 		ScreenPrint(30, 10, StatString);
