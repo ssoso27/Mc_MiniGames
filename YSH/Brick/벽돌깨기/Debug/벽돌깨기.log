@@ -1,4 +1,0 @@
-﻿  Brick.cpp
-c:\users\samsungpc\documents\mc_minigames\ysh\brick\벽돌깨기\brick.h(24): warning C4091: 'typedef ': 변수를 선언하지 않으면 '_STAGE_INFO' 왼쪽은 무시됩니다.
-c:\users\samsungpc\documents\mc_minigames\ysh\brick\벽돌깨기\brick.cpp(198): warning C4101: 'i' :참조되지 않은 지역 변수입니다.
-  벽돌깨기.vcxproj -> C:\Users\samsungpc\Documents\Mc_MiniGames\YSH\Brick\Debug\벽돌깨기.exe
