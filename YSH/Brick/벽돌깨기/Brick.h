@@ -5,7 +5,7 @@
 	#define BAR_FIRST_X 30 // Bar Ã¹ x[0]ÁÂÇ¥
 	#define BAR_FIRST_Y 20 // Bar Ã¹ yÁÂÇ¥
 
-	#define BLOCK_COUNT 20 // Block °¹¼ö 	
+//	#define BLOCK_COUNT 20 // Block °¹¼ö 	
 
 	#define BOARD_WIDTH 78
 	#define BOARD_HEIGH 24
@@ -17,11 +17,11 @@
 
 	// ±¸Á¶Ã¼
 
-	typedef struct _STAGE_INFO
+	typedef struct _STAGE
 	{
 		int BlockCount;
-		clock_t LimitTime;
-	} STAGE_INFO;
+		int Level;
+	} STAGE;
 
 	typedef struct _BALL
 	{

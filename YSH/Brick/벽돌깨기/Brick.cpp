@@ -23,7 +23,7 @@ BALL Ball;
 BAR Bar;
 BLOCK Block[30];
 GAMESTATUS GameStatus;
-STAGE_INFO StageInfo;
+STAGE Stage;
 
 // 출력 관련
 
@@ -33,8 +33,7 @@ clock_t Stat_OldTime = clock(); // PrintTime의 OldTime
 
 // 플레이 관련
 
-int BlockCount = BLOCK_COUNT; // 출력 Block의 갯수
-								// (수정필요) stage에 따라 수정해야함. 상수 지우고. 
+int BlockCountTable[3] = { 10, 15, 20 }; // Stage.Level 에 따른 Block 갯수
 
 int WallStateTable[4][6] = { // 벽과의 충돌 시 상태 변화 테이블
 	{3, 2, -1, -1, -1, 4},
@@ -58,6 +57,13 @@ void StatusPrint() // 상태에 따른 스크린 출력
 		break;
 
 	case INIT:
+		// 스테이지 초기화
+		
+		// Stage.Level++; // SUCCESS , FAILED 에서 Level 변화 
+		Stage.BlockCount = BlockCountTable[Stage.Level]; // Level에 따라 BlockCount가 다름 
+
+		// 화면 출력
+
 		if (CurTime - Stat_OldTime < PrintTime)
 		{
 			sprintf(StatString, "[INIT 화면]");
@@ -127,7 +133,7 @@ int Collision(int x, int y) // 충돌 체크
 
 	// 블럭과의 충돌
 
-	for (int i = 0; i < BlockCount; i++)
+	for (int i = 0; i < Stage.Level; i++)
 	{
 		if (Block[i].Life > 0) // Life가 남은 Block에 한해서
 		{
@@ -370,6 +376,10 @@ int OverlapBlock(int End, int x, int y) // 중복Block 존재?
 		// 상태 초기화
 		GameStatus = START;
 		
+		// 스테이지 초기화 -> StatusPrint() 의 case INIT: 
+		Stage.Level = 0;
+		Stage.BlockCount = BlockCountTable[Stage.Level];
+
 		// 바 초기화
 		Bar.X[0] = 30;
 		Bar.X[1] = 32;
@@ -389,7 +399,7 @@ int OverlapBlock(int End, int x, int y) // 중복Block 존재?
 		Ball.MoveTime = 100;
 
 		// Block 생성
-		SetBlock(BlockCount);
+		SetBlock(Stage.BlockCount);
 
 	}
 
@@ -412,7 +422,8 @@ int OverlapBlock(int End, int x, int y) // 중복Block 존재?
 		// 상단바 출력
 
 		char TheTopBar[81];
-		//sprintf(TheTopBar, "현 스테이지 : %d",  );
+		sprintf(TheTopBar, "현 스테이지 : %d         Life : %d", Stage.Level, Bar.Life);
+		ScreenPrint(0, 0, TheTopBar);
 		ScreenPrint(0, 2, "================================================================================");
 
 		if (GameStatus == RUNNING || GameStatus == STOP)
@@ -424,7 +435,7 @@ int OverlapBlock(int End, int x, int y) // 중복Block 존재?
 				ScreenPrint(Bar.X[i], Bar.Y, "▣");
 			}
 
-			for (int i = 0; i < BlockCount; i++) // Block 표시
+			for (int i = 0; i < Stage.BlockCount; i++) // Block 표시
 			{
 				if (Block[i].Life > 0) // Life가 남아있으면
 					ScreenPrint(Block[i].X, Block[i].Y, "■");
