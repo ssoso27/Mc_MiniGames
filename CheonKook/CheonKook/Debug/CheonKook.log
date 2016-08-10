@@ -1,0 +1,21 @@
+﻿  Main.cpp
+c:\users\samsungpc\documents\mc_minigames\cheonkook\cheonkook\games\tetris.h(10): warning C4005: 'BOARD_WIDTH': 매크로 재정의
+  c:\users\samsungpc\documents\mc_minigames\cheonkook\cheonkook\games\dodge.h(8): note: 'BOARD_WIDTH'의 이전 정의를 참조하십시오.
+c:\users\samsungpc\documents\mc_minigames\cheonkook\cheonkook\games\tetris.h(11): warning C4005: 'BOARD_HEIGHT': 매크로 재정의
+  c:\users\samsungpc\documents\mc_minigames\cheonkook\cheonkook\games\dodge.h(9): note: 'BOARD_HEIGHT'의 이전 정의를 참조하십시오.
+  Tetris.cpp
+c:\users\samsungpc\documents\mc_minigames\cheonkook\cheonkook\games\tetris.cpp(231): warning C4838: 'int'에서 'SHORT'(으)로의 변환에는 축소 변환이 필요합니다.
+  Shoot.cpp
+  Screen.cpp
+c:\users\samsungpc\documents\mc_minigames\cheonkook\cheonkook\games\screen.cpp(38): warning C4838: 'int'에서 'SHORT'(으)로의 변환에는 축소 변환이 필요합니다.
+  Dodge.cpp
+c:\users\samsungpc\documents\mc_minigames\cheonkook\cheonkook\games\dodge.cpp(220): warning C4244: '=': 'double'에서 'clock_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\samsungpc\documents\mc_minigames\cheonkook\cheonkook\games\dodge.cpp(234): warning C4244: '=': 'double'에서 'clock_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\samsungpc\documents\mc_minigames\cheonkook\cheonkook\games\dodge.cpp(248): warning C4244: '=': 'double'에서 'clock_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\samsungpc\documents\mc_minigames\cheonkook\cheonkook\games\dodge.cpp(262): warning C4244: '=': 'double'에서 'clock_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\samsungpc\documents\mc_minigames\cheonkook\cheonkook\games\dodge.cpp(278): warning C4244: '=': 'double'에서 'clock_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\samsungpc\documents\mc_minigames\cheonkook\cheonkook\games\dodge.cpp(331): warning C4474: 'sprintf' : 서식 문자열에 전달된 인수가 너무 많습니다.
+  c:\users\samsungpc\documents\mc_minigames\cheonkook\cheonkook\games\dodge.cpp(331): note: 자리 표시자 및 해당 매개 변수에는 variadic 인수가 0개 필요하지만 1개가 제공되었습니다.
+  코드를 생성하고 있습니다...
+  LINK : C:\Users\samsungpc\Documents\Mc_MiniGames\CheonKook\Debug\CheonKook.exe을(를) 찾을 수 없거나 마지막 증분 링크에 의해 빌드되지 않았습니다. 전체 링크를 수행하고 있습니다.
+  CheonKook.vcxproj -> C:\Users\samsungpc\Documents\Mc_MiniGames\CheonKook\Debug\CheonKook.exe
