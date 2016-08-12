@@ -45,7 +45,8 @@ int BlockStateTable[6] = { 3, 2, 1, 0, 5, 4 }; // 블럭과의 충돌 시 상태 변화 테�
  
 // 함수
 
-void StatusPrint() // 상태에 따른 스크린 출력
+// 상태에 따른 스크린 출력
+void StatusPrint() 
 {
 	clock_t CurTime = clock();
 
@@ -112,28 +113,42 @@ void StatusPrint() // 상태에 따른 스크린 출력
 	}
 }
 
-int Collision(int x, int y) // 충돌 체크
+// 충돌 체크
+int Collision(int x, int y) 
 {
 	int count = 0; // 블럭 충돌 개수
 
-	// Bar와의 충돌
+	// Ball과 Bar의 충돌
 
 	for (int i = 0; i < Bar.Length; i++)
 	{
 		if (y == Bar.Y)
 		{
-			if ((x >= Bar.X[0] && x <= Bar.X[2] + 1) ||
-				((x + 1) >= Bar.X[0] && (x + 1) <= Bar.X[2] + 1))
+
+			// X[0]과 충돌
+			if ((x >= Bar.X[0] && x <= Bar.X[0] + 1) || ((x + 1) >= Bar.X[0] && (x + 1) <= Bar.X[0] + 1))
 			{
-				Ball.Direction = (DIRECT) BlockStateTable[Ball.Direction];
+				Ball.Direction = (DIRECT) 5;
+				return 1;
+			}
+			// X[1]과 충돌
+			if ((x >= Bar.X[1] && x <= Bar.X[1] + 1) || ((x + 1) >= Bar.X[1] && (x + 1) <= Bar.X[1] + 1))
+			{
+				Ball.Direction = (DIRECT)0;
+				return 1;
+			}
+			// X[2]과 충돌
+			if ((x >= Bar.X[2] && x <= Bar.X[2] + 1) || ((x + 1) >= Bar.X[2] && (x + 1) <= Bar.X[2] + 1))
+			{
+				Ball.Direction = (DIRECT)1;
 				return 1;
 			}
 		}
 	}
 
-	// 블럭과의 충돌
+	// Ball과 Block의 충돌
 
-	for (int i = 0; i < Stage.Level; i++)
+	for (int i = 0; i < Stage.BlockCount; i++)
 	{
 		if (Block[i].Life > 0) // Life가 남은 Block에 한해서
 		{
@@ -153,8 +168,8 @@ int Collision(int x, int y) // 충돌 체크
 	if (count > 0)
 		return 1;
 
-	// 벽과의 충돌
-
+	// Ball과 벽의 충돌
+	
 	// ↑ ([0])
 	if (y < 0)
 	{
@@ -196,7 +211,8 @@ int Collision(int x, int y) // 충돌 체크
 	return 0; // 충돌 X
 }
 
-int OverlapBlock(int End, int x, int y) // 중복Block 존재? 
+// 중복Block 존재?
+int OverlapBlock(int End, int x, int y)  
 {
 	for (int i = 0; i < End; i++)
 	{
@@ -210,7 +226,8 @@ int OverlapBlock(int End, int x, int y) // 중복Block 존재?
 	return 0; // 중복 없음
 }
 
-	void SetBlock(int BlockCount)
+// Block 생성
+void SetBlock(int BlockCount)
 	{
 		int x, y, i;
 		srand((unsigned)time(NULL));
@@ -221,7 +238,7 @@ int OverlapBlock(int End, int x, int y) // 중복Block 존재?
 			while (1)
 			{
 				x = rand() % BOARD_WIDTH; // 0 <= x < 가로길이
-				y = rand() % BOARD_HEIGH; // 0 <= y < 세로길이
+				y = (rand() % 10) + 3; // 3 <= y < 13
 
 				if (OverlapBlock(i, x, y) == 0) // 0~i번 까지의 블럭 중 중복이 없으면
 				{
@@ -233,7 +250,8 @@ int OverlapBlock(int End, int x, int y) // 중복Block 존재?
 		} // for문 끝
 	}
 
-	void KeyControl(int key) // (RUNNING에서의) 키조작
+// (RUNNING에서의) 키조작
+void KeyControl(int key) 
 	{
 		clock_t CurTime = clock();
 		int direction;
@@ -269,10 +287,6 @@ int OverlapBlock(int End, int x, int y) // 중복Block 존재?
 					Ball.OldTime = clock();
 					Ball.IsReady = 0; // 준비 O -> 준비 X
 				}
-				else
-				{
-					Init(); // 준비X -> 게임 초기화 
-				}
 				break;
 
 			case '0': case '1': case '2': case '3': case '4': case '5': // Ball 방향 변경 
@@ -291,7 +305,8 @@ int OverlapBlock(int End, int x, int y) // 중복Block 존재?
 
 	}
 
-	void BallMove(clock_t CurTime) // Ball의 이동
+// Ball의 이동
+void BallMove(clock_t CurTime)
 	{
 		char temp[20];
 		if (Ball.IsReady == 0) // 준비상태가 아니면
@@ -369,9 +384,9 @@ int OverlapBlock(int End, int x, int y) // 중복Block 존재?
 		}
 	}
 
-	// 프레임워크 함수
+// 프레임워크 함수
 
-	void Init()
+void Init()
 	{
 		// 상태 초기화
 		GameStatus = START;
@@ -388,7 +403,7 @@ int OverlapBlock(int End, int x, int y) // 중복Block 존재?
 		Bar.Life = 3;
 		Bar.Length = 3;
 		Bar.OldTime = clock();
-		Bar.MoveTime = 100;
+		Bar.MoveTime = 40;
 
 		// 공 초기화
 		Ball.X = Bar.X[1];
@@ -403,7 +418,7 @@ int OverlapBlock(int End, int x, int y) // 중복Block 존재?
 
 	}
 
-	void Update()
+void Update()
 	{
 		clock_t CurTime = clock(); // 현재 시각
 
@@ -413,7 +428,7 @@ int OverlapBlock(int End, int x, int y) // 중복Block 존재?
 		}
 	}
 
-	void Render()
+void Render()
 	{
 		ScreenClear();
 		
@@ -422,12 +437,13 @@ int OverlapBlock(int End, int x, int y) // 중복Block 존재?
 		// 상단바 출력
 
 		char TheTopBar[81];
-		sprintf(TheTopBar, "현 스테이지 : %d         Life : %d", Stage.Level, Bar.Life);
-		ScreenPrint(0, 0, TheTopBar);
-		ScreenPrint(0, 2, "================================================================================");
 
 		if (GameStatus == RUNNING || GameStatus == STOP)
 		{
+			sprintf(TheTopBar, "현 스테이지 : %d         Life : %d", Stage.Level, Bar.Life);
+			ScreenPrint(0, 0, TheTopBar);
+			ScreenPrint(0, 2, "================================================================================");
+
 			ScreenPrint(Ball.X, Ball.Y, "●"); // Ball 표시
 
 			for (int i = 0; i < Bar.Length; i++) // Bar 표시
@@ -445,12 +461,12 @@ int OverlapBlock(int End, int x, int y) // 중복Block 존재?
 		ScreenFlipping();
 	}
 
-	void Release()
+void Release()
 	{
 
 	}
 
-	void main()
+void main()
 	{
 		int key;
 
