@@ -34,8 +34,9 @@ clock_t Stat_OldTime = clock(); // PrintTime의 OldTime
 
 // 플레이 관련
 
+//int BlockCountTable[3] = { 1, 2, 3 }; // 발컨을 위한 테스트용 테이블
 int BlockCountTable[3] = { 10, 15, 20 }; // Stage.Level 에 따른 Block 갯수
-
+int brokenBlock; // Life 0 인 Block의 갯수
 int WallStateTable[4][6] = { // 벽과의 충돌 시 상태 변화 테이블
 	{3, 2, -1, -1, -1, 4},
 	{-1, 5, 4, -1, -1, -1},
@@ -59,10 +60,11 @@ void StatusPrint()
 		break;
 
 	case INIT:
+
 		// 스테이지 초기화
-		
-		// Stage.Level++; // SUCCESS , FAILED 에서 Level 변화 
-		Stage.BlockCount = BlockCountTable[Stage.Level]; // Level에 따라 BlockCount가 다름 
+		//Stage.BlockCount = BlockCountTable[Stage.Level]; // Level에 따라 BlockCount가 다름 
+		brokenBlock = 0; // 파괴된 Block 갯수 0
+		Bar.Life = 3; // Life 초기화
 
 		// 화면 출력
 
@@ -92,23 +94,41 @@ void StatusPrint()
 		break;
 
 	case RUNNING:
+		if (brokenBlock == Stage.BlockCount)
+		{
+			Ball.IsReady = 1;
+			GameStatus = SUCCESS;
+		}
+		if (Bar.Life == 0)
+		{
+			Ball.IsReady = 1;
+			GameStatus = FAILED;
+		}
 		break;
 
 	case STOP:
-		sprintf(StatString, "[STOP 화면]");
+		sprintf(StatString, "[STOP 화면] \n" , 
+			"\t\t\t\t ESC :: 게임으로 돌아감");
 		ScreenPrint(30, 10, StatString);
 		break;
 
 	case SUCCESS:
-		sprintf(StatString, "SUCCESS 화면");
+		sprintf(StatString, "SUCCESS 화면 \n "
+			"\t\t\t SPACE BAR :: 다음 스테이지 \n"
+			"\t\t\t ESC :: 결과 화면");
+		ScreenPrint(30, 10, StatString);
 		break;
 
 	case FAILED:
-		sprintf(StatString, "FAILED 화면");
+		sprintf(StatString, "FAILED 화면 \n"
+			"\t\t\t SPACE BAR :: 재도전 \n"
+			"\t\t\t ESC :: 결과 화면");
+		ScreenPrint(30, 10, StatString);
 		break;
 
 	case RESULT:
 		sprintf(StatString, "RESULT 화면");
+		ScreenPrint(30, 10, StatString);
 		break;
 
 	}
@@ -117,7 +137,7 @@ void StatusPrint()
 // 충돌 체크
 int Collision(int x, int y) 
 {
-	int count = 0; // 블럭 충돌 개수
+	int count = 0; // 블럭 충돌 횟수
 
 	// Ball과 Bar의 충돌
 
@@ -159,8 +179,12 @@ int Collision(int x, int y)
 					(Block[i].X + 1) == x || (Block[i].X + 1) == (x + 1)) // x 또는 x+1이 동일
 				{
 					Ball.Direction = (DIRECT) BlockStateTable[Ball.Direction];
-					Block[i].Life--;
-					count++;
+					Block[i].Life--; // Block의 Life 감소
+					count++; // 충돌 횟수 증가
+					if (Block[i].Life == 0) // Block이 파괴되면
+					{
+						brokenBlock++; // 파괴된 Block 갯수 증가
+					}
 				}
 			}
 		}
@@ -445,10 +469,11 @@ void Render()
 
 		char TheTopBar[81];
 
+		// 게임 실행 중 출력
 		if (GameStatus == RUNNING || GameStatus == STOP)
 		{
-			sprintf(TheTopBar, "현 스테이지 : %d         Life : %d", Stage.Level + 1, Bar.Life);
-			ScreenPrint(20 , 1, TheTopBar);
+			sprintf(TheTopBar, "현 스테이지 : %d | 파괴된 블럭 : %d | Life : %d", Stage.Level + 1, brokenBlock, Bar.Life);
+			ScreenPrint(17 , 1, TheTopBar);
 
 			// Wall 표시
 			
@@ -526,6 +551,14 @@ void main()
 						GameStatus = RUNNING;
 						break;
 
+					case SUCCESS:
+						GameStatus = RESULT;
+						break;
+
+					case FAILED:
+						GameStatus = RESULT;
+						break;
+
 					default:
 						break;
 					}
@@ -537,6 +570,27 @@ void main()
 					{	
 					case START:
 						GameStatus = INIT;
+						break;
+
+					case SUCCESS:
+						Stage.Level++;
+						if (Stage.Level < 3)
+						{
+							Stage.BlockCount = BlockCountTable[Stage.Level];
+							SetBlock(Stage.BlockCount);
+							GameStatus = INIT;
+						}
+						else
+							GameStatus = RESULT;
+
+						break;
+
+					case FAILED:
+					{
+						Stage.BlockCount = BlockCountTable[Stage.Level];
+						SetBlock(Stage.BlockCount);
+						GameStatus = INIT; 
+					}
 						break;
 
 					default:
