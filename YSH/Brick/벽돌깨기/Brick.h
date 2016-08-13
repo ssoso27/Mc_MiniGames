@@ -17,6 +17,14 @@
 
 	// 구조체
 
+	typedef struct _WALL
+	{
+		int leftX; // 왼쪽 벽
+		int rightX; // 오른쪽 벽
+		int topY; // 위쪽 벽
+		int bottomY; // 아래쪽 벽
+	} WALL;
+
 	typedef struct _STAGE
 	{
 		int BlockCount;

@@ -24,6 +24,7 @@ BAR Bar;
 BLOCK Block[30];
 GAMESTATUS GameStatus;
 STAGE Stage;
+WALL Wall;
 
 // 출력 관련
 
@@ -171,21 +172,21 @@ int Collision(int x, int y)
 	// Ball과 벽의 충돌
 	
 	// ↑ ([0])
-	if (y < 0)
+	if (y < Wall.topY + 1)
 	{
 		Ball.Direction = (DIRECT) WallStateTable[0][Ball.Direction];
 		return 1; // 충돌 O
 	}
 	
 	// → ([1])
-	if (x > BOARD_WIDTH)
+	if (x > Wall.rightX - 1)
 	{
 		Ball.Direction = (DIRECT)WallStateTable[1][Ball.Direction];
 		return 1;
 	}
 	
 	// ↓ ([2])
-	if (y > BOARD_HEIGH)
+	if (y > Wall.bottomY - 1)
 	{
 		// Ball 상태 초기화
 		Ball.Direction = TOP;
@@ -202,7 +203,7 @@ int Collision(int x, int y)
 	}
 
 	// ← ([3])
-	if (x < 0)
+	if (x < Wall.leftX + 1)
 	{
 		Ball.Direction = (DIRECT)WallStateTable[3][Ball.Direction];
 		return 1;
@@ -237,8 +238,8 @@ void SetBlock(int BlockCount)
 
 			while (1)
 			{
-				x = rand() % BOARD_WIDTH; // 0 <= x < 가로길이
-				y = (rand() % 10) + 3; // 3 <= y < 13
+				x = (rand() % (Wall.rightX - Wall.leftX - 1)) + Wall.leftX + 1; // Wall.leftX + 1 <= x < Wall 너비 - 1 + Wall.letfX + 1
+				y = (rand() % 10) + Wall.topY + 1; // Wall.topY + 1 <= y < Wall.topY + 10 + 1
 
 				if (OverlapBlock(i, x, y) == 0) // 0~i번 까지의 블럭 중 중복이 없으면
 				{
@@ -262,7 +263,7 @@ void KeyControl(int key)
 			{
 			case LEFT:
 				Bar.OldTime = clock();
-				if (Bar.X[0] > 0)
+				if (Bar.X[0] > Wall.leftX + 1)
 				{
 					Bar.X[0]--;
 					Bar.X[1]--;
@@ -272,7 +273,7 @@ void KeyControl(int key)
 
 			case RIGHT:
 				Bar.OldTime = clock();
-				if (Bar.X[2] < BOARD_WIDTH)
+				if (Bar.X[2] < Wall.rightX - 1)
 				{
 					Bar.X[0]++;
 					Bar.X[1]++;
@@ -388,6 +389,12 @@ void BallMove(clock_t CurTime)
 
 void Init()
 	{
+		// 벽 초기화
+		Wall.leftX = 12;
+		Wall.rightX = BOARD_WIDTH - 12;
+		Wall.topY = 2;
+		Wall.bottomY = BOARD_HEIGH - 1;
+
 		// 상태 초기화
 		GameStatus = START;
 		
@@ -403,7 +410,7 @@ void Init()
 		Bar.Life = 3;
 		Bar.Length = 3;
 		Bar.OldTime = clock();
-		Bar.MoveTime = 40;
+		Bar.MoveTime = 30;
 
 		// 공 초기화
 		Ball.X = Bar.X[1];
@@ -440,9 +447,30 @@ void Render()
 
 		if (GameStatus == RUNNING || GameStatus == STOP)
 		{
-			sprintf(TheTopBar, "현 스테이지 : %d         Life : %d", Stage.Level, Bar.Life);
-			ScreenPrint(0, 0, TheTopBar);
-			ScreenPrint(0, 2, "================================================================================");
+			sprintf(TheTopBar, "현 스테이지 : %d         Life : %d", Stage.Level + 1, Bar.Life);
+			ScreenPrint(20 , 1, TheTopBar);
+
+			// Wall 표시
+			
+			// 각모서리
+			ScreenPrint(Wall.leftX, Wall.topY, "┌"); // 좌측 상단
+			ScreenPrint(Wall.rightX, Wall.topY, "┐"); // 우측 상단
+			ScreenPrint(Wall.leftX, Wall.bottomY, "└"); // 좌측 하단
+			ScreenPrint(Wall.rightX, Wall.bottomY, "┘"); // 우측 하단
+			
+														 // 위아래벽
+			for (int i = Wall.leftX + 2; i <Wall.rightX ; i++)
+			{
+				ScreenPrint(i, Wall.topY, "-");
+				ScreenPrint(i, Wall.bottomY, "-");
+			}
+			
+			// 좌우벽
+			for (int i = Wall.topY + 1 ; i < Wall.bottomY; i++)
+			{
+				ScreenPrint(Wall.leftX, i, "│");
+				ScreenPrint(Wall.rightX, i, "│");
+			}
 
 			ScreenPrint(Ball.X, Ball.Y, "●"); // Ball 표시
 
