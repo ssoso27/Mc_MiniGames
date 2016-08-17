@@ -2,6 +2,7 @@
 #include "Games\Dodge.h"
 #include "Games\Shoot.h"
 #include "Games\Tetris.h"
+#include "Games\Brick.h"
 
 #pragma warning(disable:4996)
 
@@ -14,7 +15,7 @@ void main()
 	while (qFlag)
 	{
 
-		printf("미니게임을 선택하세요. 1 2 3 4 \n");
+		printf("미니게임을 선택하세요. Dodge(1) Shoot(2) Tetris(3) Brick(4) 나가기(5) \n");
 		scanf("%d", &choice);
 
 		switch (choice)
@@ -32,6 +33,10 @@ void main()
 			break;
 
 		case 4:
+			SH_Brick::Brick();
+			break;
+
+		case 5:
 			qFlag = false;
 		}
 

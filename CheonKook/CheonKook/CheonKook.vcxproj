@@ -146,6 +146,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Games\Brick.cpp" />
     <ClCompile Include="Games\Dodge.cpp" />
     <ClCompile Include="Games\Screen.cpp" />
     <ClCompile Include="Games\Shoot.cpp" />
@@ -153,6 +154,7 @@
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Games\Brick.h" />
     <ClInclude Include="Games\Dodge.h" />
     <ClInclude Include="Games\Header.h" />
     <ClInclude Include="Games\Screen.h" />
