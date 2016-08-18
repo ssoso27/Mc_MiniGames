@@ -24,7 +24,7 @@ namespace SH_Brick
 
 	BALL Ball;
 	BAR Bar;
-	BLOCK Block[30];
+	BLOCK Block[20];
 	GAMESTATUS GameStatus;
 	STAGE Stage;
 	WALL Wall;
@@ -82,6 +82,7 @@ namespace SH_Brick
 			//Stage.BlockCount = BlockCountTable[Stage.Level]; // Level에 따라 BlockCount가 다름 
 			brokenBlock = 0; // 파괴된 Block 갯수 0
 			Bar.Life = 3; // Life 초기화
+			Ball.Direction = TOP;
 
 			// 화면 출력
 
