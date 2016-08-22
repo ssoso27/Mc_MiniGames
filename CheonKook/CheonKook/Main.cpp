@@ -24,27 +24,69 @@ CHOICE Choice;
 
 // 출력 관련
 char mainPrint[200]; // 기본 출력 문구
-char choicePrint[3] = "⊙"; // 선택 표시
 
 // 함수
+void SelectGame() // 게임 선택 및 실행 함수
+{
+	switch (Choice.select)
+	{
+	case 0: // 벽돌깨기
+		Choice.select = 0;
+		SH_Brick::Brick();
+		break;
+
+	case 1: // 화살표 피하기
+		Choice.select = 0;
+		SH_Dodge::Dodge();
+		break;
+
+	case 2: // 슛골인
+		Choice.select = 0;
+		SB_Shoot::Shoot();
+		break;
+
+	case 3: // 테트리스
+		Choice.select = 0;
+		SB_Tetris::Tetris();
+		break;
+
+	case 4: // 팀 소개
+		Choice.select = 0;
+		break;
+
+	default:
+		break;
+	}
+}
+
 void KeyControl(int key) // 키 조작 함수
 {
+	clock_t CurTime = clock();
+
 	switch (key)
 	{
 	case UP:
-		if (Choice.select > 0)
-			Choice.select--; // 위로 이동
-		else
-			Choice.select = distractorNum - 1; // 제일 아래로 이동
-
+		if (CurTime - Choice.OldTime > Choice.MoveTime) // 이동 제한시간이 지나면 
+		{
+			if (Choice.select > 0)
+				Choice.select--; // 위로 이동
+			else
+				Choice.select = distractorNum - 1; // 제일 아래로 이동
+		}
 		break;
 
 	case DOWN:
-		if (Choice.select < distractorNum - 1)
-			Choice.select++; // 아래로 이동
-		else
-			Choice.select = 0; // 제일 위로 이동
+		if (CurTime - Choice.OldTime > Choice.MoveTime) // 이동 제한시간이 지나면
+		{
+			if (Choice.select < distractorNum - 1)
+				Choice.select++; // 아래로 이동
+			else
+				Choice.select = 0; // 제일 위로 이동
+		}
+		break;
 
+	case SPACE:
+		SelectGame(); // 게임 선택 및 실행 함수
 		break;
 
 	default:
@@ -89,15 +131,17 @@ void AssignCoord() // 좌표 부여 함수
 // 프레임워크 함수
 void Init()
 {
-	// 선택된 선택지 초기화
-	Choice.select = 0;
+	// Choice 초기화
+	Choice.select = 0; // 선택된 선택지
+	Choice.MoveTime = 100;
+	Choice.OldTime = clock();
 
 	// 기본 출력 문구 초기화
 	sprintf(mainPrint,
 		"\t\t [ 미니게임천국 ]\n\n\n\n"
 		"\t\t\t- 게임을 선택하세요 - \n\n\n"
-		"\t\t\t ◎ 닷지\n"
 		"\t\t\t ◎ 벽돌깨기\n"
+		"\t\t\t ◎ 화살표피하기\n"
 		"\t\t\t ◎ 슛골인\n"
 		"\t\t\t ◎ 테트리스\n"
 		"\t\t\t ◎ 팀소개\n\n\n\n\n\n\n\n");
@@ -106,6 +150,7 @@ void Init()
 void Update()
 {
 	// 선택지에 따른 좌표 부여 함수
+	AssignCoord();
 }
 
 void Render()
@@ -113,6 +158,7 @@ void Render()
 	ScreenClear();
 
 	ScreenPrint(10, 10, mainPrint);
+	ScreenPrint(Choice.X, Choice.Y, "⊙");
 	
 	ScreenFlipping();
 }
@@ -133,7 +179,8 @@ void main()
 			if (key == 'q' || key == 'Q')
 				break;
 
-			// 키 조작 함수 -> 선택지 변경
+			// 키 조작 함수
+			KeyControl(key);
 		}
 
 		Update();
