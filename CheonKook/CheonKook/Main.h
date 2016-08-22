@@ -5,7 +5,7 @@ typedef struct _CHOICE
 {
 	int X;
 	int Y;
-	int select;
+	int select; // 선택된 선택지
 	clock_t OldTime;
 	clock_t MoveTime;
 } CHOICE;

@@ -24,10 +24,7 @@ CHOICE Choice;
 
 // 출력 관련
 char mainPrint[200]; // 기본 출력 문구
-char choicePrint[3] = "◀"; // 선택 표시
-
-// 조작 관련
-int select_dis; // 선택된 선택지
+char choicePrint[3] = "⊙"; // 선택 표시
 
 // 함수
 void KeyControl(int key) // 키 조작 함수
@@ -35,18 +32,18 @@ void KeyControl(int key) // 키 조작 함수
 	switch (key)
 	{
 	case UP:
-		if (select_dis > 0)
-			select_dis--; // 위로 이동
+		if (Choice.select > 0)
+			Choice.select--; // 위로 이동
 		else
-			select_dis = distractorNum - 1; // 제일 아래로 이동
+			Choice.select = distractorNum - 1; // 제일 아래로 이동
 
 		break;
 
 	case DOWN:
-		if (select_dis < distractorNum - 1)
-			select_dis++; // 아래로 이동
+		if (Choice.select < distractorNum - 1)
+			Choice.select++; // 아래로 이동
 		else
-			select_dis = 0; // 제일 위로 이동
+			Choice.select = 0; // 제일 위로 이동
 
 		break;
 
@@ -57,14 +54,43 @@ void KeyControl(int key) // 키 조작 함수
 
 void AssignCoord() // 좌표 부여 함수
 {
+	switch (Choice.select)
+	{
+	case 0:
+		Choice.X = 25;
+		Choice.Y = 12;
+		break;
 
+	case 1:
+		Choice.X = 25;
+		Choice.Y = 13;
+		break;
+
+	case 2:
+		Choice.X = 25;
+		Choice.Y = 14;
+		break;
+
+	case 3:
+		Choice.X = 25;
+		Choice.Y = 15;
+		break;
+
+	case 4:
+		Choice.X = 25;
+		Choice.Y = 16;
+		break;
+		
+	default:
+		break;
+	}
 }
 
 // 프레임워크 함수
 void Init()
 {
 	// 선택된 선택지 초기화
-	select_dis = 0;
+	Choice.select = 0;
 
 	// 기본 출력 문구 초기화
 	sprintf(mainPrint,
@@ -87,7 +113,7 @@ void Render()
 	ScreenClear();
 
 	ScreenPrint(10, 10, mainPrint);
-
+	
 	ScreenFlipping();
 }
 
