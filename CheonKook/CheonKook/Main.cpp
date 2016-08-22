@@ -7,12 +7,66 @@
 
 #pragma warning(disable:4996)
 
+// 열거형
+enum ControlKeys
+{
+	UP = 72,
+	DOWN = 80,
+	SPACE = 32
+};
+
 // 전역변수
-char mainPrint[200];
+// 상수
+int const distractorNum = 5; // 선택지 개수
+
+// 구조체 변수
+CHOICE Choice;
+
+// 출력 관련
+char mainPrint[200]; // 기본 출력 문구
+char choicePrint[3] = "◀"; // 선택 표시
+
+// 조작 관련
+int select_dis; // 선택된 선택지
 
 // 함수
+void KeyControl(int key) // 키 조작 함수
+{
+	switch (key)
+	{
+	case UP:
+		if (select_dis > 0)
+			select_dis--; // 위로 이동
+		else
+			select_dis = distractorNum - 1; // 제일 아래로 이동
+
+		break;
+
+	case DOWN:
+		if (select_dis < distractorNum - 1)
+			select_dis++; // 아래로 이동
+		else
+			select_dis = 0; // 제일 위로 이동
+
+		break;
+
+	default:
+		break;
+	}
+}
+
+void AssignCoord() // 좌표 부여 함수
+{
+
+}
+
+// 프레임워크 함수
 void Init()
 {
+	// 선택된 선택지 초기화
+	select_dis = 0;
+
+	// 기본 출력 문구 초기화
 	sprintf(mainPrint,
 		"\t\t [ 미니게임천국 ]\n\n\n\n"
 		"\t\t\t- 게임을 선택하세요 - \n\n\n"
@@ -25,7 +79,7 @@ void Init()
 
 void Update()
 {
-
+	// 선택지에 따른 좌표 부여 함수
 }
 
 void Render()
@@ -52,6 +106,8 @@ void main()
 
 			if (key == 'q' || key == 'Q')
 				break;
+
+			// 키 조작 함수 -> 선택지 변경
 		}
 
 		Update();
