@@ -13,6 +13,7 @@ typedef struct _CHOICE
 // 함수원형
 void KeyControl(int);
 void AssignCoord();
+void SelectGame();
 
 // 프레임워크 함수
 void Init();

@@ -440,7 +440,5 @@ namespace SB_Shoot
 
 		}
 
-		Release();
-		ScreenRelease();
 	}
 }

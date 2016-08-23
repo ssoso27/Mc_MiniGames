@@ -31,27 +31,22 @@ void SelectGame() // 게임 선택 및 실행 함수
 	switch (Choice.select)
 	{
 	case 0: // 벽돌깨기
-		Choice.select = 0;
 		SH_Brick::Brick();
 		break;
 
 	case 1: // 화살표 피하기
-		Choice.select = 0;
 		SH_Dodge::Dodge();
 		break;
 
 	case 2: // 슛골인
-		Choice.select = 0;
 		SB_Shoot::Shoot();
 		break;
 
 	case 3: // 테트리스
-		Choice.select = 0;
 		SB_Tetris::Tetris();
 		break;
 
 	case 4: // 팀 소개
-		Choice.select = 0;
 		break;
 
 	default:
@@ -72,6 +67,8 @@ void KeyControl(int key) // 키 조작 함수
 				Choice.select--; // 위로 이동
 			else
 				Choice.select = distractorNum - 1; // 제일 아래로 이동
+
+			Choice.OldTime = CurTime;
 		}
 		break;
 
@@ -82,10 +79,13 @@ void KeyControl(int key) // 키 조작 함수
 				Choice.select++; // 아래로 이동
 			else
 				Choice.select = 0; // 제일 위로 이동
+
+			Choice.OldTime = CurTime;
 		}
 		break;
 
 	case SPACE:
+		Choice.OldTime = CurTime;
 		SelectGame(); // 게임 선택 및 실행 함수
 		break;
 
@@ -167,8 +167,8 @@ void main()
 {
 	int key;
 
-	ScreenInit();
 	Init();
+	ScreenInit();
 
 	while (1)
 	{
@@ -186,6 +186,8 @@ void main()
 		Update();
 		Render();
 	}
+
+	ScreenRelease();
 }
 
 void main2()

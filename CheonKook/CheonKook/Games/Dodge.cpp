@@ -541,7 +541,7 @@ namespace SH_Dodge
 			{
 				Key = _getch();
 
-				if (Key == 'q' || Key == 'Q')
+				if ((Key == 'q') || (Key == 'Q'))
 					break;
 
 				if (Key == SPACE)
@@ -576,9 +576,6 @@ namespace SH_Dodge
 			Render();
 
 		}
-
-		Release();
-		ScreenRelease();
 	}
 
 }
