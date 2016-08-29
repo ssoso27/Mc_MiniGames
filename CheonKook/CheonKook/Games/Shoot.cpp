@@ -19,7 +19,7 @@ namespace SB_Shoot
 	char StateString[500]; // 게임 상태 저장
 	clock_t p_OldTime; // 게임 상태 전이를 위한 이동 시각 저장
 
-	StageInfo p_StageInfo[] = { { 2, 1000 * 20, 2, 20, 3, 300,2}, {10, 1000 * 30, 2, 20, 5, 300,2 } };
+	StageInfo p_StageInfo[] = { { 2, 1000 * 20, 2, 20, 3, 300,2}, {10, 1000 * 30, 2, 20, 5, 300,2 } ,{ 15, 1000 * 30, 2, 20, 5, 300,2 } };
 	EFFECT Effect;
 	GOAL Goal;
 	BALL Ball;
@@ -218,7 +218,15 @@ namespace SB_Shoot
 			}
 			break;
 		case SUCCESS: // SUCCESS 상태. 미션 성공
-			sprintf(StateString, "스테이지 %d 미션 성공. 다음 단계? (Y/N)", p_Stage);
+			if (p_Stage < 3)
+			{
+				sprintf(StateString, "스테이지 %d 미션 성공. 다음 단계? (Y/N)", p_Stage);
+			}
+			else // 모든 스테이지 클리어
+			{
+				sprintf(StateString, "모든 스테이지 클리어 \n");
+			}
+
 			if (CurTime - p_OldTime > 3000)
 			{
 				p_OldTime = CurTime;
@@ -340,8 +348,16 @@ namespace SB_Shoot
 					switch (Key)
 					{
 					case 'Y': case 'y':
-						++p_Stage;
-						p_GameState = INIT;
+						if (p_Stage < 2) 
+						{
+							++p_Stage;
+							p_GameState = INIT;
+						}
+						else // 모든 게임 클리어
+						{
+							p_GameState = RESULT;
+						}
+
 						break;
 					case 'N': case 'n':
 						p_GameState = RESULT;
