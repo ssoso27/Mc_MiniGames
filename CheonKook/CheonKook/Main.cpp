@@ -43,7 +43,7 @@ void SelectGame() // 게임 선택 및 실행 함수
 		break;
 
 	case 3: // 테트리스
-		SB_Tetris::Tetris();
+		//SB_Tetris::Tetris();
 		break;
 
 	case 4: // 팀 소개
@@ -143,8 +143,8 @@ void Init()
 		"\t\t\t ◎ 벽돌깨기\n"
 		"\t\t\t ◎ 화살표피하기\n"
 		"\t\t\t ◎ 슛골인\n"
-		"\t\t\t ◎ 테트리스\n"
-		"\t\t\t ◎ 팀소개\n\n\n\n\n\n\n\n");
+		"\t\t\t ◎ 테트리스 (공사중)\n"
+		"\t\t\t ◎ 팀소개 (공사중)\n\n\n\n\n\n\n\n");
 }
 
 void Update()
