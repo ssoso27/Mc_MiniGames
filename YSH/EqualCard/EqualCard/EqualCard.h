@@ -1,0 +1,28 @@
+#pragma once
+
+// 열거형
+typedef enum _GAMESTAUTS { START, INIT, READY, RUNNING, STOP, SUCCESS, FAILED, RESULT} GAMESTATUS;
+
+// 구조체
+typedef struct _CARD
+{
+	int X;
+	int Y;
+	int CellNum; // 표시될 장소 
+	clock_t PrintTime; // 화면 표시 시간
+	clock_t OldTime;
+	char* PrintForm; // 표시되는 모양
+	char* Type; // 카드 타입
+} CARD;
+
+// 함수 원형
+void CreateCard();
+void AssignCoord();
+void AssignCell();
+
+// 프레임워크 함수
+void Init();
+void Update();
+void Render();
+void Release();
+void EqualCard();
