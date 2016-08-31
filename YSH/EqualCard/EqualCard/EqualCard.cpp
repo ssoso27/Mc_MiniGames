@@ -12,46 +12,72 @@ char TypeArray[5][7] = { "Heart", "Star", "Clover", "Spade" , "Joker" }; // 타입
  
 // 함수
 
-void AssignCoord()// 좌표 부여 함수
+void AssignCoord(int index)// 좌표 부여 함수
 {
-	for (int i = 0; i < CardCount; i++)
+	switch (Card[index].CellNum)
 	{
-		switch (Card[i].CellNum)
-		{
-		case 1: // X, Y 부여
-			break;
+	case 1: // X, Y 부여
+		break;
 
-		case 2:
-			break;
+	case 2:
+		break;
 
-		case 3:
-			break;
+	case 3:
+		break;
 
-		case 4:
-			break;
+	case 4:
+		break;
 
-		case 5:
-			break;
+	case 5:
+		break;
 
-		case 6:
-			break;
+	case 6:
+		break;
 
-		case 7:
-			break;
+	case 7:
+		break;
 
-		case 8:
-			break;
+	case 8:
+		break;
 
-		case 9:
-			break;
-		}
+	case 9:
+		break;
+		
 	}
 }
 
+bool OverlapCell(int num) // 중복 Cell이 있는가?
+{
+	for (int i = 0; i < CardCount; i++)
+	{
+		if (Card[i].CellNum == num) // 중복 O
+			return true;
+	}
+
+	return false; // 중복 X
+}
+
+int RandNumMake(int start, int end) // start ~ end 범위의 랜덤 숫자 생성
+{
+	int num;
+	srand(time(NULL));
+
+	num = (rand() % (end - start)) + start;
+
+	return num;
+}
 
 void AssignCell(int index) // CellNum 부여 함수
 {
+	int randomNum;
 
+	while (true)
+	{
+		randomNum = RandNumMake(0, CardCount); // 0 ~ CardCount 까지의 수 랜덤 생성
+
+		if (OverlapCell(randomNum) == false) // 중복 Cell이 없으면
+			break;	
+	}
 }
 
 void CreateCard() // 카드 생성 함수
@@ -59,7 +85,7 @@ void CreateCard() // 카드 생성 함수
 	for (int i = 0; i < CardCount; i++)
 	{
 		AssignCell(i); // CellNum 부여 함수 (랜덤. 중복X)
-		// CellNum에 따른 좌표 부여
+		AssignCoord(i);// CellNum에 따른 좌표 부여
 		// Type 부여 함수 (랜덤. 중복 1회) 
 		// Type에 따른 PrintForm 부여
 	}
@@ -82,15 +108,17 @@ void Update()
 void Render()
 {
 
+	ScreenClear();
+
+	// GameStatus에 따른 화면 출력 함수
+	
+	// RUNNIG 시 출력 문구
+	
+	ScreenFlipping();
 }
 
 void Release()
 {
-	ScreenClear();
-
-	// GameStatus에 따른 화면 출력 함수
-
-	ScreenFlipping();
 }
 
 void main()

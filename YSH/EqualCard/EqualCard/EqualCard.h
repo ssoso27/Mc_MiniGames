@@ -17,8 +17,10 @@ typedef struct _CARD
 
 // 함수 원형
 void CreateCard();
-void AssignCoord();
-void AssignCell();
+void AssignCoord(int );
+void AssignCell(int );
+int RandNumMake(int , int );
+bool OverlapCell(int );
 
 // 프레임워크 함수
 void Init();
