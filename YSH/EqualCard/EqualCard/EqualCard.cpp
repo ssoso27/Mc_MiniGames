@@ -17,38 +17,59 @@ void AssignCoord(int index)// 좌표 부여 함수
 	switch (Card[index].CellNum)
 	{
 	case 1: // X, Y 부여
+		Card[index].X = 10;
+		Card[index].Y = 20;
 		break;
 
 	case 2:
+		Card[index].X = 13;
+		Card[index].Y = 20;
 		break;
 
 	case 3:
+		Card[index].X = 16;
+		Card[index].Y = 20;
 		break;
 
 	case 4:
+		Card[index].X = 10;
+		Card[index].Y = 17;
 		break;
 
 	case 5:
+		Card[index].X = 13;
+		Card[index].Y = 17;
 		break;
 
 	case 6:
+		Card[index].X = 16;
+		Card[index].Y = 17;
 		break;
 
 	case 7:
+		Card[index].X = 10;
+		Card[index].Y = 13;
 		break;
 
 	case 8:
+		Card[index].X = 13;
+		Card[index].Y = 13;
 		break;
 
 	case 9:
+		Card[index].X = 16;
+		Card[index].Y = 13;
 		break;
 		
 	}
 }
 
-bool OverlapCell(int num) // 중복 Cell이 있는가?
+bool OverlapCell(int start, int end, int num) // 중복 Cell이 있는가?
 {
-	for (int i = 0; i < CardCount; i++)
+	if (start == end)
+		return false; 
+
+	for (int i = start; i < end; i++)
 	{
 		if (Card[i].CellNum == num) // 중복 O
 			return true;
@@ -60,7 +81,7 @@ bool OverlapCell(int num) // 중복 Cell이 있는가?
 int RandNumMake(int start, int end) // start ~ end 범위의 랜덤 숫자 생성
 {
 	int num;
-	srand(time(NULL));
+	srand((unsigned) time(NULL));
 
 	num = (rand() % (end - start)) + start;
 
@@ -75,9 +96,11 @@ void AssignCell(int index) // CellNum 부여 함수
 	{
 		randomNum = RandNumMake(0, CardCount); // 0 ~ CardCount 까지의 수 랜덤 생성
 
-		if (OverlapCell(randomNum) == false) // 중복 Cell이 없으면
+		if (OverlapCell(0, index, randomNum) == false) // 중복 Cell이 없으면
 			break;	
 	}
+
+	//Card[index].CellNum = randomNum;
 }
 
 void CreateCard() // 카드 생성 함수
@@ -85,7 +108,7 @@ void CreateCard() // 카드 생성 함수
 	for (int i = 0; i < CardCount; i++)
 	{
 		AssignCell(i); // CellNum 부여 함수 (랜덤. 중복X)
-		AssignCoord(i);// CellNum에 따른 좌표 부여
+		//AssignCoord(i);// CellNum에 따른 좌표 부여
 		// Type 부여 함수 (랜덤. 중복 1회) 
 		// Type에 따른 PrintForm 부여
 	}
@@ -113,7 +136,19 @@ void Render()
 	// GameStatus에 따른 화면 출력 함수
 	
 	// RUNNIG 시 출력 문구
-	
+/*	for (int i = 0; i < CardCount; i++)
+	{
+		ScreenPrint(Card[i].X, Card[i].Y, "T");
+	}*/
+	// test용 출력 시작
+	char test[30];
+	for (int i = 0; i < CardCount; i++)
+	{
+		sprintf(test, "card cell : " + Card[i].CellNum);
+		ScreenPrint(30, i * 2, test);
+	}
+	// test용 출력 종료
+
 	ScreenFlipping();
 }
 
