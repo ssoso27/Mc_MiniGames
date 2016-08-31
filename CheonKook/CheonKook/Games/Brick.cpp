@@ -37,8 +37,8 @@ namespace SH_Brick
 
 	// 플레이 관련
 
-	int BlockCountTable[3] = { 1, 2, 3 }; // 발컨을 위한 테스트용 테이블
-	//int BlockCountTable[3] = { 10, 15, 20 }; // Stage.Level 에 따른 Block 갯수
+	//int BlockCountTable[3] = { 1, 2, 3 }; // 발컨을 위한 테스트용 테이블
+	int BlockCountTable[3] = { 10, 15, 20 }; // Stage.Level 에 따른 Block 갯수
 	int brokenBlock; // Life 0 인 Block의 갯수
 	int WallStateTable[4][6] = { // 벽과의 충돌 시 상태 변화 테이블
 		{3, 2, -1, -1, -1, 4},
