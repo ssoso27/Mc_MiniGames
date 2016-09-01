@@ -1,5 +1,8 @@
 #pragma once
 
+#define BOARD_WIDTH 78
+#define BOARD_HEIGH 24
+
 // 열거형
 typedef enum _GAMESTAUTS { START, INIT, READY, RUNNING, STOP, SUCCESS, FAILED, RESULT} GAMESTATUS;
 
@@ -14,6 +17,19 @@ typedef struct _CARD
 	char* PrintForm; // 표시되는 모양
 	char* Type; // 카드 타입
 } CARD;
+
+typedef struct _BOARD
+{
+	int leftX;
+	int rightX;
+	int topY;
+	int bottomY;
+	int one_forthX;
+	int two_forthX;
+	int three_forthX;
+	int one_thirdY;
+	int two_thirdY;
+} BOARD;
 
 // 함수 원형
 void CreateCard();
