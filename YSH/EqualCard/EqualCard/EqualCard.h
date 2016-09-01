@@ -15,7 +15,7 @@ typedef struct _CARD
 	clock_t PrintTime; // 화면 표시 시간
 	clock_t OldTime;
 	char* PrintForm; // 표시되는 모양
-	char* Type; // 카드 타입
+	int Type; // 카드 타입
 } CARD;
 
 typedef struct _BOARD
@@ -34,6 +34,8 @@ typedef struct _BOARD
 // 함수 원형
 void CreateCard();
 void AssignCell(int, int);
+void AssignType(int, int);
+void AssignForm();
 
 // 프레임워크 함수
 void Init();
