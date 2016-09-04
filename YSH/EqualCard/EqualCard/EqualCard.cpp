@@ -123,7 +123,7 @@ void AssignType(int start, int end) // Type 부여 함수
 
 		if (IsOverlapType[randomnum] < 2) // 중복 0 ~ 1 회
 		{
-			IsOverlapType[randomnum]++; // 중복 표시
+			++IsOverlapType[randomnum]; // 중복 표시
 			Card[i].Type = TypeArray[randomnum]; // 값 대입
 			++i; // 다음 Card[i] 로 넘어감
 		} // if문 종료
@@ -203,9 +203,13 @@ void Render()
 	}
 
 	// test
-	char test[300];
-	sprintf(test, "테스트용 \n" "용트스테 \n");
-	ScreenPrint(10, 2, test);
+	char test[CardCount][20];
+	for (int i = 0; i < CardCount; i++)
+	{
+		sprintf(test[i], "타입 : %d" ,Card[i].Type);
+		ScreenPrint(30, i, test[i]);
+	}
+	// test 종료
 
 	ScreenFlipping();
 }
