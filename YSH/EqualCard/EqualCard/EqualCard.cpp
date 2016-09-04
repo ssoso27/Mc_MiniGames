@@ -12,8 +12,7 @@ BOARD Board;
 
 // 전역변수
 char PrintArray[TypeCount][3] = { "♥" , "★" , "♣" , "♠" , "◀" , "☎" }; // 타입에 따른 출력 배열
-int TypeArray[TypeCount] = { 0, 1, 2, 3, 4, 5}; // 타입 이름 배열 
-
+//int TypeArray[TypeCount] = { 0, 1, 2, 3, 4, 5}; // 타입 이름 배열 
 // 함수
 
 void AssignCoord()// 좌표 부여 함수
@@ -115,16 +114,17 @@ void AssignType(int start, int end) // Type 부여 함수
 {
 	int randomnum;
 	int IsOverlapType[TypeCount] = { 0, }; // 중복 판별용 int 배열
+
 	srand((unsigned)time(NULL));
 
-	for (int i = 0; i < TypeCount; )
+	for (int i = 0; i < CardCount; )
 	{
 		randomnum = (rand() % (end - start)) + start; // start ~ end 범위의 랜덤 숫자
 
 		if (IsOverlapType[randomnum] < 2) // 중복 0 ~ 1 회
 		{
 			++IsOverlapType[randomnum]; // 중복 표시
-			Card[i].Type = TypeArray[randomnum]; // 값 대입
+			Card[i].Type = randomnum; // 값 대입
 			++i; // 다음 Card[i] 로 넘어감
 		} // if문 종료
 	} // for문 종료
