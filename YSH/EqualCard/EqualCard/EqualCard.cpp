@@ -27,63 +27,63 @@ void AssignCoord()// 좌표 부여 함수
 		switch (Card[index].CellNum)
 		{
 		case 1: // X, Y 부여
-			Card[index].X = 10;
-			Card[index].Y = 15;
+			Card[index].X = 24;
+			Card[index].Y = 16;
 			break;
 
 		case 2:
-			Card[index].X = 13;
-			Card[index].Y = 15;
+			Card[index].X = 34;
+			Card[index].Y = 16;
 			break;
 
 		case 3:
-			Card[index].X = 16;
-			Card[index].Y = 15;
+			Card[index].X = 44;
+			Card[index].Y = 16;
 			break;
 
 		case 4:
-			Card[index].X = 19;
-			Card[index].Y = 15;
+			Card[index].X = 54;
+			Card[index].Y = 16;
 			break;
 
 		case 5:
-			Card[index].X = 10;
+			Card[index].X = 24;
 			Card[index].Y = 12;
 			break;
 
 		case 6:
-			Card[index].X = 13;
+			Card[index].X = 34;
 			Card[index].Y = 12;
 			break;
 
 		case 7:
-			Card[index].X = 16;
+			Card[index].X = 44;
 			Card[index].Y = 12;
 			break;
 
 		case 8:
-			Card[index].X = 19;
+			Card[index].X = 54;
 			Card[index].Y = 12;
 			break;
 
 		case 9:
-			Card[index].X = 10;
-			Card[index].Y = 9;
+			Card[index].X = 24;
+			Card[index].Y = 8;
 			break;
 
 		case 10:
-			Card[index].X = 13;
-			Card[index].Y = 9;
+			Card[index].X = 34;
+			Card[index].Y = 8;
 			break;
 
 		case 11:
-			Card[index].X = 16;
-			Card[index].Y = 9;
+			Card[index].X = 44;
+			Card[index].Y = 8;
 			break;
 
 		case 12:
-			Card[index].X = 19;
-			Card[index].Y = 9;
+			Card[index].X = 54;
+			Card[index].Y = 8;
 			break;
 
 		}
@@ -201,15 +201,18 @@ void Render()
 	{
 		ScreenPrint(Card[i].X, Card[i].Y, Card[i].PrintForm);
 	}
-
-	// test
-	char test[CardCount][20];
-	for (int i = 0; i < CardCount; i++)
+	/*
+	//test 시작
+	for (int i = 0; i < 4; i++)
 	{
-		sprintf(test[i], "타입 : %d" ,Card[i].Type);
-		ScreenPrint(30, i, test[i]);
+		ScreenPrint(24 + (10*i), 8, "※");
 	}
-	// test 종료
+	for (int i = 0; i < 3; i++)
+	{
+		ScreenPrint(24, 8 + (4*i), "※");
+	}
+	//test 끝 
+	*/
 
 	ScreenFlipping();
 }
