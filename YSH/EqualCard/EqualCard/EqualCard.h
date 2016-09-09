@@ -31,11 +31,22 @@ typedef struct _BOARD
 	int two_thirdY;
 } BOARD;
 
+typedef struct _CHOICE
+{
+	int X;
+	int Y;
+	int select; // 선택된 선택지
+	clock_t OldTime;
+	clock_t MoveTime;
+} CHOICE;
+
 // 함수 원형
 void CreateCard();
 void AssignCell(int, int);
 void AssignType(int, int);
 void AssignForm();
+void KeyControl(int);
+void SelectCard();
 
 // 프레임워크 함수
 void Init();
