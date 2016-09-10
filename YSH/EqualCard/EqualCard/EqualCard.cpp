@@ -23,16 +23,21 @@ BOARD Board;
 CHOICE Choice;
 
 // 전역변수
-// Card 관련
+// 출력 관련
 char PrintArray[TypeCount][3] = { "♥" , "★" , "♣" , "♠" , "◀" , "☎" }; // 타입에 따른 출력 배열
 char CoverPrint[3] = "●";
+char StatString[500]; // 화면 출력 문구
+double PrintTime = 3.0 * 1000; // 화면 출력 시간
+clock_t Stat_OldTime = clock(); // PrintTime의 OldTime
+
+// Card 관련
 int ViewCard[2] = { -1, -1}; // 보이는 Card의 index 저장
 int selectChance; // 뒤집을 수 있는 기회
 int matchCard; // 짝을 맞춘 Card
 
 // Game 진행 관련
-clock_t OldTime; // Update 시간 측정용
-clock_t TurnTime = (clock_t) 1.2 * 1000; // 커버 씌우기까지의 시간
+clock_t Open_OldTime; // Update 시간 측정용
+double TurnTime = 1.2 * 1000; // 커버 씌우기까지의 시간
 
 // 함수
 
@@ -52,7 +57,7 @@ void CardOpening() // Card가 오픈되어 있는 동안의 작업
 	else // Type이 다르면
 	{
 		// 일정 시간이 지난 후, ViewCell[]을 -1 으로 초기화하며 Card[i].PrintForm = CoverPrint;
-		if (CurTime - OldTime > TurnTime)
+		if (CurTime - Open_OldTime > TurnTime)
 		{
 			// Cover 다시 씌우기
 			Card[ViewCard[0]].PrintForm = CoverPrint;
@@ -95,7 +100,7 @@ void SelectCard()
 	else
 	{
 		ViewCard[1] = select;
-		OldTime = clock();
+		Open_OldTime = clock();
 	}
 
 	selectChance--; // 뒤집기 기회 감소
@@ -311,34 +316,116 @@ void KeyControl(int key)
 {
 	// 모든 상태에서
 
-	// RUNNING 상태에서
-	switch (key)
+	// START 상태에서
+	if (GameStatus == START)
 	{
-	case UP:
-		if (Choice.select < 9)
-			Choice.select += 4;
-		break;
-
-	case DOWN:
-		if (Choice.select > 4)
-			Choice.select -= 4;
-		break;
-
-	case LEFT:
-		if ((Choice.select != 1) && (Choice.select != 5) && (Choice.select != 9))
-		Choice.select--;
-		break;
-
-	case RIGHT:
-		if ((Choice.select != 4) && (Choice.select != 8) && (Choice.select != 12))
-		Choice.select++;
-		break;
-
-	case SPACE:
-		if (ViewCard[1] == -1) // Card가 둘 다 Open이 아니라면
+		if (key == SPACE)
 		{
-			SelectCard();
+			GameStatus = INIT;
 		}
+	}
+
+	// RUNNING 상태에서
+	if (GameStatus == RUNNING)
+	{
+		switch (key)
+		{
+		case UP:
+			if (Choice.select < 9)
+				Choice.select += 4;
+			break;
+
+		case DOWN:
+			if (Choice.select > 4)
+				Choice.select -= 4;
+			break;
+
+		case LEFT:
+			if ((Choice.select != 1) && (Choice.select != 5) && (Choice.select != 9))
+				Choice.select--;
+			break;
+
+		case RIGHT:
+			if ((Choice.select != 4) && (Choice.select != 8) && (Choice.select != 12))
+				Choice.select++;
+			break;
+
+		case SPACE:
+			if (ViewCard[1] == -1) // Card가 둘 다 Open이 아니라면
+			{
+				SelectCard();
+			}
+			break;
+
+		default:
+			break;
+		}
+	}
+}
+
+void StatusPrint()
+{
+	clock_t CurTime = clock();
+
+	switch (GameStatus)
+	{
+	case START:
+		sprintf(StatString, "[START 화면]");
+		ScreenPrint(30, 10, StatString);
+		break;
+
+	case INIT:
+		if (CurTime - Stat_OldTime < PrintTime)
+		{
+			sprintf(StatString, "[INIT 화면]");
+			ScreenPrint(30, 10, StatString);
+		}
+		else
+		{
+			GameStatus = READY;
+			Stat_OldTime = CurTime;
+		}
+		break;
+
+	case READY:
+		if (CurTime - Stat_OldTime < PrintTime)
+		{
+			sprintf(StatString, "[READY 화면]");
+			ScreenPrint(30, 10, StatString);
+		}
+		else
+		{
+			GameStatus = RUNNING;
+			Stat_OldTime = CurTime;
+		}
+		break;
+
+	case RUNNING:
+		if (matchCard == (CardCount / 2))
+			GameStatus = SUCCESS;
+
+		if (selectChance == 0)
+			GameStatus = FAILED;
+		break;
+
+	case STOP:
+		sprintf(StatString, "[STOP 화면]");
+		ScreenPrint(30, 10, StatString);
+		break;
+
+	case SUCCESS:
+		sprintf(StatString, "[SUCCESS 화면]");
+		ScreenPrint(30, 10, StatString);
+		break;
+
+	case FAILED:
+		sprintf(StatString, "[FAILED 화면]");
+		ScreenPrint(30, 10, StatString);
+		break;
+
+	case RESULT:
+		sprintf(StatString, "[RESULT 화면]");
+		ScreenPrint(30, 10, StatString);
 		break;
 
 	default:
@@ -363,14 +450,12 @@ void Init()
 	Board.bottomY = BOARD_HEIGH - 4;
 	
 	// Game 상태 초기화
-	//GameStatus = START;
+	GameStatus = START;
 	selectChance = 30;
 }
 
 void Update()
 {
-	clock_t CurTime = clock();
-
 	AssignCoord(); 
 
 	if (ViewCard[1] != -1) // 두 카드가 모두 Open
@@ -386,42 +471,44 @@ void Render()
 	ScreenClear();
 
 	// GameStatus에 따른 화면 출력 함수
-	
+	StatusPrint();
+
 	// RUNNIG 시 출력 문구
-
-	// 상태바 출력
-	sprintf(BarPrint, "남은 뒤집기 : %d     맞춘 카드 : %d    남은 카드 : %d" , selectChance, matchCard , (CardCount/2) - matchCard );
-	ScreenPrint(16, 2, BarPrint);
-
-	// Board 출력
-	// 각모서리
-	ScreenPrint(Board.leftX, Board.topY, "┌"); // 좌측 상단
-	ScreenPrint(Board.rightX, Board.topY, "┐"); // 우측 상단
-	ScreenPrint(Board.leftX, Board.bottomY, "└"); // 좌측 하단
-	ScreenPrint(Board.rightX, Board.bottomY, "┘"); // 우측 하단
-
-	// 위아래벽
-	for (int i = Board.leftX + 2; i < Board.rightX; i++)
+	if (GameStatus == RUNNING)
 	{
-		ScreenPrint(i, Board.topY, "-");
-		ScreenPrint(i, Board.bottomY, "-");
-	}
-	// 좌우벽
-	for (int i = Board.topY + 1; i < Board.bottomY; i++)
-	{
-		ScreenPrint(Board.leftX, i, "│");
-		ScreenPrint(Board.rightX, i, "│");
-	}
+		// 상태바 출력
+		sprintf(BarPrint, "남은 뒤집기 : %d     맞춘 카드 : %d    남은 카드 : %d", selectChance, matchCard, (CardCount / 2) - matchCard);
+		ScreenPrint(16, 2, BarPrint);
 
-	// Card 출력
-	for (int i = 0; i < CardCount; i++)
-	{
-		ScreenPrint(Card[i].X, Card[i].Y, Card[i].PrintForm);
+		// Board 출력
+		// 각모서리
+		ScreenPrint(Board.leftX, Board.topY, "┌"); // 좌측 상단
+		ScreenPrint(Board.rightX, Board.topY, "┐"); // 우측 상단
+		ScreenPrint(Board.leftX, Board.bottomY, "└"); // 좌측 하단
+		ScreenPrint(Board.rightX, Board.bottomY, "┘"); // 우측 하단
+
+		// 위아래벽
+		for (int i = Board.leftX + 2; i < Board.rightX; i++)
+		{
+			ScreenPrint(i, Board.topY, "-");
+			ScreenPrint(i, Board.bottomY, "-");
+		}
+		// 좌우벽
+		for (int i = Board.topY + 1; i < Board.bottomY; i++)
+		{
+			ScreenPrint(Board.leftX, i, "│");
+			ScreenPrint(Board.rightX, i, "│");
+		}
+
+		// Card 출력
+		for (int i = 0; i < CardCount; i++)
+		{
+			ScreenPrint(Card[i].X, Card[i].Y, Card[i].PrintForm);
+		}
+
+		// Choice 출력
+		ScreenPrint(Choice.X, Choice.Y, "▷");
 	}
-
-	// Choice 출력
-	ScreenPrint(Choice.X, Choice.Y, "▷");
-
 	/*
 	//test 시작
 	for (int i = 0; i < 4; i++)
