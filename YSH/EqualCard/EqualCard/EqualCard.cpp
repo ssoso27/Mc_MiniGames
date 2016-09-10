@@ -27,6 +27,8 @@ CHOICE Choice;
 char PrintArray[TypeCount][3] = { "♥" , "★" , "♣" , "♠" , "◀" , "☎" }; // 타입에 따른 출력 배열
 char CoverPrint[3] = "●";
 int ViewCard[2] = { -1, -1}; // 보이는 Card의 index 저장
+int selectChance; // 뒤집을 수 있는 기회
+int matchCard; // 짝을 맞춘 Card
 
 // Game 진행 관련
 clock_t OldTime; // Update 시간 측정용
@@ -41,6 +43,7 @@ void CardOpening() // Card가 오픈되어 있는 동안의 작업
 	if (IsEqualType()) // 선택된 두 카드의 Type이 같으면
 	{
 		// 맞춘 카드 Count++
+		matchCard++;
 
 		// ViewCard -1 처리
 		ViewCard[0] = -1;
@@ -94,6 +97,8 @@ void SelectCard()
 		ViewCard[1] = select;
 		OldTime = clock();
 	}
+
+	selectChance--; // 뒤집기 기회 감소
 }
 
 void AssignCoord()// 좌표 부여 함수
@@ -344,10 +349,12 @@ void KeyControl(int key)
 // 프레임워크 함수
 void Init()
 {
+	// Card 초기화
 	CreateCard();	// 카드 생성 함수 ( GameStatue == INIT 에 넣을까? )
+	matchCard = 0;
 
 	// Chocie 초기화
-	Choice.select = 7;
+	Choice.select = 9;
 
 	// Board 초기화
 	Board.leftX = 15;
@@ -357,6 +364,7 @@ void Init()
 	
 	// Game 상태 초기화
 	//GameStatus = START;
+	selectChance = 30;
 }
 
 void Update()
@@ -373,13 +381,18 @@ void Update()
 
 void Render()
 {
+	char BarPrint[100];
 
 	ScreenClear();
 
 	// GameStatus에 따른 화면 출력 함수
 	
 	// RUNNIG 시 출력 문구
-	
+
+	// 상태바 출력
+	sprintf(BarPrint, "남은 뒤집기 : %d     맞춘 카드 : %d    남은 카드 : %d" , selectChance, matchCard , (CardCount/2) - matchCard );
+	ScreenPrint(16, 2, BarPrint);
+
 	// Board 출력
 	// 각모서리
 	ScreenPrint(Board.leftX, Board.topY, "┌"); // 좌측 상단
