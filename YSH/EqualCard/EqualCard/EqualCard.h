@@ -47,6 +47,8 @@ void AssignType(int, int);
 void AssignForm();
 void KeyControl(int);
 void SelectCard();
+bool IsEqualType();
+void CardOpening();
 
 // 프레임워크 함수
 void Init();

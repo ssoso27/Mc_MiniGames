@@ -26,13 +26,49 @@ CHOICE Choice;
 // Card 관련
 char PrintArray[TypeCount][3] = { "♥" , "★" , "♣" , "♠" , "◀" , "☎" }; // 타입에 따른 출력 배열
 char CoverPrint[3] = "●";
-int ViewCard[2] = { 99, 99}; // 보이는 Card의 index 저장
+int ViewCard[2] = { -1, -1}; // 보이는 Card의 index 저장
 
 // Game 진행 관련
 clock_t OldTime; // Update 시간 측정용
-clock_t TurnTime = 1.2 * 1000; // 커버 씌우기까지의 시간
+clock_t TurnTime = (clock_t) 1.2 * 1000; // 커버 씌우기까지의 시간
 
 // 함수
+
+void CardOpening() // Card가 오픈되어 있는 동안의 작업
+{
+	clock_t CurTime = clock();
+
+	if (IsEqualType()) // 선택된 두 카드의 Type이 같으면
+	{
+		// 맞춘 카드 Count++
+
+		// ViewCard -1 처리
+		ViewCard[0] = -1;
+		ViewCard[1] = -1;
+	}
+	else // Type이 다르면
+	{
+		// 일정 시간이 지난 후, ViewCell[]을 -1 으로 초기화하며 Card[i].PrintForm = CoverPrint;
+		if (CurTime - OldTime > TurnTime)
+		{
+			// Cover 다시 씌우기
+			Card[ViewCard[0]].PrintForm = CoverPrint;
+			Card[ViewCard[1]].PrintForm = CoverPrint;
+
+			// ViewCard -1 처리
+			ViewCard[0] = -1;
+			ViewCard[1] = -1;
+		}
+	}
+}
+
+bool IsEqualType() // 같은 Type인지 판별
+{
+	if (Card[ViewCard[0]].Type == Card[ViewCard[1]].Type)
+		return true;
+	else
+		return false;
+}
 
 void SelectCard()
 {
@@ -49,7 +85,7 @@ void SelectCard()
 	Card[select].PrintForm = PrintArray[Card[select].Type];
 
 	// ViewCell[0] 또는 ViewCell[1]에 Card의 index 입력
-	if (ViewCard[0] == 99)
+	if (ViewCard[0] == -1)
 	{
 		ViewCard[0] = select;
 	}
@@ -294,7 +330,10 @@ void KeyControl(int key)
 		break;
 
 	case SPACE:
-		SelectCard();
+		if (ViewCard[1] == -1) // Card가 둘 다 Open이 아니라면
+		{
+			SelectCard();
+		}
 		break;
 
 	default:
@@ -324,23 +363,12 @@ void Update()
 {
 	clock_t CurTime = clock();
 
-	AssignCoord();
+	AssignCoord(); 
 
-	// 일정 시간이 지난 후, ViewCell[]을 0으로 초기화하며 Card[i].PrintForm = CoverPrint;
-	if (ViewCard[1] != 99)
+	if (ViewCard[1] != -1) // 두 카드가 모두 Open
 	{
-		if (CurTime - OldTime > TurnTime)
-		{
-			// Cover 다시 씌우기
-			Card[ViewCard[0]].PrintForm = CoverPrint;
-			Card[ViewCard[1]].PrintForm = CoverPrint;
-			
-			// ViewCard 99 처리
-			ViewCard[0] = 99;
-			ViewCard[1] = 99;
-		}
+		CardOpening();
 	}
-
 }
 
 void Render()
