@@ -23,20 +23,41 @@ BOARD Board;
 CHOICE Choice;
 
 // 전역변수
+// Card 관련
 char PrintArray[TypeCount][3] = { "♥" , "★" , "♣" , "♠" , "◀" , "☎" }; // 타입에 따른 출력 배열
-//int TypeArray[TypeCount] = { 0, 1, 2, 3, 4, 5}; // 타입 이름 배열 
-int ViewCell[2] = { 0, }; // 보이는 CellNum 저장
 char CoverPrint[3] = "●";
+int ViewCard[2] = { 99, 99}; // 보이는 Card의 index 저장
+
+// Game 진행 관련
+clock_t OldTime; // Update 시간 측정용
+clock_t TurnTime = 1.2 * 1000; // 커버 씌우기까지의 시간
 
 // 함수
 
 void SelectCard()
 {
+	int select; // 선택된 카드
+
+	for (int i = 0; i < CardCount; i++) // 선택된 카드 찾기
+	{
+		if ((Choice.select) == Card[i].CellNum)
+			select = i;
+	}
+
 	// Card.select 에 따른 Card 선택
 	// 선택된 카드는 Card[i].PrintForm = PrintArray[Card[i].Type]
-	// ViewCell[0] 또는 ViewCell[1]에 Card.select 입력
+	Card[select].PrintForm = PrintArray[Card[select].Type];
 
-	// 일정 시간이 지난 후, ViewCell[]을 0으로 초기화하며 Card[i].PrintForm = CoverPrint;
+	// ViewCell[0] 또는 ViewCell[1]에 Card의 index 입력
+	if (ViewCard[0] == 99)
+	{
+		ViewCard[0] = select;
+	}
+	else
+	{
+		ViewCard[1] = select;
+		OldTime = clock();
+	}
 }
 
 void AssignCoord()// 좌표 부여 함수
@@ -272,6 +293,10 @@ void KeyControl(int key)
 		Choice.select++;
 		break;
 
+	case SPACE:
+		SelectCard();
+		break;
+
 	default:
 		break;
 	}
@@ -297,7 +322,25 @@ void Init()
 
 void Update()
 {
+	clock_t CurTime = clock();
+
 	AssignCoord();
+
+	// 일정 시간이 지난 후, ViewCell[]을 0으로 초기화하며 Card[i].PrintForm = CoverPrint;
+	if (ViewCard[1] != 99)
+	{
+		if (CurTime - OldTime > TurnTime)
+		{
+			// Cover 다시 씌우기
+			Card[ViewCard[0]].PrintForm = CoverPrint;
+			Card[ViewCard[1]].PrintForm = CoverPrint;
+			
+			// ViewCard 99 처리
+			ViewCard[0] = 99;
+			ViewCard[1] = 99;
+		}
+	}
+
 }
 
 void Render()
