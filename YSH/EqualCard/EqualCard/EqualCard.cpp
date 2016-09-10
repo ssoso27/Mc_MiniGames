@@ -27,7 +27,7 @@ CHOICE Choice;
 char PrintArray[TypeCount][3] = { "♥" , "★" , "♣" , "♠" , "◀" , "☎" }; // 타입에 따른 출력 배열
 char CoverPrint[3] = "●";
 char StatString[500]; // 화면 출력 문구
-double PrintTime = 3.0 * 1000; // 화면 출력 시간
+double PrintTime = 2.0 * 1000; // 화면 출력 시간
 clock_t Stat_OldTime = clock(); // PrintTime의 OldTime
 
 // Card 관련
@@ -88,10 +88,6 @@ void SelectCard()
 			select = i;
 	}
 
-	// Card.select 에 따른 Card 선택
-	// 선택된 카드는 Card[i].PrintForm = PrintArray[Card[i].Type]
-	Card[select].PrintForm = PrintArray[Card[select].Type];
-
 	// ViewCell[0] 또는 ViewCell[1]에 Card의 index 입력
 	if (ViewCard[0] == -1)
 	{
@@ -99,9 +95,17 @@ void SelectCard()
 	}
 	else
 	{
+		if (ViewCard[0] == select) // 같은 CellNum 중복 방지
+			return;
+
 		ViewCard[1] = select;
 		Open_OldTime = clock();
 	}
+
+	// Card.select 에 따른 Card 선택
+	// 선택된 카드는 Card[i].PrintForm = PrintArray[Card[i].Type]
+	Card[select].PrintForm = PrintArray[Card[select].Type];
+
 
 	selectChance--; // 뒤집기 기회 감소
 }
