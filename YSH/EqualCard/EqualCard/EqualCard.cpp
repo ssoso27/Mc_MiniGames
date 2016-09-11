@@ -2,7 +2,7 @@
 #include "EqualCard.h"
 
 // 상수
-const int CardCount = 12; // Card의 개수
+const int MaxCardCount = 16; // 최대 Card의 개수
 const int TypeCount = 6; // Type의 개수
 
 // 열거형
@@ -17,10 +17,11 @@ enum ControlKeys
 };
 
 // 구조체변수 & 열거형변수
-CARD Card[CardCount]; // Card 생성
+CARD Card[MaxCardCount]; // Card 생성
 GAMESTATUS GameStatus;
 BOARD Board;
 CHOICE Choice;
+STAGE Stage;
 
 // 전역변수
 // 출력 관련
@@ -31,11 +32,13 @@ double PrintTime = 2.0 * 1000; // 화면 출력 시간
 clock_t Stat_OldTime = clock(); // PrintTime의 OldTime
 
 // Card 관련
+int CardCountArray[3] = { 12, 16, 16 };
 int ViewCard[2] = { -1, -1}; // 보이는 Card의 index 저장
 int selectChance; // 뒤집을 수 있는 기회
 int matchCard; // 짝을 맞춘 Card
 
 // Game 진행 관련
+int ChanceArray[3] = { 30, 30, 25 };
 clock_t Open_OldTime; // Update 시간 측정용
 double TurnTime = 1.2 * 1000; // 커버 씌우기까지의 시간
 
@@ -82,7 +85,7 @@ void SelectCard()
 {
 	int select; // 선택된 카드
 
-	for (int i = 0; i < CardCount; i++) // 선택된 카드 찾기
+	for (int i = 0; i < Stage.CardCount; i++) // 선택된 카드 찾기
 	{
 		if ((Choice.select) == Card[i].CellNum)
 			select = i;
@@ -187,7 +190,7 @@ void AssignCoord()// 좌표 부여 함수
 	}
 
 	// Card 좌표 부여
-	for (int index = 0; index < CardCount; index++)
+	for (int index = 0; index < Stage.CardCount; index++)
 	{
 		switch (Card[index].CellNum)
 		{
@@ -261,10 +264,10 @@ void AssignCoord()// 좌표 부여 함수
 void AssignCell(int start, int end) // start ~ end 범위의 랜덤 숫자 생성
 {
 	int randomnum;
-	bool IsOverlapCell[CardCount + 1 ] = { false, }; // 중복 판별용 bool 배열
+	bool IsOverlapCell[MaxCardCount + 1 ] = { false, }; // 중복 판별용 bool 배열
 	srand((unsigned)time(NULL));
 
-	for (int i = 0; i < CardCount; )
+	for (int i = 0; i < Stage.CardCount; )
 	{
 		randomnum = (rand() % (end - start)) + start; // start ~ end 범위의 랜덤 숫자
 
@@ -285,7 +288,7 @@ void AssignType(int start, int end) // Type 부여 함수
 
 	srand((unsigned)time(NULL));
 
-	for (int i = 0; i < CardCount; )
+	for (int i = 0; i < Stage.CardCount; )
 	{
 		randomnum = (rand() % (end - start)) + start; // start ~ end 범위의 랜덤 숫자
 
@@ -301,7 +304,7 @@ void AssignType(int start, int end) // Type 부여 함수
 
 void AssignForm() // PrintForm 부여
 {
-	for (int i = 0; i < CardCount; i++)
+	for (int i = 0; i < Stage.CardCount; i++)
 	{
 		// Card[i].PrintForm = PrintArray[Card[i].Type]; // Type에 따른 PrintForm
 		Card[i].PrintForm = CoverPrint; // Cover 씌우기
@@ -310,7 +313,7 @@ void AssignForm() // PrintForm 부여
 
 void CreateCard() // 카드 생성 함수
 {
-	AssignCell(1, CardCount+1); // CellNum 부여 함수 (랜덤. 중복X)
+	AssignCell(1, Stage.CardCount+1); // CellNum 부여 함수 (랜덤. 중복X)
 	AssignCoord(); // CellNum에 따른 좌표 부여
 	AssignType(0, TypeCount); // Type 부여 함수 (랜덤. 중복 1회) 
 	AssignForm();// PrintForm 부여
@@ -365,6 +368,44 @@ void KeyControl(int key)
 			break;
 		}
 	}
+
+	// SUCCESS 상태에서
+	if (GameStatus == SUCCESS)
+	{
+		switch (key)
+		{
+		case 'Y': case 'y':
+			if (Stage.Level < 3)
+			{
+				Stage.Level++;
+				GameStatus = INIT;
+			}
+			else
+			{
+				GameStatus = RESULT;
+			}
+			break;
+
+		case 'N': case 'n':
+			GameStatus = RESULT;
+			break;
+		}
+	}
+
+	// FAILED 상태에서
+	if (GameStatus == FAILED)
+	{
+		switch (key)
+		{
+		case 'Y': case 'y':
+			GameStatus = INIT;
+			break;
+
+		case 'N': case 'n':
+			GameStatus = RESULT;
+			break;
+		}
+	}
 }
 
 void StatusPrint()
@@ -379,6 +420,25 @@ void StatusPrint()
 		break;
 
 	case INIT:
+		// 초기화
+		// Card 초기화
+		Stage.CardCount = CardCountArray[Stage.Level];
+		CreateCard();	// 카드 생성 함수 ( GameStatue == INIT 에 넣을까? )
+		matchCard = 0;
+
+		// Chocie 초기화
+		Choice.select = 9;
+
+		// Board 초기화
+		Board.leftX = 15;
+		Board.rightX = BOARD_WIDTH - 15;
+		Board.topY = 4;
+		Board.bottomY = BOARD_HEIGH - 4;
+
+		// Game 상태 초기화
+		selectChance = ChanceArray[Stage.Level];
+
+		// 화면출력
 		if (CurTime - Stat_OldTime < PrintTime)
 		{
 			sprintf(StatString, "[INIT 화면]");
@@ -389,6 +449,7 @@ void StatusPrint()
 			GameStatus = READY;
 			Stat_OldTime = CurTime;
 		}
+
 		break;
 
 	case READY:
@@ -405,11 +466,14 @@ void StatusPrint()
 		break;
 
 	case RUNNING:
-		if (matchCard == (CardCount / 2))
+		if (matchCard == (Stage.CardCount / 2))
+		{
 			GameStatus = SUCCESS;
-
-		if (selectChance == 0)
+		}
+		else if (selectChance == 0)
+		{
 			GameStatus = FAILED;
+		}
 		break;
 
 	case STOP:
@@ -418,12 +482,14 @@ void StatusPrint()
 		break;
 
 	case SUCCESS:
-		sprintf(StatString, "[SUCCESS 화면]");
+		sprintf(StatString, "[SUCCESS 화면] \n"
+					  "\t\t\t[Y/N]");
 		ScreenPrint(30, 10, StatString);
 		break;
 
 	case FAILED:
-		sprintf(StatString, "[FAILED 화면]");
+		sprintf(StatString, "[FAILED 화면]"
+					  "\t\t\t[Y/N]");
 		ScreenPrint(30, 10, StatString);
 		break;
 
@@ -439,23 +505,10 @@ void StatusPrint()
 
 // 프레임워크 함수
 void Init()
-{
-	// Card 초기화
-	CreateCard();	// 카드 생성 함수 ( GameStatue == INIT 에 넣을까? )
-	matchCard = 0;
-
-	// Chocie 초기화
-	Choice.select = 9;
-
-	// Board 초기화
-	Board.leftX = 15;
-	Board.rightX = BOARD_WIDTH - 15;
-	Board.topY = 4;
-	Board.bottomY = BOARD_HEIGH - 4;
-	
+{	
 	// Game 상태 초기화
 	GameStatus = START;
-	selectChance = 30;
+	Stage.Level = 0;
 }
 
 void Update()
@@ -481,7 +534,7 @@ void Render()
 	if (GameStatus == RUNNING)
 	{
 		// 상태바 출력
-		sprintf(BarPrint, "남은 뒤집기 : %d     맞춘 카드 : %d    남은 카드 : %d", selectChance, matchCard, (CardCount / 2) - matchCard);
+		sprintf(BarPrint, "남은 뒤집기 : %d     맞춘 카드 : %d    남은 카드 : %d", selectChance, matchCard, (Stage.CardCount / 2) - matchCard);
 		ScreenPrint(16, 2, BarPrint);
 
 		// Board 출력
@@ -505,7 +558,7 @@ void Render()
 		}
 
 		// Card 출력
-		for (int i = 0; i < CardCount; i++)
+		for (int i = 0; i < Stage.CardCount; i++)
 		{
 			ScreenPrint(Card[i].X, Card[i].Y, Card[i].PrintForm);
 		}

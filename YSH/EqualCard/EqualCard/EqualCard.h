@@ -24,11 +24,13 @@ typedef struct _BOARD
 	int rightX;
 	int topY;
 	int bottomY;
+	/*
 	int one_forthX;
 	int two_forthX;
 	int three_forthX;
 	int one_thirdY;
 	int two_thirdY;
+	*/
 } BOARD;
 
 typedef struct _CHOICE
@@ -39,6 +41,12 @@ typedef struct _CHOICE
 	clock_t OldTime;
 	clock_t MoveTime;
 } CHOICE;
+
+typedef struct _STAGE
+{
+	int Level;
+	int CardCount;
+} STAGE;
 
 // 함수 원형
 void CreateCard();
