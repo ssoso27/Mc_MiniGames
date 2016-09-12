@@ -3,7 +3,7 @@
 
 // 상수
 const int MaxCardCount = 16; // 최대 Card의 개수
-const int TypeCount = 6; // Type의 개수
+const int MaxTypeCount = 8; // 최대 Type의 개수
 
 // 열거형
 enum ControlKeys
@@ -25,7 +25,7 @@ STAGE Stage;
 
 // 전역변수
 // 출력 관련
-char PrintArray[TypeCount][3] = { "♥" , "★" , "♣" , "♠" , "◀" , "☎" }; // 타입에 따른 출력 배열
+char PrintArray[MaxTypeCount][3] = { "♥" , "★" , "♣" , "♠" , "◀" , "☎" }; // 타입에 따른 출력 배열
 char CoverPrint[3] = "●";
 char StatString[500]; // 화면 출력 문구
 double PrintTime = 2.0 * 1000; // 화면 출력 시간
@@ -33,6 +33,7 @@ clock_t Stat_OldTime = clock(); // PrintTime의 OldTime
 
 // Card 관련
 int CardCountArray[3] = { 12, 16, 16 };
+int TypeCountArray[3] = { 6, 8, 8 };
 int ViewCard[2] = { -1, -1}; // 보이는 Card의 index 저장
 int selectChance; // 뒤집을 수 있는 기회
 int matchCard; // 짝을 맞춘 Card
@@ -284,7 +285,7 @@ void AssignCell(int start, int end) // start ~ end 범위의 랜덤 숫자 생성
 void AssignType(int start, int end) // Type 부여 함수
 {
 	int randomnum;
-	int IsOverlapType[TypeCount] = { 0, }; // 중복 판별용 int 배열
+	int IsOverlapType[MaxTypeCount] = { 0, }; // 중복 판별용 int 배열
 
 	srand((unsigned)time(NULL));
 
@@ -315,7 +316,7 @@ void CreateCard() // 카드 생성 함수
 {
 	AssignCell(1, Stage.CardCount+1); // CellNum 부여 함수 (랜덤. 중복X)
 	AssignCoord(); // CellNum에 따른 좌표 부여
-	AssignType(0, TypeCount); // Type 부여 함수 (랜덤. 중복 1회) 
+	AssignType(0, Stage.TypeCount); // Type 부여 함수 (랜덤. 중복 1회) 
 	AssignForm();// PrintForm 부여
 }
 
@@ -423,6 +424,7 @@ void StatusPrint()
 		// 초기화
 		// Card 초기화
 		Stage.CardCount = CardCountArray[Stage.Level];
+		Stage.TypeCount = TypeCountArray[Stage.Level];
 		CreateCard();	// 카드 생성 함수 ( GameStatue == INIT 에 넣을까? )
 		matchCard = 0;
 

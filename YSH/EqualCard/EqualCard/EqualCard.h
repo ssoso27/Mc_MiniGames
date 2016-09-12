@@ -46,6 +46,7 @@ typedef struct _STAGE
 {
 	int Level;
 	int CardCount;
+	int TypeCount;
 } STAGE;
 
 // 함수 원형
