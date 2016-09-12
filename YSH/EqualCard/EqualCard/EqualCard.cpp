@@ -25,8 +25,8 @@ STAGE Stage;
 
 // 전역변수
 // 출력 관련
-char PrintArray[MaxTypeCount][3] = { "♥" , "★" , "♣" , "♠" , "◀" , "☎" }; // 타입에 따른 출력 배열
-char CoverPrint[3] = "●";
+char PrintArray[MaxTypeCount][3] = { "☆" , "◇" , "♡" , "♤" , "♧" , "△" , "▣" , "◐" }; // 타입에 따른 출력 배열
+char CoverPrint[3] = "▒";
 char StatString[500]; // 화면 출력 문구
 double PrintTime = 2.0 * 1000; // 화면 출력 시간
 clock_t Stat_OldTime = clock(); // PrintTime의 OldTime
@@ -127,22 +127,22 @@ void AssignCoord()// 좌표 부여 함수
 	{
 	case 1: // X, Y 부여
 		Choice.X = 21;
-		Choice.Y = 16;
+		Choice.Y = 8;
 		break;
 
 	case 2:
 		Choice.X = 31;
-		Choice.Y = 16;
+		Choice.Y = 8;
 		break;
 
 	case 3:
 		Choice.X = 41;
-		Choice.Y = 16;
+		Choice.Y = 8;
 		break;
 
 	case 4:
 		Choice.X = 51;
-		Choice.Y = 16;
+		Choice.Y = 8;
 		break;
 
 	case 5:
@@ -167,22 +167,44 @@ void AssignCoord()// 좌표 부여 함수
 
 	case 9:
 		Choice.X = 21;
-		Choice.Y = 8;
+		Choice.Y = 16;
 		break;
 
 	case 10:
 		Choice.X = 31;
-		Choice.Y = 8;
+		Choice.Y = 16;
 		break;
 
 	case 11:
 		Choice.X = 41;
-		Choice.Y = 8;
+		Choice.Y = 16;
 		break;
 
 	case 12:
 		Choice.X = 51;
-		Choice.Y = 8;
+		Choice.Y = 16;
+		break;
+
+		// Stage Up
+
+	case 13:
+		Choice.X = 21;
+		Choice.Y = 20;
+		break;
+
+	case 14:
+		Choice.X = 31;
+		Choice.Y = 20;
+		break;
+
+	case 15:
+		Choice.X = 41;
+		Choice.Y = 20;
+		break;
+
+	case 16:
+		Choice.X = 51;
+		Choice.Y = 20;
 		break;
 
 	default:
@@ -197,22 +219,22 @@ void AssignCoord()// 좌표 부여 함수
 		{
 		case 1: // X, Y 부여
 			Card[index].X = 24;
-			Card[index].Y = 16;
+			Card[index].Y = 8;
 			break;
 
 		case 2:
 			Card[index].X = 34;
-			Card[index].Y = 16;
+			Card[index].Y = 8;
 			break;
 
 		case 3:
 			Card[index].X = 44;
-			Card[index].Y = 16;
+			Card[index].Y = 8;
 			break;
 
 		case 4:
 			Card[index].X = 54;
-			Card[index].Y = 16;
+			Card[index].Y = 8;
 			break;
 
 		case 5:
@@ -237,50 +259,60 @@ void AssignCoord()// 좌표 부여 함수
 
 		case 9:
 			Card[index].X = 24;
-			Card[index].Y = 8;
+			Card[index].Y = 16;
 			break;
 
 		case 10:
 			Card[index].X = 34;
-			Card[index].Y = 8;
+			Card[index].Y = 16;
 			break;
 
 		case 11:
 			Card[index].X = 44;
-			Card[index].Y = 8;
+			Card[index].Y = 16;
 			break;
 
 		case 12:
 			Card[index].X = 54;
-			Card[index].Y = 8;
+			Card[index].Y = 16;
+			break;
+
+			// Stage Up
+
+		case 13:
+			Card[index].X = 24;
+			Card[index].Y = 20;
+			break;
+
+		case 14:
+			Card[index].X = 34;
+			Card[index].Y = 20;
+			break;
+
+		case 15:
+			Card[index].X = 44;
+			Card[index].Y = 20;
+			break;
+
+		case 16:
+			Card[index].X = 54;
+			Card[index].Y = 20;
 			break;
 
 		default:
-			break;	
+			break;
 
 		}
 	}
 }
 
-void AssignCell(int start, int end) // start ~ end 범위의 랜덤 숫자 생성
+void AssignCell()
 {
-	int randomnum;
-	bool IsOverlapCell[MaxCardCount + 1 ] = { false, }; // 중복 판별용 bool 배열
-	srand((unsigned)time(NULL));
-
-	for (int i = 0; i < Stage.CardCount; )
+	for (int i = 0; i < Stage.CardCount; i++)
 	{
-		randomnum = (rand() % (end - start)) + start; // start ~ end 범위의 랜덤 숫자
-
-		if (IsOverlapCell[randomnum] == false) // 중복이 없다면
-		{
-			IsOverlapCell[randomnum] = true; // 중복 표시
-			Card[i].CellNum = randomnum; // 값 대입
-			++i; // 다음 CellNum으로 넘어감
-		} // if문 종료
-	} // for문 종료
-
-} // 함수 종료
+		Card[i].CellNum = i + 1;
+	}
+}
 
 void AssignType(int start, int end) // Type 부여 함수
 {
@@ -307,14 +339,13 @@ void AssignForm() // PrintForm 부여
 {
 	for (int i = 0; i < Stage.CardCount; i++)
 	{
-		// Card[i].PrintForm = PrintArray[Card[i].Type]; // Type에 따른 PrintForm
 		Card[i].PrintForm = CoverPrint; // Cover 씌우기
 	}
 }
 
 void CreateCard() // 카드 생성 함수
 {
-	AssignCell(1, Stage.CardCount+1); // CellNum 부여 함수 (랜덤. 중복X)
+	AssignCell(); // CellNum 부여 함수
 	AssignCoord(); // CellNum에 따른 좌표 부여
 	AssignType(0, Stage.TypeCount); // Type 부여 함수 (랜덤. 중복 1회) 
 	AssignForm();// PrintForm 부여
@@ -339,13 +370,13 @@ void KeyControl(int key)
 		switch (key)
 		{
 		case UP:
-			if (Choice.select < 9)
-				Choice.select += 4;
+			if (Choice.select > 4)
+				Choice.select -= 4;
 			break;
 
 		case DOWN:
-			if (Choice.select > 4)
-				Choice.select -= 4;
+			if (Choice.select < Stage.CardCount - 3)
+				Choice.select += 4;
 			break;
 
 		case LEFT:
@@ -574,7 +605,7 @@ void Render()
 	{
 		ScreenPrint(24 + (10*i), 8, "※");
 	}
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		ScreenPrint(24, 8 + (4*i), "※");
 	}

@@ -51,7 +51,7 @@ typedef struct _STAGE
 
 // 함수 원형
 void CreateCard();
-void AssignCell(int, int);
+void AssignCell();
 void AssignType(int, int);
 void AssignForm();
 void KeyControl(int);
