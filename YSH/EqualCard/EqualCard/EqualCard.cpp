@@ -35,11 +35,12 @@ clock_t Stat_OldTime = clock(); // PrintTime의 OldTime
 int CardCountArray[3] = { 12, 16, 16 };
 int TypeCountArray[3] = { 6, 8, 8 };
 int ViewCard[2] = { -1, -1}; // 보이는 Card의 index 저장
+bool IsMatchCard[MaxCardCount] = {}; // 맞춘 카드 판별
 int selectChance; // 뒤집을 수 있는 기회
-int matchCard; // 짝을 맞춘 Card
+int matchCardCount; // 짝을 맞춘 Card
 
 // Game 진행 관련
-int ChanceArray[3] = { 30, 30, 25 };
+int ChanceArray[3] = { 30, 40, 30 };
 clock_t Open_OldTime; // Update 시간 측정용
 double TurnTime = 1.2 * 1000; // 커버 씌우기까지의 시간
 
@@ -51,8 +52,10 @@ void CardOpening() // Card가 오픈되어 있는 동안의 작업
 
 	if (IsEqualType()) // 선택된 두 카드의 Type이 같으면
 	{
-		// 맞춘 카드 Count++
-		matchCard++;
+		// 맞춘 카드 처리
+		IsMatchCard[ViewCard[0]] = true;
+		IsMatchCard[ViewCard[1]] = true;
+		matchCardCount++;
 
 		// ViewCard -1 처리
 		ViewCard[0] = -1;
@@ -86,11 +89,10 @@ void SelectCard()
 {
 	int select; // 선택된 카드
 
-	for (int i = 0; i < Stage.CardCount; i++) // 선택된 카드 찾기
-	{
-		if ((Choice.select) == Card[i].CellNum)
-			select = i;
-	}
+	select = Choice.select - 1;
+
+	if (IsMatchCard[select]) // 이미 맞춘 카드면 return
+		return; 
 
 	// ViewCell[0] 또는 ViewCell[1]에 Card의 index 입력
 	if (ViewCard[0] == -1)
@@ -117,9 +119,10 @@ void SelectCard()
 void AssignCoord()// 좌표 부여 함수
 {
 	/*
+	1 2 3 4
+	5 6 7 8 
 	9 10 11 12
-	5  6  7  8
-	1  2  3  4
+	13 14 15 16
 	*/
 
 	// Choice 좌표 부여
@@ -454,10 +457,14 @@ void StatusPrint()
 	case INIT:
 		// 초기화
 		// Card 초기화
-		Stage.CardCount = CardCountArray[Stage.Level];
-		Stage.TypeCount = TypeCountArray[Stage.Level];
-		CreateCard();	// 카드 생성 함수 ( GameStatue == INIT 에 넣을까? )
-		matchCard = 0;
+		Stage.CardCount = CardCountArray[Stage.Level]; // Stage Card 수
+		Stage.TypeCount = TypeCountArray[Stage.Level]; // Stage CardType 수
+		CreateCard();	// 카드 생성 함수
+		matchCardCount = 0; // 맞춘 Card 수
+		for (int i = 0; i < MaxCardCount; i++)
+		{
+			IsMatchCard[i] = false; // 이미 맞춘 Card 배열 
+		}
 
 		// Chocie 초기화
 		Choice.select = 9;
@@ -499,7 +506,7 @@ void StatusPrint()
 		break;
 
 	case RUNNING:
-		if (matchCard == (Stage.CardCount / 2))
+		if (matchCardCount == (Stage.CardCount / 2))
 		{
 			GameStatus = SUCCESS;
 		}
@@ -516,13 +523,13 @@ void StatusPrint()
 
 	case SUCCESS:
 		sprintf(StatString, "[SUCCESS 화면] \n"
-					  "\t\t\t[Y/N]");
+					  "\t\t\t\t[Y/N]");
 		ScreenPrint(30, 10, StatString);
 		break;
 
 	case FAILED:
-		sprintf(StatString, "[FAILED 화면]"
-					  "\t\t\t[Y/N]");
+		sprintf(StatString, "[FAILED 화면] \n"
+					  "\t\t\t\t[Y/N]");
 		ScreenPrint(30, 10, StatString);
 		break;
 
@@ -567,7 +574,7 @@ void Render()
 	if (GameStatus == RUNNING)
 	{
 		// 상태바 출력
-		sprintf(BarPrint, "남은 뒤집기 : %d     맞춘 카드 : %d    남은 카드 : %d", selectChance, matchCard, (Stage.CardCount / 2) - matchCard);
+		sprintf(BarPrint, "남은 뒤집기 : %d     맞춘 카드 : %d    남은 카드 : %d", selectChance, matchCardCount, (Stage.CardCount / 2) - matchCardCount);
 		ScreenPrint(16, 2, BarPrint);
 
 		// Board 출력
