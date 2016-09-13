@@ -4,6 +4,7 @@
 #include "Games\Shoot.h"
 #include "Games\Tetris.h"
 #include "Games\Brick.h"
+#include "Games\EqualCard.h"
 
 #pragma warning(disable:4996)
 
@@ -42,8 +43,8 @@ void SelectGame() // 게임 선택 및 실행 함수
 		SB_Shoot::Shoot();
 		break;
 
-	case 3: // 테트리스
-		//SB_Tetris::Tetris();
+	case 3: // 같은 카드 찾기
+		SH_EqualCard::EqualCard();
 		break;
 
 	case 4: // 팀 소개
@@ -141,9 +142,9 @@ void Init()
 		"\t\t [ 미니게임천국 ]\n\n\n\n"
 		"\t\t\t- 게임을 선택하세요 - \n\n\n"
 		"\t\t\t ◎ 벽돌깨기\n"
-		"\t\t\t ◎ 화살표피하기\n"
+		"\t\t\t ◎ 화살표 피하기\n"
 		"\t\t\t ◎ 슛골인\n"
-		"\t\t\t ◎ 테트리스 (공사중)\n"
+		"\t\t\t ◎ 같은 카드 찾기\n"
 		"\t\t\t ◎ 팀소개 (공사중)\n\n\n\n\n\n\n\n");
 }
 
