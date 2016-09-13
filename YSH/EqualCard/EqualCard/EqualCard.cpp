@@ -383,7 +383,7 @@ void KeyControl(int key)
 			break;
 
 		case LEFT:
-			if ((Choice.select != 1) && (Choice.select != 5) && (Choice.select != 9))
+			if ((Choice.select != 1) && (Choice.select != 5) && (Choice.select != 9) && (Choice.select != 13))
 				Choice.select--;
 			break;
 
@@ -410,7 +410,7 @@ void KeyControl(int key)
 		switch (key)
 		{
 		case 'Y': case 'y':
-			if (Stage.Level < 3)
+			if (Stage.Level < 2)
 			{
 				Stage.Level++;
 				GameStatus = INIT;
@@ -450,8 +450,19 @@ void StatusPrint()
 	switch (GameStatus)
 	{
 	case START:
-		sprintf(StatString, "[START 화면]");
-		ScreenPrint(30, 10, StatString);
+		sprintf(StatString, "\t\t\t  [같은 카드 맞추기] \n\n"
+			"\t\t===================================\n\n"
+			"\t\t같은 카드를 맞추는 게임입니다.\n"
+			"\t\t스테이지 당 뒤집기 제한이 있습니다.\n"
+			"\t\t카드를 전부 맞추면 미션 성공입니다.\n"
+			"\t\t뒤집기 기회가 0이 되면 미션 실패입니다.\n"
+			"\t\t스테이지는 총 3레벨로 구성되어있습니다.\n\n"
+			"\t\t===================================\n\n"
+			"\t\t\t  - 조 작 법 -\n\n"
+			"\t\t이동 : 방향키 | 카드 선택 : SPACE BAR\n"
+			"\t\t-----------------------------------\n"
+			"\t\t게임 시작 : SPACE BAR | 게임 종료 : q\n\n\n\n");
+		ScreenPrint(0, 3, StatString);
 		break;
 
 	case INIT:
@@ -495,8 +506,8 @@ void StatusPrint()
 	case READY:
 		if (CurTime - Stat_OldTime < PrintTime)
 		{
-			sprintf(StatString, "[READY 화면]");
-			ScreenPrint(30, 10, StatString);
+			sprintf(StatString, "[READY] %d 스테이지", Stage.Level + 1);
+			ScreenPrint(25, 10, StatString);
 		}
 		else
 		{
@@ -522,19 +533,28 @@ void StatusPrint()
 		break;
 
 	case SUCCESS:
-		sprintf(StatString, "[SUCCESS 화면] \n"
-					  "\t\t\t\t[Y/N]");
-		ScreenPrint(30, 10, StatString);
+		if (Stage.Level < 2)
+		{
+			sprintf(StatString, "%d 스테이지 CLEAR \n\n"
+				"\t\t\t다음 스테이지? [Y/N]", Stage.Level + 1);
+		}
+		else
+		{
+			sprintf(StatString, "모든 스테이지 CLEAR \n\n"
+				"\t\t\t게임 결과창 [Y]");
+		}
+		ScreenPrint(25, 10, StatString);
 		break;
 
 	case FAILED:
-		sprintf(StatString, "[FAILED 화면] \n"
-					  "\t\t\t\t[Y/N]");
-		ScreenPrint(30, 10, StatString);
+		sprintf(StatString, " %d 스테이지 GAME OVER\n\n"
+			"\t\t\t     재도전? [Y/N]", Stage.Level + 1);
+		ScreenPrint(25, 10, StatString);
 		break;
 
 	case RESULT:
-		sprintf(StatString, "[RESULT 화면]");
+		sprintf(StatString, "[게임 종료]\n\n"
+			"\t\t\t 나가려면 Q를 누르세요.");
 		ScreenPrint(30, 10, StatString);
 		break;
 
@@ -598,13 +618,30 @@ void Render()
 		}
 
 		// Card 출력
-		for (int i = 0; i < Stage.CardCount; i++)
+		if (Stage.CardCount == 12)
 		{
-			ScreenPrint(Card[i].X, Card[i].Y, Card[i].PrintForm);
+			for (int i = 0; i < Stage.CardCount; i++)
+			{
+				ScreenPrint(Card[i].X, Card[i].Y, Card[i].PrintForm);
+			}
+		}
+		else
+		{
+			for (int i = 0; i < Stage.CardCount; i++)
+			{
+				ScreenPrint(Card[i].X , Card[i].Y - 2, Card[i].PrintForm);
+			}
 		}
 
 		// Choice 출력
-		ScreenPrint(Choice.X, Choice.Y, "▷");
+		if (Stage.CardCount == 12)
+		{
+			ScreenPrint(Choice.X, Choice.Y, "▷");
+		}
+		else
+		{
+			ScreenPrint(Choice.X , Choice.Y - 2, "▷");
+		}
 	}
 	/*
 	//test 시작
