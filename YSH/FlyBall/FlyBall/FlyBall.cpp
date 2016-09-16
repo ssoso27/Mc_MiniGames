@@ -7,20 +7,23 @@ enum ControlKeys
 {
 	UP = 72,
 	DOWN = 80,
-	LEFT = 75,
-	RIGHT = 77,
+	//LEFT = 75,
+	//RIGHT = 77,
 	SPACE = 32,
 	ESC = 27
 };
 
 PLAYER Player;
 
+// 전역 변수
+// 상수
+const int FirstX = 2;
+const int FirstY = 2;
 
 // 함수
 // Player의 이동
 void PlayerMove(clock_t CurTime)
 {
-	char temp[20];
 	if (Player.IsReady == 0) // 준비상태가 아니면
 	{
 		if (CurTime - Player.OldTime > Player.MoveTime) // 이동제한시간 경과
@@ -31,8 +34,6 @@ void PlayerMove(clock_t CurTime)
 			switch (Player.Direction)
 			{
 			case TOP:
-				sprintf(temp, "TOP");
-				ScreenPrint(10, 2, temp);
 				//if (Collision(Player.X, Player.Y - 1) == 0) // 이동할 좌표에서 충돌이 안 일어나면 
 				{
 					Player.Y--; // 이동한다
@@ -46,6 +47,10 @@ void PlayerMove(clock_t CurTime)
 					Player.X++;
 					Player.Y--;
 				}
+				break;
+				
+			case RIGHT:
+				Player.X += 2;
 				break;
 
 			case BOT_RIGHT:
@@ -71,6 +76,10 @@ void PlayerMove(clock_t CurTime)
 				}
 				break;
 
+			case LEFT:
+				Player.X -= 2;
+				break;
+
 			case TOP_LEFT:
 				//if (Collision(Player.X - 1, Player.Y - 1) == 0)
 				{
@@ -84,15 +93,15 @@ void PlayerMove(clock_t CurTime)
 		if (Player.X < 0 || Player.X >BOARD_WIDTH || Player.Y < 0 || Player.Y > BOARD_HEIGH) // 벽에 충돌
 		{
 			Player.IsReady = 1;
-			Player.Direction = TOP;
-		//	Player.X = Bar.X[1];
-		//	Player.Y = Bar.Y - 1;
+			Player.Direction = RIGHT;
+			Player.X = FirstX;
+			Player.Y = FirstY;
 		}
 	}
 	else // 준비 상태면
 	{
-	//	Player.X = Bar.X[1];
-	//	Player.Y = Bar.Y - 1;
+		Player.X = FirstX;
+		Player.Y = FirstY;
 	}
 }
 
@@ -111,38 +120,50 @@ void KeyControl(int key)
 		}
 		break;
 
-	case 'S': case 's': // ↑
+	case '8': // ↑
 		direction = 0;
 		Player.Direction = (DIRECT)direction;
 		Player.OldTime = clock();
 		break;
 
-	case 'D': case 'd': // ↗
+	case '9': // ↗
 		direction = 1;
 		Player.Direction = (DIRECT)direction;
 		Player.OldTime = clock();
 		break;
 
-	case 'C': case 'c': // ↘
+	case '6': // →
 		direction = 2;
 		Player.Direction = (DIRECT)direction;
 		Player.OldTime = clock();
 		break;
 
-	case 'X': case 'x': // ↓
+	case '3': // ↘
 		direction = 3;
 		Player.Direction = (DIRECT)direction;
 		Player.OldTime = clock();
 		break;
 
-	case 'Z': case 'z': // ↙
+	case '2': // ↓
 		direction = 4;
 		Player.Direction = (DIRECT)direction;
 		Player.OldTime = clock();
 		break;
 
-	case 'A': case 'a': // ↖
+	case '1': // ↙
 		direction = 5;
+		Player.Direction = (DIRECT)direction;
+		Player.OldTime = clock();
+		break;
+
+	case '4': // ←
+		direction = 6;
+		Player.Direction = (DIRECT)direction;
+		Player.OldTime = clock();
+		break;
+
+	case '7': // ↖
+		direction = 7;
 		Player.Direction = (DIRECT)direction;
 		Player.OldTime = clock();
 		break;
@@ -155,9 +176,9 @@ void KeyControl(int key)
 // 프레임워크 함수
 void Init()
 {
-	Player.X = 2;
-	Player.Y = 2;
-	Player.Direction = TOP;
+	Player.X = FirstX;
+	Player.Y = FirstY;
+	Player.Direction = RIGHT;
 	Player.OldTime = clock();
 	Player.IsReady = 1;
 	Player.MoveTime = 130;
