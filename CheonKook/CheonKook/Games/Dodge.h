@@ -7,7 +7,7 @@ namespace SH_Dodge
 #define StageNum 3 // Stage 개수
 #define BOARD_WIDTH 80      // 화면의 너비
 #define BOARD_HEIGHT 25      // 화면의 높이
-#define Zero 50 // Stage==0 일 때의 Dot의 수
+#define Zero 40 // Stage==0 일 때의 Dot의 수
 
 	// 열거형 선언
 

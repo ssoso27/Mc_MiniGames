@@ -321,16 +321,9 @@ namespace SH_Dodge
 				Player.Y = 15;
 				Player.Life = 3;
 
-				if (Stage == 0)
-				{
-					sprintf(StatString, "[INIT] 게임 초기화 \n\n");
-					ScreenPrint(25, 10, StatString);
-				}
-				else // Stage != 0
-				{
-					sprintf(StatString, "[INIT] 게임 초기화 \n\n", Stage + 1);
-					ScreenPrint(25, 10, StatString);
-				}
+				sprintf(StatString, "[INIT] 게임 초기화 \n\n");
+				ScreenPrint(25, 10, StatString);
+
 			}
 			else
 			{
@@ -419,6 +412,7 @@ namespace SH_Dodge
 		Player.Life = 3;
 
 		// DOT[] 초기화 -> RenDer() 함수의 StatusPrint() 함수의 case INIT:
+		DotInit(); // Dot 초기화
 
 		// Star 초기화
 
