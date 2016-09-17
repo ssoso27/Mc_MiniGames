@@ -7,6 +7,16 @@
 typedef enum _DIRECT { TOP, TOP_RIGHT, RIGHT, BOT_RIGHT, BOTTOM, BOT_LEFT, LEFT, TOP_LEFT } DIRECT; // 방향 설정. 시계방향. 
 
 // 구조체
+typedef struct _BOARD
+{
+	int topY;
+	int bottomY;
+	int leftX;
+	int rightX;
+	static const int Width = 40;
+	static const int Height = 16;
+} BOARD;
+
 typedef struct _BLOCK
 {
 	int X;

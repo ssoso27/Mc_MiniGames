@@ -17,10 +17,52 @@ PLAYER Player;
 
 // 전역 변수
 // 상수
-const int FirstX = 2;
-const int FirstY = 2;
+const int PlayerFirstX = 2;
+const int PlayerFirstY = 2;
+const int MaxBlockCount = 30;
+
+// 구조체 변수
+BLOCK Block[MaxBlockCount];
+BOARD Board;
+
+
+// 배열
+bool IsBlock[Board.Width][Board.Height]; // Block 생성 위치 판별
 
 // 함수
+
+// Block 좌표 대입
+void AssignCoord()
+{
+	for (int k = 0; k < MaxBlockCount; k++)
+	{
+		for (int i = 0; i < Board.Height / 2; i++) // i행
+		{
+			for (int j = 0; j < Board.Width / 2; j++) // j열
+			{
+				if (IsBlock[i][j] == true)
+				{
+					Block[k].X = Board.leftX + (i * 2);
+					Block[k].Y = Board.topY + (j * 2);
+				}
+			}
+		}
+	}
+}
+
+// Block Map 생성
+void MapMake()
+{
+	// bool IsBlock[][] 에 true 넣을거
+}
+
+// Block 생성
+void CreateBlock()
+{
+	MapMake();
+	AssignCoord();
+}
+
 // Player의 이동
 void PlayerMove(clock_t CurTime)
 {
@@ -94,17 +136,18 @@ void PlayerMove(clock_t CurTime)
 		{
 			Player.IsReady = 1;
 			Player.Direction = RIGHT;
-			Player.X = FirstX;
-			Player.Y = FirstY;
+			Player.X = PlayerFirstX;
+			Player.Y = PlayerFirstY;
 		}
 	}
 	else // 준비 상태면
 	{
-		Player.X = FirstX;
-		Player.Y = FirstY;
+		Player.X = PlayerFirstX;
+		Player.Y = PlayerFirstY;
 	}
 }
 
+// 키조작
 void KeyControl(int key)
 {
 	int direction;
@@ -176,8 +219,18 @@ void KeyControl(int key)
 // 프레임워크 함수
 void Init()
 {
-	Player.X = FirstX;
-	Player.Y = FirstY;
+	// Board 초기화
+	Board.topY = 2;
+	Board.bottomY = Board.topY + Board.Height;
+	Board.leftX = 6;
+	Board.rightX = Board.leftX + Board.Width;
+
+	// Block 초기화
+	CreateBlock();
+
+	// Player 초기화
+	Player.X = PlayerFirstX;
+	Player.Y = PlayerFirstY;
 	Player.Direction = RIGHT;
 	Player.OldTime = clock();
 	Player.IsReady = 1;
@@ -196,6 +249,31 @@ void Render()
 	ScreenClear();
 
 	ScreenPrint(Player.X, Player.Y, "●");
+
+	for (int i = 0; i < MaxBlockCount; i++)
+	{
+		ScreenPrint(Block[i].X, Block[i].Y, "■");
+	}
+
+	// Board 출력
+	// 각모서리
+	ScreenPrint(Board.leftX, Board.topY, "┌"); // 좌측 상단
+	ScreenPrint(Board.rightX, Board.topY, "┐"); // 우측 상단
+	ScreenPrint(Board.leftX, Board.bottomY, "└"); // 좌측 하단
+	ScreenPrint(Board.rightX, Board.bottomY, "┘"); // 우측 하단
+
+												   // 위아래벽
+	for (int i = Board.leftX + 2; i < Board.rightX; i++)
+	{
+		ScreenPrint(i, Board.topY, "-");
+		ScreenPrint(i, Board.bottomY, "-");
+	}
+	// 좌우벽
+	for (int i = Board.topY + 1; i < Board.bottomY; i++)
+	{
+		ScreenPrint(Board.leftX, i, "│");
+		ScreenPrint(Board.rightX, i, "│");
+	}
 
 	ScreenFlipping();
 }
