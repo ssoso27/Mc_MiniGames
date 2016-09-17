@@ -679,7 +679,10 @@ namespace SH_EqualCard
 				key = _getch();
 
 				if ((key == 'q') || (key == 'Q'))
+				{
+					Stage.Level = 0;
 					break;
+				}
 
 				// key ¡∂¿€
 				KeyControl(key);

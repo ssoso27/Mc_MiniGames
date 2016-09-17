@@ -331,8 +331,11 @@ namespace SB_Shoot
 
 				// RESULT 상태가 아닐 시
 
-				if (Key == 'q')
+				if (Key == 'q' || Key == 'Q')
+				{
+					p_Stage = -1;
 					break;
+				}
 
 				// START 상태에서의 키 조작
 				if (p_GameState == START)

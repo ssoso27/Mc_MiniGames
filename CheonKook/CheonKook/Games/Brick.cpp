@@ -125,7 +125,7 @@ namespace SH_Brick
 			break;
 
 		case STOP:
-			sprintf(StatString, "[STOP 화면] \n",
+			sprintf(StatString, "[STOP 화면] \n"
 				"\t\t\t\t ESC :: 게임으로 돌아감");
 			ScreenPrint(30, 10, StatString);
 			break;
@@ -280,7 +280,7 @@ namespace SH_Brick
 	// Block 생성
 	void SetBlock(int BlockCount)
 	{
-		int x, y, i;
+		int x, y;
 		srand((unsigned)time(NULL));
 		for (int i = 0; i < BlockCount; i++)
 		{
@@ -590,7 +590,10 @@ namespace SH_Brick
 				key = _getch();
 
 				if ((key == 'q') || (key == 'Q'))
+				{
+					Stage.Level = 0;
 					break;
+				}
 
 				// RUNNING 외 상태에서의 키조작
 

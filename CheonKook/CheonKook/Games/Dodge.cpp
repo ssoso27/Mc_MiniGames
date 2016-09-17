@@ -542,7 +542,10 @@ namespace SH_Dodge
 				Key = _getch();
 
 				if ((Key == 'q') || (Key == 'Q'))
+				{
+					Stage = 0;
 					break;
+				}
 
 				if (Key == SPACE)
 				{
