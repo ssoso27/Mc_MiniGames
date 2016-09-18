@@ -42,6 +42,9 @@ typedef struct _PLAYER
 // 함수원형
 void PlayerMove(clock_t );
 void KeyControl(int);
+void AssignCoord(int);
+void MapMake();
+void CreateBlock();
 
 void Init();
 void Update();

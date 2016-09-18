@@ -17,8 +17,8 @@ PLAYER Player;
 
 // 전역 변수
 // 상수
-const int PlayerFirstX = 2;
-const int PlayerFirstY = 2;
+const int PlayerFirstX = 8;
+const int PlayerFirstY = 4;
 const int MaxBlockCount = 30;
 
 // 구조체 변수
@@ -27,40 +27,44 @@ BOARD Board;
 
 
 // 배열
-bool IsBlock[Board.Width][Board.Height]; // Block 생성 위치 판별
+bool IsBlock[Board.Height / 2][Board.Width / 2] = { false, }; // Block 생성 위치 판별 [20][8]
 
 // 함수
 
 // Block 좌표 대입
-void AssignCoord()
+void AssignCoord(int k)
 {
-	for (int k = 0; k < MaxBlockCount; k++)
+	for (int i = 0; i < Board.Height / 2; i++) // i행
 	{
-		for (int i = 0; i < Board.Height / 2; i++) // i행
+		for (int j = 0; j < Board.Width / 2; j++) // j열
 		{
-			for (int j = 0; j < Board.Width / 2; j++) // j열
+			if (IsBlock[i][j] == true)
 			{
-				if (IsBlock[i][j] == true)
-				{
-					Block[k].X = Board.leftX + (i * 2);
-					Block[k].Y = Board.topY + (j * 2);
-				}
-			}
-		}
-	}
-}
+				Block[k].X = Board.leftX + (j * 2) + 1;
+				Block[k].Y = Board.topY + (i * 2) + 1;
+				IsBlock[i][j] = false;
+
+				break;
+			} // if문 end
+		} // for j end
+	} // for i end
+} 
 
 // Block Map 생성
 void MapMake()
 {
-	// bool IsBlock[][] 에 true 넣을거
+	// bool IsBlock[][] 에 true 넣을거 [7][19]
+	IsBlock[7][19] = true;
 }
 
 // Block 생성
 void CreateBlock()
 {
 	MapMake();
-	AssignCoord();
+	for (int i = 0; i < MaxBlockCount; i++)
+	{
+		AssignCoord(i);
+	}
 }
 
 // Player의 이동
@@ -248,13 +252,6 @@ void Render()
 {
 	ScreenClear();
 
-	ScreenPrint(Player.X, Player.Y, "●");
-
-	for (int i = 0; i < MaxBlockCount; i++)
-	{
-		ScreenPrint(Block[i].X, Block[i].Y, "■");
-	}
-
 	// Board 출력
 	// 각모서리
 	ScreenPrint(Board.leftX, Board.topY, "┌"); // 좌측 상단
@@ -273,6 +270,13 @@ void Render()
 	{
 		ScreenPrint(Board.leftX, i, "│");
 		ScreenPrint(Board.rightX, i, "│");
+	}
+
+	//ScreenPrint(Player.X, Player.Y, "●");
+
+	//for (int i = 0; i < MaxBlockCount; i++)
+	{
+		ScreenPrint(Block[0].X, Block[0].Y, "■");
 	}
 
 	ScreenFlipping();
