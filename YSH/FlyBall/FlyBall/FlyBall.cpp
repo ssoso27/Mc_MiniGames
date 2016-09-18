@@ -19,7 +19,7 @@ PLAYER Player;
 // 상수
 const int PlayerFirstX = 8;
 const int PlayerFirstY = 4;
-const int MaxBlockCount = 30;
+const int MaxBlockCount = 160;
 
 // 구조체 변수
 BLOCK Block[MaxBlockCount];
@@ -53,8 +53,15 @@ void AssignCoord(int k)
 // Block Map 생성
 void MapMake()
 {
-	// bool IsBlock[][] 에 true 넣을거 [7][19]
-	IsBlock[7][19] = true;
+	// bool IsBlock[][] 에 true 넣을거 [7][32]
+	for (int i = 5; i < 30; i++) IsBlock[0][i] = true; // 0
+	// 1
+	// 2
+	// 3
+	// 4
+	// 5
+	// 6
+	// 7
 }
 
 // Block 생성
@@ -224,9 +231,9 @@ void KeyControl(int key)
 void Init()
 {
 	// Board 초기화
-	Board.topY = 2;
+	Board.topY = 4;
 	Board.bottomY = Board.topY + Board.Height;
-	Board.leftX = 6;
+	Board.leftX = 8;
 	Board.rightX = Board.leftX + Board.Width;
 
 	// Block 초기화
@@ -274,9 +281,10 @@ void Render()
 
 	//ScreenPrint(Player.X, Player.Y, "●");
 
-	//for (int i = 0; i < MaxBlockCount; i++)
+	for (int i = 0; i < MaxBlockCount; i++)
 	{
-		ScreenPrint(Block[0].X, Block[0].Y, "■");
+		if (Block[i].X == 0 && Block[i].Y == 0) continue; // 좌표가 주어지지 않은 Block 표시 X
+		ScreenPrint(Block[i].X, Block[i].Y, "■");
 	}
 
 	ScreenFlipping();

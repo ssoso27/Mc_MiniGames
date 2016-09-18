@@ -13,7 +13,7 @@ typedef struct _BOARD
 	int bottomY;
 	int leftX;
 	int rightX;
-	static const int Width = 40;
+	static const int Width = 64;
 	static const int Height = 16;
 } BOARD;
 
