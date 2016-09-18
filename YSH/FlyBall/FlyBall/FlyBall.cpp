@@ -17,8 +17,8 @@ PLAYER Player;
 
 // 전역 변수
 // 상수
-const int PlayerFirstX = 8;
-const int PlayerFirstY = 4;
+const int PlayerFirstX = 10;
+const int PlayerFirstY = 6;
 const int MaxBlockCount = 160;
 
 // 구조체 변수
@@ -57,7 +57,7 @@ void MapMake()
 	for (int i = 5; i < 30; i++) IsBlock[0][i] = true; // 0
 	// 1
 	// 2
-	// 3
+	IsBlock[3][5] = true; // 3
 	// 4
 	// 5
 	// 6
@@ -74,6 +74,66 @@ void CreateBlock()
 	}
 }
 
+// 충돌 체크
+int Collision(int x, int y)
+{
+	int count = 0;
+
+	// Player과 Block의 충돌
+	for (int i = 0; i < MaxBlockCount; i++)
+	{
+		if ((Block[i].Y == y) || (Block[i].Y == (y+1)) ||
+			((Block[i].Y + 1) == y) || ((Block[i].Y + 1) == (y + 1))) // y 또는 y+1이 동일
+		{
+			if (Block[i].X == x || Block[i].X == (x + 1) ||
+				(Block[i].X + 1) == x || (Block[i].X + 1) == (x + 1)) // x 또는 x+1이 동일
+			{
+				// 충돌 시 반응
+				Player.Life--; // Life 감소
+
+				// Player 상태 초기화
+				Player.X = PlayerFirstX;
+				Player.Y = PlayerFirstY;
+				Player.Direction = RIGHT;
+				Player.OldTime = clock();
+				Player.IsReady = 1;
+
+				if (Player.Life < 1) // 라이프가 없으면
+				{
+					//	GameStatus = FAILED; // 미션 실패
+				}
+
+				count++; // 충돌체크
+			}
+		}	
+	}
+
+	if (count > 0)
+		return 1;
+
+	// Ball과 벽의 충돌
+	if (y < Board.topY + 1 || x > Board.rightX - 1 || y > Board.bottomY - 1 || x < Board.leftX + 1)
+	{	
+		// 충돌 시 반응
+		Player.Life--; // Life 감소
+
+	    // Player 상태 초기화
+		Player.X = PlayerFirstX;
+		Player.Y = PlayerFirstY;
+		Player.Direction = RIGHT;
+		Player.OldTime = clock();
+		Player.IsReady = 1;
+
+		if (Player.Life < 1) // 라이프가 없으면
+		{
+		//	GameStatus = FAILED; // 미션 실패
+		}
+		return 1; // 충돌 O
+	}
+
+	return 0; // 충돌 X
+}
+
 // Player의 이동
 void PlayerMove(clock_t CurTime)
 {
@@ -87,15 +147,15 @@ void PlayerMove(clock_t CurTime)
 			switch (Player.Direction)
 			{
 			case TOP:
-				//if (Collision(Player.X, Player.Y - 1) == 0) // 이동할 좌표에서 충돌이 안 일어나면 
+				if (Collision(Player.X, Player.Y - 1) == 0) // 이동할 좌표에서 충돌이 안 일어나면 
 				{
 					Player.Y--; // 이동한다
 				}
-				// 충돌이 일어났을 경우, Collision에서 Player.Direction이 변경된다.
+				// 충돌이 일어났을 경우, Collision에서 충돌 처리
 				break;
 
 			case TOP_RIGHT:
-				//if (Collision(Player.X + 1, Player.Y - 1) == 0)
+				if (Collision(Player.X + 1, Player.Y - 1) == 0)
 				{
 					Player.X++;
 					Player.Y--;
@@ -103,11 +163,14 @@ void PlayerMove(clock_t CurTime)
 				break;
 				
 			case RIGHT:
-				Player.X += 2;
+				if (Collision(Player.X - 1, Player.Y + 1) == 0)
+				{
+					Player.X += 2;
+				}
 				break;
 
 			case BOT_RIGHT:
-				//if (Collision(Player.X + 1, Player.Y + 1) == 0)
+				if (Collision(Player.X + 1, Player.Y + 1) == 0)
 				{
 					Player.X++;
 					Player.Y++;
@@ -115,14 +178,14 @@ void PlayerMove(clock_t CurTime)
 				break;
 
 			case BOTTOM:
-				//if (Collision(Player.X, Player.Y + 1) == 0)
+				if (Collision(Player.X, Player.Y + 1) == 0)
 				{
 					Player.Y++;
 				}
 				break;
 
 			case BOT_LEFT:
-				//if (Collision(Player.X - 1, Player.Y + 1) == 0)
+				if (Collision(Player.X - 1, Player.Y + 1) == 0)
 				{
 					Player.X--;
 					Player.Y++;
@@ -130,11 +193,14 @@ void PlayerMove(clock_t CurTime)
 				break;
 
 			case LEFT:
-				Player.X -= 2;
+				if (Collision(Player.X - 1, Player.Y + 1) == 0)
+				{
+					Player.X -= 2;
+				}
 				break;
 
 			case TOP_LEFT:
-				//if (Collision(Player.X - 1, Player.Y - 1) == 0)
+				if (Collision(Player.X - 1, Player.Y - 1) == 0)
 				{
 					Player.X--;
 					Player.Y--;
@@ -242,10 +308,11 @@ void Init()
 	// Player 초기화
 	Player.X = PlayerFirstX;
 	Player.Y = PlayerFirstY;
+	Player.Life = 3;
 	Player.Direction = RIGHT;
 	Player.OldTime = clock();
 	Player.IsReady = 1;
-	Player.MoveTime = 130;
+	Player.MoveTime = 170;
 }
 
 void Update()
@@ -258,6 +325,11 @@ void Update()
 void Render()
 {
 	ScreenClear();
+
+	// 상단바 출력
+	char TheTopBar[81];
+	sprintf(TheTopBar, "현 스테이지 : %d | Life : %d", 1, /*Stage.Level + 1,*/ Player.Life);
+	ScreenPrint(17, 1, TheTopBar);
 
 	// Board 출력
 	// 각모서리
@@ -279,7 +351,7 @@ void Render()
 		ScreenPrint(Board.rightX, i, "│");
 	}
 
-	//ScreenPrint(Player.X, Player.Y, "●");
+	ScreenPrint(Player.X, Player.Y, "*");
 
 	for (int i = 0; i < MaxBlockCount; i++)
 	{

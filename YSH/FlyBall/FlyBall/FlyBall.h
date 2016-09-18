@@ -45,6 +45,7 @@ void KeyControl(int);
 void AssignCoord(int);
 void MapMake();
 void CreateBlock();
+int Collision(int, int);
 
 void Init();
 void Update();
