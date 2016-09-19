@@ -415,7 +415,7 @@ namespace SH_Dodge
 		DotInit(); // Dot 초기화
 
 		// Star 초기화
-
+		StarInit();
 		Star.Catch = Star.SumCatch = 0;
 
 	}
