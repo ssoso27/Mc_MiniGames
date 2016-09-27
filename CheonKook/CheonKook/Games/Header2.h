@@ -8,7 +8,7 @@
 
 typedef enum { NOCURSOR, SOLIDCURSOR, NORMALCURSOR } CURSOR_TYPE;
 void clrscr();
-void gotoxy(int x, int y);
+void gotoxy(int , int );
 int wherex();
 int wherey();
-void setcursortype(CURSOR_TYPE c);
+void setcursortype(CURSOR_TYPE );

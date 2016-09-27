@@ -2,7 +2,7 @@
 #include "Header2.h"
 
 	// 이 매크로가 정의되어 있으면 함수의 원형만 선언하고 정의는 하지 않는다.
-#ifndef SKOUT_PROTOTYPE_ONLY
+//#ifndef SKOUT_PROTOTYPE_ONLY
 
 	// 화면을 모두 지운다.
 	void clrscr()
@@ -59,4 +59,4 @@
 		SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &CurInfo);
 	}
 
-#endif  
+//#endif  
