@@ -5,10 +5,12 @@
 #include "Games\Tetris.h"
 #include "Games\Brick.h"
 #include "Games\EqualCard.h"
+#include "Games\Push.h"
 
 #pragma warning(disable:4996)
 
 // 열거형
+
 enum ControlKeys
 {
 	UP = 72,
@@ -33,6 +35,7 @@ void SelectGame() // 게임 선택 및 실행 함수
 	{
 	case 0: // 벽돌깨기
 		SH_Brick::Brick();
+		//SB_Push::Push();
 		break;
 
 	case 1: // 화살표 피하기
