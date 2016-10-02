@@ -83,12 +83,12 @@ C와 C++를 이용하여 제작 중입니다.
 #####-- ( = 자신이 commit 하기 전 항상 해야 할 명령어)
 
 -- ** <font size = 4.5> git fetch upstream <br>
--- git merge upstream/master** </font>
+-- git merge upstream/master </font>**
 
 ####* 석 줄 요약
 -- 한 번도 clone을 안 했을 경우, clone을 한다.<br>
 -- **add -> commit -> push** 순으로 파일 업로드<br>
--- 다른 팀원들이 새로 업로드 했을 경우, **fetch -> merge**를 한다.<br>
+-- 다른 팀원들이 새로 업로드 했을 경우, **fetch -> merge -> push**를 한다.<br>
 
 ---
 
