@@ -75,11 +75,20 @@ C와 C++를 이용하여 제작 중입니다.
 -- 현재 폴더의 상태 확인<br>
 -- 수정된 파일 등을 나타냄 <br>
 -- **사용법 :: git status** <br>
+####6. 자신의 업로드 이후
+#####-- ( add -> commit -> push 이후 할 일)
+-- 자신의 업로드 내역을 적용시키기 위해 요청해야함 <br>
+-- 자신의 Repository (웹 사이트) -> [Pull requests] -> [New pull request] -> [Create pull request]<br>
+####7. 누군가의 업로드 이후
+#####-- ( = 자신이 commit 하기 전 항상 해야 할 명령어)
+
+-- ** <font size = 4.5> git fetch upstream <br>
+-- git merge upstream/master** </font>
 
 ####* 석 줄 요약
 -- 한 번도 clone을 안 했을 경우, clone을 한다.<br>
 -- **add -> commit -> push** 순으로 파일 업로드<br>
--- 다른 팀원들이 새로 업로드 했을 경우, **pull**을 한다.<br>
+-- 다른 팀원들이 새로 업로드 했을 경우, **fetch -> merge**를 한다.<br>
 
 ---
 
