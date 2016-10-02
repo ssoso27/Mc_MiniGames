@@ -163,7 +163,7 @@ void PlayerMove(clock_t CurTime)
 				break;
 				
 			case RIGHT:
-				if (Collision(Player.X - 1, Player.Y + 1) == 0)
+				if (Collision(Player.X + 2, Player.Y) == 0)
 				{
 					Player.X += 2;
 				}
@@ -193,7 +193,7 @@ void PlayerMove(clock_t CurTime)
 				break;
 
 			case LEFT:
-				if (Collision(Player.X - 1, Player.Y + 1) == 0)
+				if (Collision(Player.X - 2, Player.Y) == 0)
 				{
 					Player.X -= 2;
 				}
