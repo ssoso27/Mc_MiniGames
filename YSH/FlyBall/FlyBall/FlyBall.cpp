@@ -38,13 +38,17 @@ void AssignCoord(int k)
 	{
 		for (int j = 0; j < Board.Width / 2; j++) // j열
 		{
-			if (IsBlock[i][j] == true)
+			if (IsBlock[i][j] == true) // MapMake()에 의해 생성된 블럭 자리
 			{
+				// Block 좌표 초기화
 				Block[k].X = Board.leftX + (j * 2) + 1;
 				Block[k].Y = Board.topY + (i * 2) + 1;
+				
+				// 블럭 자리 false
 				IsBlock[i][j] = false;
 
-				break;
+				// k번째 Block 좌표 초기화 종료
+				return;
 			} // if문 end
 		} // for j end
 	} // for i end
@@ -55,11 +59,11 @@ void MapMake()
 {
 	// bool IsBlock[][] 에 true 넣을거 [7][32]
 	for (int i = 5; i < 30; i++) IsBlock[0][i] = true; // 0
-	// 1
+	IsBlock[1][2] = true; // 1
 	// 2
 	IsBlock[3][5] = true; // 3
 	// 4
-	// 5
+	IsBlock[5][12] = true; // 5
 	// 6
 	// 7
 }
