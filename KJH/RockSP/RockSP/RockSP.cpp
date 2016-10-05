@@ -4,9 +4,14 @@
 char print[500];
 
 char rsp[5][50] = { "rock", "scissor", "paper" };
+char result[20];
 
 int computer;
 int score = 0;
+
+bool IsRPrint; // result값 출력 판별
+clock_t RPrintOldTime; // result print한 마지막 시각
+
 
 typedef struct _CHOICE {
 
@@ -31,7 +36,7 @@ enum ControlKeys
 void Init() {
 	sprintf(print, " \t---------\t\t---------\t\t---------\n"
 		"\t   rock   \t\t scissor \t\t  paper \n"
-		"\t ---------\t\t---------\t\t---------\n");
+		"\t---------\t\t---------\t\t---------\n");
 	
 	Choice.select = 1;
 
@@ -66,9 +71,20 @@ void Update()
 
 void Render()
 {
+	clock_t CurTime = clock();
+
 	ScreenClear();
 
+	if (IsRPrint == true)
+	{
+		ScreenPrint(10, 10, result);
 
+		// 시간 제한 두기
+		if (CurTime - RPrintOldTime >= 3 * 1000) // 출력 시간이 3초가 넘으면
+		{
+			IsRPrint = false; // 더이상 띄우지 않는다
+		}
+	}
 
 	ScreenPrint(0, 0, print);
 	
@@ -78,18 +94,20 @@ void Render()
 }
 
 void SelectRSP() {
-
+	
 	computer = rand() % 3;
-	if (Choice.select == (computer + 1) % 3) {
 
-		printf("Win!");
+	if (Choice.select == (computer + 1) % 3) {
+		sprintf(result, "Win!");
 		score++;
 	}
 	else if (Choice.select == computer)
-		printf("Draw!");
+		sprintf(result, "Draw!");
 
-	else printf("Lose!");
+	else sprintf(result, "Lose!");
 
+	RPrintOldTime = clock(); // 마지막 출력 시각을 현재 시각으로 설정 
+	IsRPrint = true; // result print 허용
 
 }
 //가위바위보선택
@@ -99,23 +117,29 @@ void KeyControl(int key)
 	switch (key)
 	{
 		case LEFT :
-			if (Choice.select > 2)
+		{
+			if (Choice.select >= 2)
 				Choice.select--;
 			else
 				Choice.select = 3;
 			break;
+		}
 
 		case RIGHT :
-			if (Choice.select < 2)
+		{
+			if (Choice.select <= 2)
 				Choice.select++;
 			else
 				Choice.select = 1;
 			break;
+		}
 
 		case SPACE :
+		{
+			
 			SelectRSP();
 			break;
-
+		}
 		default:
 			break;
 
