@@ -1,13 +1,15 @@
-
 #include "Header.h"
 
 char print[500];
 
-char rsp[5][50] = { "rock", "scissor", "paper" };
+//char rsp[5][50] = { "rock", "scissor", "paper" };
 char result[20];
 
 int computer;
 int score = 0;
+
+char ComputerResult[20]; //computer 값 확인
+char FinalScore[20];
 
 bool IsRPrint; // result값 출력 판별
 clock_t RPrintOldTime; // result print한 마지막 시각
@@ -37,8 +39,10 @@ void Init() {
 	sprintf(print, " \t---------\t\t---------\t\t---------\n"
 		"\t   rock   \t\t scissor \t\t  paper \n"
 		"\t---------\t\t---------\t\t---------\n");
-	
-	Choice.select = 1;
+
+	Choice.select = 0;
+
+	sprintf(FinalScore, "Score : 0");
 
 }//화면초기화
 
@@ -47,17 +51,17 @@ void AssignCoord()
 
 	switch (Choice.select) {
 
-	case 1:
+	case 0:
 		Choice.x = 12;
 		Choice.y = 5;
 		break;
 
-	case 2:
+	case 1:
 		Choice.x = 36;
 		Choice.y = 5;
 		break;
 
-	case 3:
+	case 2:
 		Choice.x = 60;
 		Choice.y = 5;
 		break;
@@ -77,9 +81,9 @@ void Render()
 
 	if (IsRPrint == true)
 	{
-		ScreenPrint(10, 10, result);
-
-		// 시간 제한 두기
+		ScreenPrint(10, 12, result); // 시간 제한 두기
+		ScreenPrint(10, 10, ComputerResult);
+		
 		if (CurTime - RPrintOldTime >= 3 * 1000) // 출력 시간이 3초가 넘으면
 		{
 			IsRPrint = false; // 더이상 띄우지 않는다
@@ -88,6 +92,7 @@ void Render()
 
 	ScreenPrint(0, 0, print);
 	
+	ScreenPrint(68, 1, FinalScore);
 	ScreenPrint(Choice.x, Choice.y, "▲");
 
 	ScreenFlipping();
@@ -95,9 +100,31 @@ void Render()
 
 void SelectRSP() {
 	
+
 	computer = rand() % 3;
 
-	if (Choice.select == (computer + 1) % 3) {
+	switch (computer)
+	{
+		case 0: 
+
+			sprintf(ComputerResult, "Computer : Rock!");
+			break;
+
+		case 1:
+			sprintf(ComputerResult, "Computer : Scissor!");
+			break;
+
+		case 2:
+			sprintf(ComputerResult, "Computer : Paper!");
+			break;
+
+		default:
+			break;
+	}
+
+
+
+	if ((Choice.select==2 && Choice.select>computer)||(Choice.select < computer)) {
 		sprintf(result, "Win!");
 		score++;
 	}
@@ -105,6 +132,8 @@ void SelectRSP() {
 		sprintf(result, "Draw!");
 
 	else sprintf(result, "Lose!");
+
+	sprintf(FinalScore, "Score : %d", score);
 
 	RPrintOldTime = clock(); // 마지막 출력 시각을 현재 시각으로 설정 
 	IsRPrint = true; // result print 허용
@@ -118,19 +147,19 @@ void KeyControl(int key)
 	{
 		case LEFT :
 		{
-			if (Choice.select >= 2)
+			if (Choice.select >= 1)
 				Choice.select--;
 			else
-				Choice.select = 3;
+				Choice.select = 2;
 			break;
 		}
 
 		case RIGHT :
 		{
-			if (Choice.select <= 2)
+			if (Choice.select <= 1)
 				Choice.select++;
 			else
-				Choice.select = 1;
+				Choice.select = 0;
 			break;
 		}
 
@@ -155,7 +184,9 @@ void main() {
 	Init();
 	ScreenInit();
 
+
 	while (1) {
+
 
 		if (_kbhit()) {
 
