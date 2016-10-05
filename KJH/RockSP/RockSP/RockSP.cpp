@@ -29,13 +29,35 @@ enum ControlKeys
 };
 
 void Init() {
-	sprintf(print, "\t---------\t\t---------\t\t---------\n"
+	sprintf(print, " \t---------\t\t---------\t\t---------\n"
 		"\t   rock   \t\t scissor \t\t  paper \n"
-		"\t ---------\t\t---------\t\t--------\n");
+		"\t ---------\t\t---------\t\t---------\n");
 	
 	Choice.select = 1;
 
 }//화면초기화
+
+void AssignCoord()
+{
+
+	switch (Choice.select) {
+
+	case 1:
+		Choice.x = 12;
+		Choice.y = 5;
+		break;
+
+	case 2:
+		Choice.x = 36;
+		Choice.y = 5;
+		break;
+
+	case 3:
+		Choice.x = 60;
+		Choice.y = 5;
+		break;
+	}
+}
 
 void Update()
 {
@@ -55,27 +77,22 @@ void Render()
 	ScreenFlipping();
 }
 
-void AssignCoord()
-{
+void SelectRSP() {
 
-	switch (Choice.select) {
+	computer = rand() % 3;
+	if (Choice.select == (computer + 1) % 3) {
 
-	case 1:
-		Choice.x = 10;
-		Choice.y = 30;
-		break;
-
-	case 2:
-		Choice.x = 20;
-		Choice.y = 30;
-		break;
-
-	case 3:
-		Choice.x = 30;
-		Choice.y = 30;
-		break;
+		printf("Win!");
+		score++;
 	}
+	else if (Choice.select == computer)
+		printf("Draw!");
+
+	else printf("Lose!");
+
+
 }
+//가위바위보선택
 
 void KeyControl(int key)
 {
@@ -105,22 +122,6 @@ void KeyControl(int key)
 	}
 }
 
-void SelectRSP() {
-
-	computer = rand() % 3;
-	if(Choice.select==(computer+1)%3){
-			
-		printf("Win!");
-		score++;
-	}else if (Choice.select == computer)
-		printf("Draw!");
-		
-	else printf("Lose!");
-		
-
-}
-//가위바위보선택
-
 void main() {
 
 	int key;
@@ -137,15 +138,14 @@ void main() {
 			key = _getch();
 
 			if (key == 75 || key == 77 || key==32)
-				break;
-
-			KeyControl(key);
+				KeyControl(key);
+			
 		}
 
 		Update();
 		Render();
 	}
-
+	
 }
 
 
