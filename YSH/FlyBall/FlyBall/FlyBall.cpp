@@ -14,6 +14,7 @@ enum ControlKeys
 };
 
 PLAYER Player;
+GOAL Goal;
 
 // 전역 변수
 // 상수
@@ -57,9 +58,11 @@ void AssignCoord(int k)
 // Block Map 생성
 void MapMake()
 {
+	// Map 종류에 따라 다르게 생성. (switch문) (수정 필요)
+
 	// bool IsBlock[][] 에 true 넣을거 [7][32]
 	for (int i = 5; i < 30; i++) IsBlock[0][i] = true; // 0
-	IsBlock[1][2] = true; // 1
+	IsBlock[1][4] = true; // 1
 	// 2
 	IsBlock[3][5] = true; // 3
 	// 4
@@ -82,6 +85,20 @@ void CreateBlock()
 int Collision(int x, int y)
 {
 	int count = 0;
+
+	// Player와 Goal의 충돌
+	if (Goal.Y == y) // y 또는 y+1이 동일
+	{
+		if (Goal.X == x || Goal.X == (x + 1) ||
+			(Goal.X + 1) == x || (Goal.X + 1) == (x + 1)) // x 또는 x+1이 동일
+		{
+			// 충돌 시 반응
+			// Goal.nextMap에 따른 맵 이동 ( + 게임 클리어)
+			// (수정 필요)
+
+			return 1; // 충돌 O
+		}
+	}
 
 	// Player과 Block의 충돌
 	for (int i = 0; i < MaxBlockCount; i++)
@@ -115,7 +132,7 @@ int Collision(int x, int y)
 	if (count > 0)
 		return 1;
 
-	// Ball과 벽의 충돌
+	// Player와 벽의 충돌
 	if (y < Board.topY + 1 || x > Board.rightX - 1 || y > Board.bottomY - 1 || x < Board.leftX + 1)
 	{	
 		// 충돌 시 반응
@@ -300,6 +317,10 @@ void KeyControl(int key)
 // 프레임워크 함수
 void Init()
 {
+	// Goal 초기화
+	Goal.X = 62;
+	Goal.Y = 14;
+
 	// Board 초기화
 	Board.topY = 4;
 	Board.bottomY = Board.topY + Board.Height;
@@ -355,13 +376,15 @@ void Render()
 		ScreenPrint(Board.rightX, i, "│");
 	}
 
-	ScreenPrint(Player.X, Player.Y, "*");
+	ScreenPrint(Player.X, Player.Y, "●");
 
 	for (int i = 0; i < MaxBlockCount; i++)
 	{
 		if (Block[i].X == 0 && Block[i].Y == 0) continue; // 좌표가 주어지지 않은 Block 표시 X
 		ScreenPrint(Block[i].X, Block[i].Y, "■");
 	}
+
+	ScreenPrint(Goal.X, Goal.Y, "★");
 
 	ScreenFlipping();
 }

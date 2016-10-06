@@ -27,6 +27,7 @@ typedef struct _GOAL
 {
 	int X;
 	int Y;
+	int nextMap; // 이동 맵 지정
 } GOAL;
 
 typedef struct _PLAYER
