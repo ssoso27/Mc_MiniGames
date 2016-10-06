@@ -42,14 +42,14 @@
     <ClCompile Include="Games\EqualCard.cpp">
       <Filter>소스 파일\Games</Filter>
     </ClCompile>
-    <ClCompile Include="Games\Push.cpp">
-      <Filter>소스 파일\Games</Filter>
-    </ClCompile>
     <ClCompile Include="Games\Header2.cpp">
       <Filter>소스 파일\Games</Filter>
     </ClCompile>
     <ClCompile Include="Games\Header2.h">
       <Filter>헤더 파일\Games</Filter>
+    </ClCompile>
+    <ClCompile Include="Games\RockSP.cpp">
+      <Filter>소스 파일\Games</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -77,7 +77,7 @@
     <ClInclude Include="Games\EqualCard.h">
       <Filter>헤더 파일\Games</Filter>
     </ClInclude>
-    <ClInclude Include="Games\Push.h">
+    <ClInclude Include="Games\RockSP.h">
       <Filter>헤더 파일\Games</Filter>
     </ClInclude>
   </ItemGroup>
