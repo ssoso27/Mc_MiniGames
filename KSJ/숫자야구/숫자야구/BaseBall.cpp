@@ -34,6 +34,7 @@ void main() {
 	
 	int life = 10;
 
+	int temp=0; // 스트라이크=temp=3 마지막에 승리하셨습니다 출력
 
 	srand((unsigned)time(NULL)); // rand 함수를 쓰기 위함
 
@@ -142,6 +143,7 @@ void main() {
 		printf("%d 스트라이크, %d 볼, 남은 목숨 : %d \n", strike, ball,life);
 
 		if (strike == 3) {
+			temp = 3;
 			break;
 		}
 
@@ -149,10 +151,10 @@ void main() {
 
 	//루프 돌리기 
 
-	if (strike != 3) {
+	if ( temp!= 3) {
 		printf("게임오버 \n");
 	}
-	if (strike == 3) {
+	if (temp == 3) {
 		printf("승리하셨습니다. \n");
 	}
 
