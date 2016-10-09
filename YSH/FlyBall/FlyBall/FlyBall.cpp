@@ -590,6 +590,10 @@ void Render()
 		ScreenPrint(Board.rightX, i, "│");
 	}
 
+	// Start, Goal 출력
+	ScreenPrint(PlayerFirstX, PlayerFirstY, "S");
+	ScreenPrint(Goal.X, Goal.Y, "G");
+
 	// Player 출력
 	ScreenPrint(Player.X, Player.Y, "●");
 
