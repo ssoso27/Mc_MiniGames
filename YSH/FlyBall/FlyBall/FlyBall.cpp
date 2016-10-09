@@ -238,8 +238,16 @@ int Collision(int x, int y)
 				(Portal[i].X + 1) == x || (Portal[i].X + 1) == (x + 1)) // x 또는 x+1이 동일
 			{
 				// 충돌 시 반응
-				// Portal[i].nextMap에 따른 맵 이동 ( + 게임 클리어)
-				// (수정 필요)
+				// Portal[i].nextMap에 따른 맵 이동
+				MapIndex = Portal[i].nextMap;
+				CreateBlock(i);
+
+				// Player 초기화
+				Player.X = PlayerFirstX;
+				Player.Y = PlayerFirstY;
+				Player.Direction = RIGHT;
+				Player.OldTime = clock();
+				Player.IsReady = 1;
 
 				return 1; // 충돌 O
 			}
@@ -468,10 +476,6 @@ void Init()
 	Board.leftX = 8;
 	Board.rightX = Board.leftX + Board.Width;
 
-	// Map 초기화
-	MapIndex = 0;
-	CreateBlock(MapIndex);
-
 	// Portal 초기화
 	// 상
 	Portal[0].X = 35; 
@@ -490,6 +494,10 @@ void Init()
 	{
 		Portal[i].IsEnable = false; // 모든 Portal 비활성화
 	}
+
+	// Map 초기화
+	MapIndex = 0;
+	CreateBlock(MapIndex);
 
 	// Player 초기화
 	Player.X = PlayerFirstX;
