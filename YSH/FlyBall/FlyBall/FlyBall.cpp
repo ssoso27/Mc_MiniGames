@@ -17,7 +17,7 @@ enum ControlKeys
 // 상수
 const int PlayerFirstX = 10; // 플레이어의 시작 X좌표
 const int PlayerFirstY = 6; // 플레이어의 시작 Y좌표
-const int MaxBlockCount = 160; // Map에 들어가는 최대 Block 수
+const int MaxBlockCount = 512; // Map에 들어가는 최대 Block 수
 const int MAXMAPNUM = 6; // 최대 Map 수
 
 // 전역 변수
@@ -32,7 +32,7 @@ GOAL Goal;
 STARTP StartP;
 
 // 배열
-bool IsBlock[Board.Height / 2][Board.Width / 2] = { false, }; // Block 생성 위치 판별 [20][8]
+bool IsBlock[Board.Height][Board.Width / 2] = { false, }; // Block 생성 위치 판별
 
 // 함수
 
@@ -41,7 +41,7 @@ void SetStartGoal()
 {
 	srand((unsigned)time(NULL));
 
-	StartP.whereMap = rand() % MAXMAPNUM;
+	StartP.whereMap = 0;
 
 	do
 	{
@@ -112,7 +112,7 @@ void SetPortal(int i)
 // Block 좌표 대입
 void AssignCoord(int k)
 {
-	for (int i = 0; i < Board.Height / 2; i++) // i행
+	for (int i = 0; i < Board.Height; i++) // i행
 	{
 		for (int j = 0; j < Board.Width / 2; j++) // j열
 		{
@@ -120,7 +120,7 @@ void AssignCoord(int k)
 			{
 				// Block 좌표 초기화
 				Block[k].X = Board.leftX + (j * 2) + 1;
-				Block[k].Y = Board.topY + (i * 2) + 1;
+				Block[k].Y = Board.topY + i + 1;
 				
 				// 블럭 자리 false
 				IsBlock[i][j] = false;
@@ -139,16 +139,29 @@ void MapMake(int index)
 	switch (index)
 	{
 	case 0: // Map0
-			// bool IsBlock[][] 에 true 넣을거 [7][32]
-		IsBlock[0][3] = IsBlock[0][7] = true; // 0
-		IsBlock[1][4] = true; // 1
-		 // 2
-		IsBlock[3][5] = true; // 3
-		// 4
-		IsBlock[5][12] = true; // 5
-		 // 6
-		IsBlock[7][10] = true; // 7
-		
+			// bool IsBlock[][] 에 true 넣을거 [14][31]
+		for (int i = 2; i <= 31; i++) { IsBlock[0][i] = true; } // 0
+		for (int i = 4; i <= 10; i++) { IsBlock[1][i] = true; }	//1
+		for (int i = 21; i <= 27; i++) { IsBlock[1][i] = true; }//1
+		for (int i = 14; i <= 18; i++) { IsBlock[2][i] = true; }//2
+		for (int i = 17; i <= 24; i++) { IsBlock[3][i] = true; }//3		
+		for (int i = 0; i <= 13; i++) { IsBlock[4][i] = true; }// 4
+		for (int i = 24; i <= 29; i++) { IsBlock[5][i] = true; }//5
+		for (int i = 0; i <= 9; i++) { IsBlock[6][i] = true; }//6
+		for (int i = 19; i <= 21; i++) { IsBlock[6][i] = true; }//6
+		for (int i = 0; i <= 11; i++) { IsBlock[7][i] = true; }//7
+		for (int i = 16; i <= 28; i++) { IsBlock[7][i] = true; }//7
+		for (int i = 0; i <= 12; i++) { IsBlock[8][i] = true; }//8
+		for (int i = 24; i <= 29; i++) { IsBlock[8][i] = true; }//8
+		for (int i = 17; i <= 19; i++) { IsBlock[9][i] = true; }//9
+		for (int i = 26; i <= 31; i++) { IsBlock[9][i] = true; }//9
+		for (int i = 8; i <= 14; i++) { IsBlock[10][i] = true; }//10
+		for (int i = 24; i <= 28; i++) { IsBlock[10][i] = true; }//10
+		for (int i = 1; i <= 6; i++) { IsBlock[11][i] = true; }//11
+		for (int i = 9; i <= 18; i++) { IsBlock[11][i] = true; }//11
+		for (int i = 5; i <= 7; i++) { IsBlock[12][i] = true; }//12
+		for (int i = 17; i <= 22; i++) { IsBlock[12][i] = true; }//12
+		for (int i = 0; i <= 31; i++) { IsBlock[14][i] = true; }//14
 		// 포탈 설정 
 		SetPortal(1);
 		SetPortal(2);
@@ -295,8 +308,7 @@ int Collision(int x, int y)
 	// Player과 Block의 충돌
 	for (int i = 0; i < MaxBlockCount; i++)
 	{
-		if ((Block[i].Y == y) || (Block[i].Y == (y+1)) ||
-			((Block[i].Y + 1) == y) || ((Block[i].Y + 1) == (y + 1))) // y 또는 y+1이 동일
+		if (Block[i].Y == y) // y 또는 y+1이 동일
 		{
 			if (Block[i].X == x || Block[i].X == (x + 1) ||
 				(Block[i].X + 1) == x || (Block[i].X + 1) == (x + 1)) // x 또는 x+1이 동일
