@@ -27,7 +27,6 @@ int MapIndex; // 현재 Map의 Index
 BLOCK Block[MaxBlockCount];
 BOARD Board;
 PLAYER Player;
-GOAL Goal;
 PORTAL Portal[4]; // 상, 우, 하, 좌
 
 
@@ -35,6 +34,36 @@ PORTAL Portal[4]; // 상, 우, 하, 좌
 bool IsBlock[Board.Height / 2][Board.Width / 2] = { false, }; // Block 생성 위치 판별 [20][8]
 
 // 함수
+
+// Portal 활성화 및 설정
+void SetPortal(int i)
+{
+	switch (i)
+	{
+	case 0:
+		Portal[i].IsEnable = true; // 포탈 활성화
+		Portal[i].nextMap = MapIndex - 1; // 이동 맵 결정
+		break;
+
+	case 1:
+		Portal[i].IsEnable = true; // 포탈 활성화
+		Portal[i].nextMap = MapIndex + 2; // 이동 맵 결정
+		break;
+
+	case 2:
+		Portal[i].IsEnable = true; // 포탈 활성화
+		Portal[i].nextMap = MapIndex + 1; // 이동 맵 결정
+		break;
+
+	case 3:
+		Portal[i].IsEnable = true; // 포탈 활성화
+		Portal[i].nextMap = MapIndex - 2; // 이동 맵 결정
+		break;
+
+	default:
+		break;
+	}
+}
 
 // Block 좌표 대입
 void AssignCoord(int k)
@@ -62,6 +91,8 @@ void AssignCoord(int k)
 // Block Map 생성
 void MapMake(int index)
 {
+	// 이전 Map 정보 초기화 (수정 필요)
+
 	// Map 종류에 따라 다르게 생성
 	switch (index)
 	{
@@ -76,8 +107,10 @@ void MapMake(int index)
 		// 6
 		// 7
 
-		// 포탈 설정
-		//Portal[0].X = 
+		// 포탈 설정 
+		SetPortal(1);
+		SetPortal(2);
+
 		break;
 
 
@@ -85,12 +118,16 @@ void MapMake(int index)
 		// bool IsBlock[][] 에 true 넣을거 [7][32]
 		for (int i = 5; i < 30; i++) IsBlock[0][i] = true; // 0
 		IsBlock[1][4] = true; // 1
-							  // 2
+		  // 2
 		IsBlock[3][5] = true; // 3
-							  // 4
+		  // 4
 		IsBlock[5][12] = true; // 5
-							   // 6
-							   // 7
+		// 6
+		// 7
+
+		// 포탈 설정 
+		SetPortal(0);
+		SetPortal(1);
 
 		break;
 
@@ -99,12 +136,17 @@ void MapMake(int index)
 		// bool IsBlock[][] 에 true 넣을거 [7][32]
 		for (int i = 5; i < 30; i++) IsBlock[0][i] = true; // 0
 		IsBlock[1][4] = true; // 1
-							  // 2
+		 // 2
 		IsBlock[3][5] = true; // 3
-							  // 4
+		  // 4
 		IsBlock[5][12] = true; // 5
-							   // 6
-							   // 7
+	   // 6
+	  // 7
+
+	  // 포탈 설정 (IsEnable, nextMap)
+		SetPortal(1);
+		SetPortal(2);
+		SetPortal(3);
 
 		break;
 
@@ -113,12 +155,17 @@ void MapMake(int index)
 		// bool IsBlock[][] 에 true 넣을거 [7][32]
 		for (int i = 5; i < 30; i++) IsBlock[0][i] = true; // 0
 		IsBlock[1][4] = true; // 1
-							  // 2
+		 // 2
 		IsBlock[3][5] = true; // 3
-							  // 4
+		 // 4
 		IsBlock[5][12] = true; // 5
-							   // 6
-							   // 7
+		// 6
+		// 7
+
+		// 포탈 설정 (IsEnable, nextMap)
+		SetPortal(0);
+		SetPortal(1);
+		SetPortal(3);
 
 		break;
 
@@ -127,12 +174,16 @@ void MapMake(int index)
 		// bool IsBlock[][] 에 true 넣을거 [7][32]
 		for (int i = 5; i < 30; i++) IsBlock[0][i] = true; // 0
 		IsBlock[1][4] = true; // 1
-							  // 2
+		  // 2
 		IsBlock[3][5] = true; // 3
-							  // 4
+		  // 4
 		IsBlock[5][12] = true; // 5
-							   // 6
-							   // 7
+		// 6
+		// 7
+
+		// 포탈 설정 (IsEnable, nextMap)
+		SetPortal(2);
+		SetPortal(3);
 
 		break;
 
@@ -141,12 +192,17 @@ void MapMake(int index)
 		// bool IsBlock[][] 에 true 넣을거 [7][32]
 		for (int i = 5; i < 30; i++) IsBlock[0][i] = true; // 0
 		IsBlock[1][4] = true; // 1
-							  // 2
+		  // 2
 		IsBlock[3][5] = true; // 3
-							  // 4
+		 // 4
 		IsBlock[5][12] = true; // 5
-							   // 6
-							   // 7
+		// 6
+		// 7
+
+		// 포탈 설정 (IsEnable, nextMap)
+		SetPortal(0);
+		SetPortal(2);
+		SetPortal(3);
 
 		break;
 
@@ -170,20 +226,25 @@ int Collision(int x, int y)
 {
 	int count = 0;
 
-	// Player와 Goal의 충돌
-	if (Goal.Y == y) // y 또는 y+1이 동일
+	// Player와 Portal[i]의 충돌
+	for (int i = 0; i < 4; i++)
 	{
-		if (Goal.X == x || Goal.X == (x + 1) ||
-			(Goal.X + 1) == x || (Goal.X + 1) == (x + 1)) // x 또는 x+1이 동일
-		{
-			// 충돌 시 반응
-			// Goal.nextMap에 따른 맵 이동 ( + 게임 클리어)
-			// (수정 필요)
+		if (Portal[i].IsEnable == false) // 유효하지 않은 포탈이면
+			continue;
 
-			return 1; // 충돌 O
+		if (Portal[i].Y == y) // y 또는 y+1이 동일
+		{
+			if (Portal[i].X == x || Portal[i].X == (x + 1) ||
+				(Portal[i].X + 1) == x || (Portal[i].X + 1) == (x + 1)) // x 또는 x+1이 동일
+			{
+				// 충돌 시 반응
+				// Portal[i].nextMap에 따른 맵 이동 ( + 게임 클리어)
+				// (수정 필요)
+
+				return 1; // 충돌 O
+			}
 		}
 	}
-
 	// Player과 Block의 충돌
 	for (int i = 0; i < MaxBlockCount; i++)
 	{
@@ -401,10 +462,6 @@ void KeyControl(int key)
 // 프레임워크 함수
 void Init()
 {
-	// Goal 초기화
-	Goal.X = 62;
-	Goal.Y = 14;
-
 	// Board 초기화
 	Board.topY = 4;
 	Board.bottomY = Board.topY + Board.Height;
@@ -428,6 +485,11 @@ void Init()
 	// 좌
 	Portal[3].X = 10;
 	Portal[3].Y = 10;
+
+	for (int i = 0; i < 4; i++)
+	{
+		Portal[i].IsEnable = false; // 모든 Portal 비활성화
+	}
 
 	// Player 초기화
 	Player.X = PlayerFirstX;
@@ -475,16 +537,24 @@ void Render()
 		ScreenPrint(Board.rightX, i, "│");
 	}
 
+	// Player 출력
 	ScreenPrint(Player.X, Player.Y, "●");
 
+	// Block 출력
 	for (int i = 0; i < MaxBlockCount; i++)
 	{
 		if (Block[i].X == 0 && Block[i].Y == 0) continue; // 좌표가 주어지지 않은 Block 표시 X
 		ScreenPrint(Block[i].X, Block[i].Y, "■");
 	}
 
-	ScreenPrint(Goal.X, Goal.Y, "★");
+	// Portal 출력
+	for (int i = 0; i < 4; i++)
+	{
+		if (Portal[i].IsEnable == false) // 유효하지 않은 포탈이면
+			continue; 
 
+		ScreenPrint(Portal[i].X, Portal[i].Y, "★");
+	}
 	ScreenFlipping();
 }
 

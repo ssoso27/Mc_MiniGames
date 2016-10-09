@@ -23,13 +23,6 @@ typedef struct _BLOCK
 	int Y;
 } BLOCK;
 
-typedef struct _GOAL
-{
-	int X;
-	int Y;
-	int nextMap; // 이동 맵 지정
-} GOAL;
-
 typedef struct _PLAYER
 {
 	int X, Y;
@@ -44,7 +37,7 @@ typedef struct _PORTAL
 {
 	int X, Y;
 	int nextMap; // 이동할 맵
-	bool IsAvail; // 유효한 포탈인가?
+	bool IsEnable; // 활성화된 포탈인가?
 } PORTAL;
 
 // 함수원형
@@ -54,6 +47,7 @@ void AssignCoord(int);
 void MapMake(int );
 void CreateBlock(int );
 int Collision(int, int);
+void SetPortal(int);
 
 void Init();
 void Update();
