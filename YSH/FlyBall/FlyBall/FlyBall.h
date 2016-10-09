@@ -48,6 +48,7 @@ void MapMake(int );
 void CreateBlock(int );
 int Collision(int, int);
 void SetPortal(int);
+void MapReset();
 
 void Init();
 void Update();

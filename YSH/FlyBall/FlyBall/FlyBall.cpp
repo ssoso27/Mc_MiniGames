@@ -35,27 +35,53 @@ bool IsBlock[Board.Height / 2][Board.Width / 2] = { false, }; // Block 생성 위치
 
 // 함수
 
+// 이전 Map 정보 리셋
+void MapReset()
+{
+	// Player 리셋
+	Player.X = PlayerFirstX;
+	Player.Y = PlayerFirstY;
+	Player.Direction = RIGHT;
+	Player.OldTime = clock();
+	Player.IsReady = 1;
+
+	// Block 리셋
+	for (int i = 0; i < Board.Height / 2; i++)
+	{
+		for (int j = 0; j < Board.Width / 2; j++)
+		{
+			IsBlock[i][j] = false;
+		}
+	}
+
+	// Portal 리셋
+	for (int i = 0; i < 4; i++)
+	{
+		Portal[i].IsEnable = false;
+	}
+}
+
 // Portal 활성화 및 설정
 void SetPortal(int i)
 {
 	switch (i)
 	{
-	case 0:
+	case 0: // ↑
 		Portal[i].IsEnable = true; // 포탈 활성화
 		Portal[i].nextMap = MapIndex - 1; // 이동 맵 결정
 		break;
 
-	case 1:
+	case 1: // →
 		Portal[i].IsEnable = true; // 포탈 활성화
 		Portal[i].nextMap = MapIndex + 2; // 이동 맵 결정
 		break;
 
-	case 2:
+	case 2: // ↓
 		Portal[i].IsEnable = true; // 포탈 활성화
 		Portal[i].nextMap = MapIndex + 1; // 이동 맵 결정
 		break;
 
-	case 3:
+	case 3: // ←
 		Portal[i].IsEnable = true; // 포탈 활성화
 		Portal[i].nextMap = MapIndex - 2; // 이동 맵 결정
 		break;
@@ -91,22 +117,20 @@ void AssignCoord(int k)
 // Block Map 생성
 void MapMake(int index)
 {
-	// 이전 Map 정보 초기화 (수정 필요)
-
 	// Map 종류에 따라 다르게 생성
 	switch (index)
 	{
 	case 0: // Map0
-		// bool IsBlock[][] 에 true 넣을거 [7][32]
-		for (int i = 5; i < 30; i++) IsBlock[0][i] = true; // 0
+			// bool IsBlock[][] 에 true 넣을거 [7][32]
+		IsBlock[0][3] = IsBlock[0][7] = true; // 0
 		IsBlock[1][4] = true; // 1
-		// 2
+		 // 2
 		IsBlock[3][5] = true; // 3
 		// 4
 		IsBlock[5][12] = true; // 5
-		// 6
-		// 7
-
+		 // 6
+		IsBlock[7][10] = true; // 7
+		
 		// 포탈 설정 
 		SetPortal(1);
 		SetPortal(2);
@@ -116,15 +140,15 @@ void MapMake(int index)
 
 	case 1:
 		// bool IsBlock[][] 에 true 넣을거 [7][32]
-		for (int i = 5; i < 30; i++) IsBlock[0][i] = true; // 0
+		IsBlock[0][3] = IsBlock[0][7] = true; // 0
 		IsBlock[1][4] = true; // 1
-		  // 2
+		 // 2
 		IsBlock[3][5] = true; // 3
-		  // 4
+		// 4
 		IsBlock[5][12] = true; // 5
 		// 6
 		// 7
-
+		
 		// 포탈 설정 
 		SetPortal(0);
 		SetPortal(1);
@@ -134,14 +158,14 @@ void MapMake(int index)
 
 	case 2:
 		// bool IsBlock[][] 에 true 넣을거 [7][32]
-		for (int i = 5; i < 30; i++) IsBlock[0][i] = true; // 0
+		IsBlock[0][3] = true; // 0
 		IsBlock[1][4] = true; // 1
 		 // 2
 		IsBlock[3][5] = true; // 3
-		  // 4
+		// 4
 		IsBlock[5][12] = true; // 5
-	   // 6
-	  // 7
+		// 6
+		// 7
 
 	  // 포탈 설정 (IsEnable, nextMap)
 		SetPortal(1);
@@ -153,11 +177,11 @@ void MapMake(int index)
 
 	case 3:
 		// bool IsBlock[][] 에 true 넣을거 [7][32]
-		for (int i = 5; i < 30; i++) IsBlock[0][i] = true; // 0
+		// 0
 		IsBlock[1][4] = true; // 1
 		 // 2
 		IsBlock[3][5] = true; // 3
-		 // 4
+		  // 4
 		IsBlock[5][12] = true; // 5
 		// 6
 		// 7
@@ -172,15 +196,15 @@ void MapMake(int index)
 
 	case 4:
 		// bool IsBlock[][] 에 true 넣을거 [7][32]
-		for (int i = 5; i < 30; i++) IsBlock[0][i] = true; // 0
+		// 0
 		IsBlock[1][4] = true; // 1
-		  // 2
+		 // 2
 		IsBlock[3][5] = true; // 3
-		  // 4
-		IsBlock[5][12] = true; // 5
+		// 4
+		// 5
 		// 6
 		// 7
-
+		
 		// 포탈 설정 (IsEnable, nextMap)
 		SetPortal(2);
 		SetPortal(3);
@@ -190,18 +214,17 @@ void MapMake(int index)
 
 	case 5:
 		// bool IsBlock[][] 에 true 넣을거 [7][32]
-		for (int i = 5; i < 30; i++) IsBlock[0][i] = true; // 0
+		// 0
 		IsBlock[1][4] = true; // 1
-		  // 2
-		IsBlock[3][5] = true; // 3
-		 // 4
-		IsBlock[5][12] = true; // 5
+		// 2
+		// 3
+		// 4
+		// 5
 		// 6
 		// 7
 
 		// 포탈 설정 (IsEnable, nextMap)
 		SetPortal(0);
-		SetPortal(2);
 		SetPortal(3);
 
 		break;
@@ -214,10 +237,11 @@ void MapMake(int index)
 // index에 맞는 Map Block 생성
 void CreateBlock(int MapIndex)
 {
-	MapMake(MapIndex);
+	MapReset(); // 이전 맵 리셋
+	MapMake(MapIndex); // 맵 생성
 	for (int i = 0; i < MaxBlockCount; i++)
 	{
-		AssignCoord(i);
+		AssignCoord(i); // 좌표 부여
 	}
 }
 
@@ -240,14 +264,7 @@ int Collision(int x, int y)
 				// 충돌 시 반응
 				// Portal[i].nextMap에 따른 맵 이동
 				MapIndex = Portal[i].nextMap;
-				CreateBlock(i);
-
-				// Player 초기화
-				Player.X = PlayerFirstX;
-				Player.Y = PlayerFirstY;
-				Player.Direction = RIGHT;
-				Player.OldTime = clock();
-				Player.IsReady = 1;
+				CreateBlock(MapIndex);
 
 				return 1; // 충돌 O
 			}
@@ -522,8 +539,8 @@ void Render()
 
 	// 상단바 출력
 	char TheTopBar[81];
-	sprintf(TheTopBar, "현 스테이지 : %d | Life : %d", 1, /*Stage.Level + 1,*/ Player.Life);
-	ScreenPrint(17, 1, TheTopBar);
+	sprintf(TheTopBar, "현 스테이지 : %d | Life : %d  \t\t    [Map%d]", 1, /*Stage.Level + 1,*/ Player.Life, MapIndex);
+	ScreenPrint(17, 2, TheTopBar);
 
 	// Board 출력
 	// 각모서리
