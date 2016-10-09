@@ -40,12 +40,19 @@ typedef struct _PLAYER
 	clock_t OldTime;
 } PLAYER;
 
+typedef struct _PORTAL
+{
+	int X, Y;
+	int nextMap; // 이동할 맵
+	bool IsAvail; // 유효한 포탈인가?
+} PORTAL;
+
 // 함수원형
 void PlayerMove(clock_t );
 void KeyControl(int);
 void AssignCoord(int);
-void MapMake();
-void CreateBlock();
+void MapMake(int );
+void CreateBlock(int );
 int Collision(int, int);
 
 void Init();

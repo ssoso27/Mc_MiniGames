@@ -13,18 +13,22 @@ enum ControlKeys
 	ESC = 27
 };
 
-PLAYER Player;
-GOAL Goal;
+
+// 상수
+const int PlayerFirstX = 10; // 플레이어의 시작 X좌표
+const int PlayerFirstY = 6; // 플레이어의 시작 Y좌표
+const int MaxBlockCount = 160; // Map에 들어가는 최대 Block 수
+const int MAXMAPNUM = 6; // 최대 Map 수
 
 // 전역 변수
-// 상수
-const int PlayerFirstX = 10;
-const int PlayerFirstY = 6;
-const int MaxBlockCount = 160;
+int MapIndex; // 현재 Map의 Index
 
 // 구조체 변수
 BLOCK Block[MaxBlockCount];
 BOARD Board;
+PLAYER Player;
+GOAL Goal;
+PORTAL Portal[4]; // 상, 우, 하, 좌
 
 
 // 배열
@@ -56,25 +60,105 @@ void AssignCoord(int k)
 } 
 
 // Block Map 생성
-void MapMake()
+void MapMake(int index)
 {
-	// Map 종류에 따라 다르게 생성. (switch문) (수정 필요)
+	// Map 종류에 따라 다르게 생성
+	switch (index)
+	{
+	case 0: // Map0
+		// bool IsBlock[][] 에 true 넣을거 [7][32]
+		for (int i = 5; i < 30; i++) IsBlock[0][i] = true; // 0
+		IsBlock[1][4] = true; // 1
+		// 2
+		IsBlock[3][5] = true; // 3
+		// 4
+		IsBlock[5][12] = true; // 5
+		// 6
+		// 7
 
-	// bool IsBlock[][] 에 true 넣을거 [7][32]
-	for (int i = 5; i < 30; i++) IsBlock[0][i] = true; // 0
-	IsBlock[1][4] = true; // 1
-	// 2
-	IsBlock[3][5] = true; // 3
-	// 4
-	IsBlock[5][12] = true; // 5
-	// 6
-	// 7
+		// 포탈 설정
+		//Portal[0].X = 
+		break;
+
+
+	case 1:
+		// bool IsBlock[][] 에 true 넣을거 [7][32]
+		for (int i = 5; i < 30; i++) IsBlock[0][i] = true; // 0
+		IsBlock[1][4] = true; // 1
+							  // 2
+		IsBlock[3][5] = true; // 3
+							  // 4
+		IsBlock[5][12] = true; // 5
+							   // 6
+							   // 7
+
+		break;
+
+
+	case 2:
+		// bool IsBlock[][] 에 true 넣을거 [7][32]
+		for (int i = 5; i < 30; i++) IsBlock[0][i] = true; // 0
+		IsBlock[1][4] = true; // 1
+							  // 2
+		IsBlock[3][5] = true; // 3
+							  // 4
+		IsBlock[5][12] = true; // 5
+							   // 6
+							   // 7
+
+		break;
+
+
+	case 3:
+		// bool IsBlock[][] 에 true 넣을거 [7][32]
+		for (int i = 5; i < 30; i++) IsBlock[0][i] = true; // 0
+		IsBlock[1][4] = true; // 1
+							  // 2
+		IsBlock[3][5] = true; // 3
+							  // 4
+		IsBlock[5][12] = true; // 5
+							   // 6
+							   // 7
+
+		break;
+
+
+	case 4:
+		// bool IsBlock[][] 에 true 넣을거 [7][32]
+		for (int i = 5; i < 30; i++) IsBlock[0][i] = true; // 0
+		IsBlock[1][4] = true; // 1
+							  // 2
+		IsBlock[3][5] = true; // 3
+							  // 4
+		IsBlock[5][12] = true; // 5
+							   // 6
+							   // 7
+
+		break;
+
+
+	case 5:
+		// bool IsBlock[][] 에 true 넣을거 [7][32]
+		for (int i = 5; i < 30; i++) IsBlock[0][i] = true; // 0
+		IsBlock[1][4] = true; // 1
+							  // 2
+		IsBlock[3][5] = true; // 3
+							  // 4
+		IsBlock[5][12] = true; // 5
+							   // 6
+							   // 7
+
+		break;
+
+	default:
+		break;
+	}
 }
 
-// Block 생성
-void CreateBlock()
+// index에 맞는 Map Block 생성
+void CreateBlock(int MapIndex)
 {
-	MapMake();
+	MapMake(MapIndex);
 	for (int i = 0; i < MaxBlockCount; i++)
 	{
 		AssignCoord(i);
@@ -327,8 +411,23 @@ void Init()
 	Board.leftX = 8;
 	Board.rightX = Board.leftX + Board.Width;
 
-	// Block 초기화
-	CreateBlock();
+	// Map 초기화
+	MapIndex = 0;
+	CreateBlock(MapIndex);
+
+	// Portal 초기화
+	// 상
+	Portal[0].X = 35; 
+	Portal[0].Y = 6;
+	// 우
+	Portal[1].X = 70;
+	Portal[1].Y = 10;
+	// 하
+	Portal[2].X = 35;
+	Portal[2].Y = 18;
+	// 좌
+	Portal[3].X = 10;
+	Portal[3].Y = 10;
 
 	// Player 초기화
 	Player.X = PlayerFirstX;
