@@ -40,6 +40,19 @@ typedef struct _PORTAL
 	bool IsEnable; // 활성화된 포탈인가?
 } PORTAL;
 
+typedef struct _GOAL
+{
+	int X, Y;
+	int whereMap; // 어떤 맵에 있는가?
+	bool IsSuccess; // 게임을 클리어 했는가?
+	bool IsEnable; // 활성화된 골인지점인가?
+} GOAL;
+
+typedef struct _STARTP
+{
+	int whereMap; // 어떤 맵에 있는가?
+} STARTP;
+
 // 함수원형
 void PlayerMove(clock_t );
 void KeyControl(int);
@@ -49,6 +62,7 @@ void CreateBlock(int );
 int Collision(int, int);
 void SetPortal(int);
 void MapReset();
+void SetStartGoal();
 
 void Init();
 void Update();

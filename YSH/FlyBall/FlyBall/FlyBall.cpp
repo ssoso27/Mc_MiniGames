@@ -28,12 +28,27 @@ BLOCK Block[MaxBlockCount];
 BOARD Board;
 PLAYER Player;
 PORTAL Portal[4]; // 상, 우, 하, 좌
-
+GOAL Goal;
+STARTP StartP;
 
 // 배열
 bool IsBlock[Board.Height / 2][Board.Width / 2] = { false, }; // Block 생성 위치 판별 [20][8]
 
 // 함수
+
+// Start, Goal 지점 Map 세팅
+void SetStartGoal()
+{
+	srand((unsigned)time(NULL));
+
+	StartP.whereMap = rand() % MAXMAPNUM;
+
+	do
+	{
+		Goal.whereMap = rand() % MAXMAPNUM;
+	} while (StartP.whereMap == Goal.whereMap);
+
+}
 
 // 이전 Map 정보 리셋
 void MapReset()
@@ -59,6 +74,9 @@ void MapReset()
 	{
 		Portal[i].IsEnable = false;
 	}
+
+	// Goal 리셋
+	Goal.IsEnable = false;
 }
 
 // Portal 활성화 및 설정
@@ -238,6 +256,10 @@ void MapMake(int index)
 void CreateBlock(int MapIndex)
 {
 	MapReset(); // 이전 맵 리셋
+
+	if (MapIndex == Goal.whereMap) // Goal Map 이면
+		Goal.IsEnable = true; // Goal 활성화
+
 	MapMake(MapIndex); // 맵 생성
 	for (int i = 0; i < MaxBlockCount; i++)
 	{
@@ -512,9 +534,15 @@ void Init()
 		Portal[i].IsEnable = false; // 모든 Portal 비활성화
 	}
 
+	// Start, Goal 지점 초기화
+	Goal.X = 70;
+	Goal.Y = 18;
+	SetStartGoal();
+
 	// Map 초기화
-	MapIndex = 0;
+	MapIndex = StartP.whereMap;
 	CreateBlock(MapIndex);
+
 
 	// Player 초기화
 	Player.X = PlayerFirstX;
