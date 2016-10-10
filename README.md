@@ -78,9 +78,9 @@ C와 C++를 이용하여 제작 중입니다.
 ####7. 누군가의 업로드 이후
 #####-- ( = 자신이 commit 하기 전 항상 해야 할 명령어)
 
---  <font size = 4.5> git fetch upstream <br>
--- git merge upstream/master<br>
--- git push</font>
+--  <font size = 4.5> <b>git fetch upstream</b> <br>
+-- <b>git merge upstream/master</b><br>
+-- <b>git push</b></font>
 
 ####* 석 줄 요약
 -- 한 번도 clone을 안 했을 경우, clone을 한다.<br>
