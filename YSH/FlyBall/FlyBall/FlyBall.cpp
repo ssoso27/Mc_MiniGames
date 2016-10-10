@@ -2,15 +2,15 @@
 #include "Screen.h"
 #include "FlyBall.h"
 
-// 구조체 변수 & 열거형
+// 열거형
 enum ControlKeys
 {
-	UP = 72,
-	DOWN = 80,
-	//LEFT = 75,
-	//RIGHT = 77,
-	SPACE = 32,
-	ESC = 27
+	UP_key = 72,
+	DOWN_key = 80,
+	LEFT_key = 75,
+	RIGHT_key = 77,
+	SPACE_key = 32,
+	ESC_key = 27
 };
 
 
@@ -23,13 +23,18 @@ const int MAXMAPNUM = 6; // 최대 Map 수
 // 전역 변수
 int MapIndex; // 현재 Map의 Index
 
-// 구조체 변수
+char StatString[500]; // 화면 출력 문구 저장용 char[]
+int PrintTime = 3 * 1000;
+clock_t Stat_OldTime = clock(); // PrintTime의 OldTime
+
+// 구조체 & 열거형 변수
 BLOCK Block[MaxBlockCount];
 BOARD Board;
 PLAYER Player;
 PORTAL Portal[4]; // 상, 우, 하, 좌
 GOAL Goal;
 STARTP StartP;
+GAMESTATUS GameStatus;
 
 // 배열
 bool IsBlock[Board.Height][Board.Width / 2] = { false, }; // Block 생성 위치 판별
@@ -541,73 +546,203 @@ void KeyControl(int key)
 {
 	int direction;
 
-	switch (key)
+
+	// START 에서의 키조작
+	if (GameStatus == START)
 	{
-	case SPACE:
-		//(Player.IsReady == 1) ? (Player.IsReady = 0) : (Player.IsReady = 1); // Player.IsReady 바꿈 
-		if (Player.IsReady == 1)
+		if (key == SPACE_key)
 		{
+			GameStatus = INIT;
+		}
+	}
+
+	// RUNNING 에서의 키조작
+	{
+		switch (key)
+		{
+		case SPACE_key:
+			//(Player.IsReady == 1) ? (Player.IsReady = 0) : (Player.IsReady = 1); // Player.IsReady 바꿈 
+			if (Player.IsReady == 1)
+			{
+				Player.OldTime = clock();
+				Player.IsReady = 0; // 준비 O -> 준비 X
+			}
+			break;
+
+		case UP_key: // ↑
+			direction = 0;
+			Player.Direction = (DIRECT)direction;
 			Player.OldTime = clock();
-			Player.IsReady = 0; // 준비 O -> 준비 X
+			break;
+
+		case RIGHT_key: // →
+			direction = 2;
+			Player.Direction = (DIRECT)direction;
+			Player.OldTime = clock();
+			break;
+
+		case DOWN_key: // ↓
+			direction = 4;
+			Player.Direction = (DIRECT)direction;
+			Player.OldTime = clock();
+			break;
+
+		case LEFT_key: // ←
+			direction = 6;
+			Player.Direction = (DIRECT)direction;
+			Player.OldTime = clock();
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	// (수정 필요)
+	// SUCCESS 에서의 키조작
+	if (GameStatus == SUCCESS)
+	{/*
+		switch (key)
+		{
+		case 'Y': case 'y':
+			if (Stage.Level < 2)
+			{
+				Stage.Level++;
+				GameStatus = INIT;
+			}
+			else
+			{
+				GameStatus = RESULT;
+			}
+			break;
+
+		case 'N': case 'n':
+			GameStatus = RESULT;
+			break;
+		}/*/
+	}
+	
+	// FAILED 에서의 키조작
+	if (GameStatus == FAILED)
+	{/*
+		switch (key)
+		{
+		case 'Y': case 'y':
+			GameStatus = INIT;
+			break;
+
+		case 'N': case 'n':
+			GameStatus = RESULT;
+			break;
+		}*/
+	}
+}
+
+// 게임 상태 별 문구 및 초기화
+void StatusPrint()
+{
+	clock_t CurTime = clock();
+
+	switch (GameStatus)
+	{
+	case START:
+		sprintf(StatString, "[Fly Ball] \n\n"
+			"\t\t===================================\n\n"
+			"\t\t주어진 벽돌을 깨는 게임입니다.\n"
+			"\t\t각 스테이지 당 Life는 3 입니다.\n"
+			"\t\t공의 이동 방향을 조작할 수 있습니다.\n"
+			"\t\t벽돌을 다 깨면 다음 스테이지로 넘어갑니다.\n"
+			"\t\t스테이지는 총 3레벨로 구성되어있습니다.\n\n"
+			"\t\t===================================\n\n"
+			"\t\t\t  - 조 작 법 -\n"
+			"\t\t이동 : 방향키 | 일시정지 : ESC\n"
+			"\t\t공 방향 조작 : \n"
+			"\t\t\tA S D \n"
+			"\t\t\tZ X C \n"
+			"\t\t-----------------------------------\n"
+			"\t\t게임 시작 : SPACE BAR | 게임 종료 : q\n\n\n\n");
+		ScreenPrint(25, 10, StatString);
+		break;
+
+	case INIT:
+
+		// 스테이지 초기화
+
+
+		// 화면 출력
+
+		if (CurTime - Stat_OldTime < PrintTime)
+		{
+			sprintf(StatString, "[INIT 화면]");
+			ScreenPrint(30, 10, StatString);
+		}
+		else
+		{
+			GameStatus = READY;
+			Stat_OldTime = CurTime;
 		}
 		break;
 
-	case '8': // ↑
-		direction = 0;
-		Player.Direction = (DIRECT)direction;
-		Player.OldTime = clock();
+	case READY:
+		if (CurTime - Stat_OldTime < PrintTime)
+		{
+			sprintf(StatString, "[READY 화면]");
+			ScreenPrint(30, 10, StatString);
+		}
+		else
+		{
+			GameStatus = RUNNING;
+			Stat_OldTime = CurTime;
+		}
 		break;
 
-	case '9': // ↗
-		direction = 1;
-		Player.Direction = (DIRECT)direction;
-		Player.OldTime = clock();
+	case RUNNING:
+
 		break;
 
-	case '6': // →
-		direction = 2;
-		Player.Direction = (DIRECT)direction;
-		Player.OldTime = clock();
+	case SUCCESS:
+		/*
+		if (Stage.Level < 2)
+		{
+			sprintf(StatString, "[미션 성공] \n "
+				"\t\t\t SPACE BAR :: 다음 스테이지 \n"
+				"\t\t\t ESC :: 결과 화면");
+		}
+		else // Stage.Level == 3
+		{
+			sprintf(StatString, "[미션 성공] \n "
+				"\t\t\t SPACE BAR :: 결과 화면");
+		}
+		ScreenPrint(30, 10, StatString);
+		*/
+		sprintf(StatString, "[미션 성공] \n "
+			"\t\t\t SPACE BAR :: 다음 스테이지 \n"
+			"\t\t\t ESC :: 결과 화면");
+		ScreenPrint(30, 10, StatString);
+
 		break;
 
-	case '3': // ↘
-		direction = 3;
-		Player.Direction = (DIRECT)direction;
-		Player.OldTime = clock();
+	case FAILED:
+		sprintf(StatString, "[미션 실패] \n"
+			"\t\t\t SPACE BAR :: 재도전 \n"
+			"\t\t\t ESC :: 결과 화면");
+		ScreenPrint(30, 10, StatString);
 		break;
 
-	case '2': // ↓
-		direction = 4;
-		Player.Direction = (DIRECT)direction;
-		Player.OldTime = clock();
+	case RESULT:
+		sprintf(StatString, "RESULT 화면");
+		ScreenPrint(30, 10, StatString);
 		break;
 
-	case '1': // ↙
-		direction = 5;
-		Player.Direction = (DIRECT)direction;
-		Player.OldTime = clock();
-		break;
-
-	case '4': // ←
-		direction = 6;
-		Player.Direction = (DIRECT)direction;
-		Player.OldTime = clock();
-		break;
-
-	case '7': // ↖
-		direction = 7;
-		Player.Direction = (DIRECT)direction;
-		Player.OldTime = clock();
-		break;
-
-	default:
-		break;
 	}
 }
 
 // 프레임워크 함수
 void Init()
 {
+	// 게임 상태 초기화
+	GameStatus = START;
+
 	// Board 초기화
 	Board.topY = 4;
 	Board.bottomY = Board.topY + Board.Height;
