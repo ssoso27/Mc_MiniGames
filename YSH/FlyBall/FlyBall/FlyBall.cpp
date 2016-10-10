@@ -645,7 +645,7 @@ void StatusPrint()
 
 	switch (GameStatus)
 	{
-	case START:
+	case START: // (수정 필요)
 		sprintf(StatString, "[Fly Ball] \n\n"
 			"\t\t===================================\n\n"
 			"\t\t주어진 벽돌을 깨는 게임입니다.\n"
@@ -798,53 +798,59 @@ void Update()
 void Render()
 {
 	ScreenClear();
+	char TheTopBar[81]; // 상단바
 
-	// 상단바 출력
-	char TheTopBar[81];
-	sprintf(TheTopBar, "현 스테이지 : %d | Life : %d  \t\t    [Map%d]", 1, /*Stage.Level + 1,*/ Player.Life, MapIndex);
-	ScreenPrint(17, 2, TheTopBar);
+	StatusPrint(); // 게임 상태 별 출력
 
-	// Board 출력
-	// 각모서리
-	ScreenPrint(Board.leftX, Board.topY, "┌"); // 좌측 상단
-	ScreenPrint(Board.rightX, Board.topY, "┐"); // 우측 상단
-	ScreenPrint(Board.leftX, Board.bottomY, "└"); // 좌측 하단
-	ScreenPrint(Board.rightX, Board.bottomY, "┘"); // 우측 하단
-
-												   // 위아래벽
-	for (int i = Board.leftX + 2; i < Board.rightX; i++)
+	// RUNNING 상태에서의 출력
+	if (GameStatus == RUNNING)
 	{
-		ScreenPrint(i, Board.topY, "-");
-		ScreenPrint(i, Board.bottomY, "-");
-	}
-	// 좌우벽
-	for (int i = Board.topY + 1; i < Board.bottomY; i++)
-	{
-		ScreenPrint(Board.leftX, i, "│");
-		ScreenPrint(Board.rightX, i, "│");
-	}
+		// 상단바 출력
+		sprintf(TheTopBar, "현 스테이지 : %d | Life : %d  \t\t    [Map%d]", 1, /*Stage.Level + 1,*/ Player.Life, MapIndex);
+		ScreenPrint(17, 2, TheTopBar);
 
-	// Start, Goal 출력
-	ScreenPrint(PlayerFirstX, PlayerFirstY, "S");
-	ScreenPrint(Goal.X, Goal.Y, "G");
+		// Board 출력
+		// 각모서리
+		ScreenPrint(Board.leftX, Board.topY, "┌"); // 좌측 상단
+		ScreenPrint(Board.rightX, Board.topY, "┐"); // 우측 상단
+		ScreenPrint(Board.leftX, Board.bottomY, "└"); // 좌측 하단
+		ScreenPrint(Board.rightX, Board.bottomY, "┘"); // 우측 하단
 
-	// Player 출력
-	ScreenPrint(Player.X, Player.Y, "●");
+													   // 위아래벽
+		for (int i = Board.leftX + 2; i < Board.rightX; i++)
+		{
+			ScreenPrint(i, Board.topY, "-");
+			ScreenPrint(i, Board.bottomY, "-");
+		}
+		// 좌우벽
+		for (int i = Board.topY + 1; i < Board.bottomY; i++)
+		{
+			ScreenPrint(Board.leftX, i, "│");
+			ScreenPrint(Board.rightX, i, "│");
+		}
 
-	// Block 출력
-	for (int i = 0; i < MaxBlockCount; i++)
-	{
-		if (Block[i].X == 0 && Block[i].Y == 0) continue; // 좌표가 주어지지 않은 Block 표시 X
-		ScreenPrint(Block[i].X, Block[i].Y, "■");
-	}
+		// Start, Goal 출력
+		ScreenPrint(PlayerFirstX, PlayerFirstY, "S");
+		ScreenPrint(Goal.X, Goal.Y, "G");
 
-	// Portal 출력
-	for (int i = 0; i < 4; i++)
-	{
-		if (Portal[i].IsEnable == false) // 유효하지 않은 포탈이면
-			continue; 
+		// Player 출력
+		ScreenPrint(Player.X, Player.Y, "●");
 
-		ScreenPrint(Portal[i].X, Portal[i].Y, "★");
+		// Block 출력
+		for (int i = 0; i < MaxBlockCount; i++)
+		{
+			if (Block[i].X == 0 && Block[i].Y == 0) continue; // 좌표가 주어지지 않은 Block 표시 X
+			ScreenPrint(Block[i].X, Block[i].Y, "■");
+		}
+
+		// Portal 출력
+		for (int i = 0; i < 4; i++)
+		{
+			if (Portal[i].IsEnable == false) // 유효하지 않은 포탈이면
+				continue;
+
+			ScreenPrint(Portal[i].X, Portal[i].Y, "★");
+		}
 	}
 	ScreenFlipping();
 }
