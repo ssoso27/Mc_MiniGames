@@ -419,9 +419,6 @@ int Collision(int x, int y)
 			if (Block[i].X == x || Block[i].X == (x + 1) ||
 				(Block[i].X + 1) == x || (Block[i].X + 1) == (x + 1)) // x 또는 x+1이 동일
 			{
-				// 충돌 시 반응
-				Player.Life--; // Life 감소
-
 				// Player 상태 초기화
 				Player.X = PlayerFirstX;
 				Player.Y = PlayerFirstY;
@@ -429,11 +426,9 @@ int Collision(int x, int y)
 				Player.OldTime = clock();
 				Player.IsReady = 1;
 
-				if (Player.Life < 1) // 라이프가 없으면
-				{
-					//	GameStatus = FAILED; // 미션 실패
-				}
-
+				// 충돌 시 반응
+				Player.Life--; // Life 감소
+				
 				count++; // 충돌체크
 			}
 		}	
@@ -455,10 +450,6 @@ int Collision(int x, int y)
 		Player.OldTime = clock();
 		Player.IsReady = 1;
 
-		if (Player.Life < 1) // 라이프가 없으면
-		{
-		//	GameStatus = FAILED; // 미션 실패
-		}
 		return 1; // 충돌 O
 	}
 
