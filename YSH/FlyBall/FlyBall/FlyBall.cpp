@@ -377,6 +377,20 @@ int Collision(int x, int y)
 {
 	int count = 0;
 
+	// Player와 Goal의 충돌
+	if (Goal.IsEnable == true) // 유효한 Goal 지점이면
+	{
+		if (Goal.Y == y) // y 또는 y+1이 동일
+		{
+			if (Goal.X == x || Goal.X == (x + 1) ||
+				(Goal.X + 1) == x || (Goal.X + 1) == (x + 1)) // x 또는 x+1이 동일
+			{
+				// 충돌 처리
+				GameStatus = SUCCESS;
+			}
+		}
+	}
+
 	// Player와 Portal[i]의 충돌
 	for (int i = 0; i < 4; i++)
 	{
@@ -698,6 +712,9 @@ void StatusPrint()
 
 	case RUNNING:
 
+		if (Player.Life <= 0) // GameOver
+			GameStatus = FAILED;
+
 		break;
 
 	case SUCCESS:
@@ -781,7 +798,7 @@ void Init()
 	// Player 초기화
 	Player.X = PlayerFirstX;
 	Player.Y = PlayerFirstY;
-	Player.Life = 3;
+	Player.Life = 10;
 	Player.Direction = RIGHT;
 	Player.OldTime = clock();
 	Player.IsReady = 1;
@@ -828,10 +845,15 @@ void Render()
 			ScreenPrint(Board.leftX, i, "│");
 			ScreenPrint(Board.rightX, i, "│");
 		}
-
-		// Start, Goal 출력
+		/*
+		// (test) Start, Goal 출력
 		ScreenPrint(PlayerFirstX, PlayerFirstY, "S");
 		ScreenPrint(Goal.X, Goal.Y, "G");
+		*/
+
+		// Goal 출력
+		if (Goal.IsEnable == true)
+			ScreenPrint(Goal.X, Goal.Y, "골");
 
 		// Player 출력
 		ScreenPrint(Player.X, Player.Y, "●");
