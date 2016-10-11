@@ -231,6 +231,7 @@ void MapMake(int index)
 
 
 	case 3: //Map3
+<<<<<<< HEAD
 			// bool IsBlock[][] 에 true 넣을거 [14][31]
 			//0
 		for (int i = 6; i <= 9; i++) { IsBlock[0][i] = true; }//0
@@ -245,10 +246,27 @@ void MapMake(int index)
 		for (int i = 16; i <= 19; i++) { IsBlock[2][i] = true; }//2
 		for (int i = 25; i <= 28; i++) { IsBlock[2][i] = true; }//2
 																//3
+=======
+		// bool IsBlock[][] 에 true 넣을거 [14][31]
+		//0
+		for (int i = 6; i <= 9; i++) { IsBlock[0][i] = true; }//0
+		for (int i = 16; i <= 19; i++) { IsBlock[0][i] = true; }//0
+		for (int i = 25; i <= 28; i++) { IsBlock[0][i] = true; }//0
+		//1
+		for (int i = 6; i <= 9; i++) { IsBlock[1][i] = true; }//1
+		for (int i = 16; i <= 19; i++) { IsBlock[1][i] = true; }//1
+		for (int i = 25; i <= 28; i++) { IsBlock[1][i] = true; }//1
+		//2
+		for (int i = 6; i <= 9; i++) { IsBlock[2][i] = true; }//2
+		for (int i = 16; i <= 19; i++) { IsBlock[2][i] = true; }//2
+		for (int i = 25; i <= 28; i++) { IsBlock[2][i] = true; }//2
+		//3
+>>>>>>> a19f2f352e2d8686d44d49e3862ab17c4dc0da12
 		for (int i = 0; i <= 3; i++) { IsBlock[3][i] = true; }//3
 		for (int i = 6; i <= 13; i++) { IsBlock[3][i] = true; }//3
 		for (int i = 16; i <= 19; i++) { IsBlock[3][i] = true; }//3
 		for (int i = 25; i <= 28; i++) { IsBlock[3][i] = true; }//3
+<<<<<<< HEAD
 																//4
 		for (int i = 16; i <= 19; i++) { IsBlock[4][i] = true; }//4
 		for (int i = 22; i <= 28; i++) { IsBlock[4][i] = true; }//4
@@ -280,6 +298,39 @@ void MapMake(int index)
 		for (int i = 16; i <= 19; i++) { IsBlock[13][i] = true; }//13
 		for (int i = 25; i <= 28; i++) { IsBlock[13][i] = true; }//13
 																 //14
+=======
+		//4
+		for (int i = 16; i <= 19; i++) { IsBlock[4][i] = true; }//4
+		for (int i = 22; i <= 28; i++) { IsBlock[4][i] = true; }//4
+		//5
+		for (int i = 16; i <= 19; i++) { IsBlock[5][i] = true; }//5
+		for (int i = 22; i <= 28; i++) { IsBlock[5][i] = true; }//5
+		//6
+		for (int i = 12; i <= 19; i++) { IsBlock[6][i] = true; }//6
+		//7
+		for (int i = 0; i <= 9; i++) { IsBlock[7][i] = true; }//7
+		//8
+		for (int i = 23; i <= 28; i++) { IsBlock[8][i] = true; }//8
+		//9
+		for (int i = 6; i <= 9; i++) { IsBlock[9][i] = true; }//9
+		for (int i = 22; i <= 28; i++) { IsBlock[9][i] = true; }//9
+		//10
+		for (int i = 6; i <= 9; i++) { IsBlock[10][i] = true; }//10
+		for (int i = 25; i <= 28; i++) { IsBlock[10][i] = true; }//10
+		//11
+		for (int i = 6; i <= 9; i++) { IsBlock[11][i] = true; }//11
+		for (int i = 16; i <= 19; i++) { IsBlock[11][i] = true; }//11
+		for (int i = 25; i <= 28; i++) { IsBlock[11][i] = true; }//11
+		//12
+		for (int i = 6; i <= 9; i++) { IsBlock[12][i] = true; }//12
+		for (int i = 16; i <= 19; i++) { IsBlock[12][i] = true; }//12
+		for (int i = 25; i <= 28; i++) { IsBlock[12][i] = true; }//12
+		//13
+		for (int i = 6; i <= 9; i++) { IsBlock[13][i] = true; }//13
+		for (int i = 16; i <= 19; i++) { IsBlock[13][i] = true; }//13
+		for (int i = 25; i <= 28; i++) { IsBlock[13][i] = true; }//13
+		//14
+>>>>>>> a19f2f352e2d8686d44d49e3862ab17c4dc0da12
 		for (int i = 0; i <= 31; i++) { IsBlock[14][i] = true; }//14
 
 																// 포탈 설정 (IsEnable, nextMap)
@@ -361,7 +412,29 @@ void MapMake(int index)
 		SetPortal(3);
 
 		break;
+		
+	case 6: //Map6
+		// bool IsBlock[][] 에 true 넣을거 [14][31]
+		for (int i = 0; i <= 6; i++) { IsBlock[0][i] = true; }//0
+		for (int i = 18; i <= 31; i++) { IsBlock[0][i] = true; }//0
+		for (int i = 4; i <= 7; i++) { IsBlock[1][i] = true; }//1
+		for (int i = 19; i <= 31; i++) { IsBlock[1][i] = true; }//1
+		for (int i = 5; i <= 8; i++) { IsBlock[2][i] = true; }//2
+		for (int i = 6; i <= 9; i++) { IsBlock[3][i] = true; }//3
+		for (int i = 2; i <= 5; i++) { IsBlock[5][i] = true; }//5
+		for (int i = 11; i <= 13; i++) { IsBlock[5][i] = true; }//5
+		for (int i = 1; i <= 4; i++) { IsBlock[6][i] = true; }//6
+		for (int i = 11; i <= 13; i++) { IsBlock[6][i] = true; }//6
+		for (int i = 0; i <= 13; i++) { IsBlock[7][i] = true; }//7
+		for (int i = 17; i <= 31; i++) { IsBlock[7][i] = true; }//7
+		for (int i = 0; i <= 13; i++) { IsBlock[8][i] = true; }//8
+		for (int i = 17; i <= 31; i++) { IsBlock[8][i] = true; }//8
+		for (int i = 10; i <= 12; i++) { IsBlock[9][i] = true; }//9
+		for (int i = 10; i <= 12; i++) { IsBlock[10][i] = true; }//10
+		for (int i = 10; i <= 12; i++) { IsBlock[11][i] = true; }//11
+		for (int i = 0; i <= 31; i++) { IsBlock[14][i] = true; }//14
 
+<<<<<<< HEAD
 	case 6: //Map6
 			// bool IsBlock[][] 에 true 넣을거 [14][31]
 		for (int i = 0; i <= 6; i++) { IsBlock[0][i] = true; }//0
@@ -386,13 +459,22 @@ void MapMake(int index)
 		break;
 	case 7: //Map7
 			// bool IsBlock[][] 에 true 넣을거 [14][31]
+=======
+		break;
+	case 7: //Map7
+		// bool IsBlock[][] 에 true 넣을거 [14][31]
+>>>>>>> a19f2f352e2d8686d44d49e3862ab17c4dc0da12
 		for (int i = 0; i <= 31; i++) { IsBlock[0][i] = true; }//0
 
 		break;
 	default:
 		break;
 	}
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> a19f2f352e2d8686d44d49e3862ab17c4dc0da12
 }
 
 // index에 맞는 Map Block 생성
