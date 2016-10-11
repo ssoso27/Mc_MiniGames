@@ -2,15 +2,15 @@
 #include "Screen.h"
 #include "FlyBall.h"
 
-// 열거형
+// 구조체 변수 & 열거형
 enum ControlKeys
 {
-	UP_key = 72,
-	DOWN_key = 80,
-	LEFT_key = 75,
-	RIGHT_key = 77,
-	SPACE_key = 32,
-	ESC_key = 27
+	UP = 72,
+	DOWN = 80,
+	//LEFT = 75,
+	//RIGHT = 77,
+	SPACE = 32,
+	ESC = 27
 };
 
 
@@ -20,28 +20,23 @@ const int PlayerFirstY = 6; // 플레이어의 시작 Y좌표
 const int MaxBlockCount = 512; // Map에 들어가는 최대 Block 수
 const int MAXMAPNUM = 6; // 최대 Map 수
 
-// 전역 변수
+						 // 전역 변수
 int MapIndex; // 현재 Map의 Index
 
-char StatString[500]; // 화면 출력 문구 저장용 char[]
-int PrintTime = 3 * 1000;
-clock_t Stat_OldTime = clock(); // PrintTime의 OldTime
-
-// 구조체 & 열거형 변수
+			  // 구조체 변수
 BLOCK Block[MaxBlockCount];
 BOARD Board;
 PLAYER Player;
 PORTAL Portal[4]; // 상, 우, 하, 좌
 GOAL Goal;
 STARTP StartP;
-GAMESTATUS GameStatus;
 
 // 배열
 bool IsBlock[Board.Height][Board.Width / 2] = { false, }; // Block 생성 위치 판별
 
-// 함수
+														  // 함수
 
-// Start, Goal 지점 Map 세팅
+														  // Start, Goal 지점 Map 세팅
 void SetStartGoal()
 {
 	srand((unsigned)time(NULL));
@@ -66,7 +61,7 @@ void MapReset()
 	Player.IsReady = 1;
 
 	// Block 리셋
-	for (int i = 0; i < Board.Height / 2; i++)
+	for (int i = 0; i < Board.Height; i++)
 	{
 		for (int j = 0; j < Board.Width / 2; j++)
 		{
@@ -126,7 +121,7 @@ void AssignCoord(int k)
 				// Block 좌표 초기화
 				Block[k].X = Board.leftX + (j * 2) + 1;
 				Block[k].Y = Board.topY + i + 1;
-				
+
 				// 블럭 자리 false
 				IsBlock[i][j] = false;
 
@@ -135,7 +130,7 @@ void AssignCoord(int k)
 			} // if문 end
 		} // for j end
 	} // for i end
-} 
+}
 
 // Block Map 생성
 void MapMake(int index)
@@ -167,7 +162,7 @@ void MapMake(int index)
 		for (int i = 5; i <= 7; i++) { IsBlock[12][i] = true; }//12
 		for (int i = 17; i <= 22; i++) { IsBlock[12][i] = true; }//12
 		for (int i = 0; i <= 31; i++) { IsBlock[14][i] = true; }//14
-		// 포탈 설정 
+																// 포탈 설정 
 		SetPortal(1);
 		SetPortal(2);
 
@@ -175,7 +170,7 @@ void MapMake(int index)
 
 
 	case 1: //Map1
-		// bool IsBlock[][] 에 true 넣을거 [14][31]
+			// bool IsBlock[][] 에 true 넣을거 [14][31]
 		for (int i = 2; i <= 10; i++) { IsBlock[0][i] = true; } // 0
 		for (int i = 21; i <= 31; i++) { IsBlock[0][i] = true; } //0
 		for (int i = 5; i <= 8; i++) { IsBlock[1][i] = true; }//1
@@ -200,8 +195,8 @@ void MapMake(int index)
 		for (int i = 4; i <= 7; i++) { IsBlock[13][i] = true; }//13
 		for (int i = 19; i <= 23; i++) { IsBlock[13][i] = true; }//13
 		for (int i = 0; i <= 31; i++) { IsBlock[14][i] = true; }//14
-		
-		// 포탈 설정 
+
+																// 포탈 설정 
 		SetPortal(0);
 		SetPortal(1);
 
@@ -209,7 +204,7 @@ void MapMake(int index)
 
 
 	case 2: //Map2
-		// bool IsBlock[][] 에 true 넣을거 [14][31]
+			// bool IsBlock[][] 에 true 넣을거 [14][31]
 		for (int i = 0; i <= 31; i++) { IsBlock[0][i] = true; }//0
 		for (int i = 14; i <= 17; i++) { IsBlock[1][i] = true; }//1
 		for (int i = 14; i <= 17; i++) { IsBlock[2][i] = true; }//2
@@ -227,7 +222,7 @@ void MapMake(int index)
 		for (int i = 14; i <= 17; i++) { IsBlock[13][i] = true; }//13
 		for (int i = 0; i <= 31; i++) { IsBlock[14][i] = true; }//14
 
-	  // 포탈 설정 (IsEnable, nextMap)
+																// 포탈 설정 (IsEnable, nextMap)
 		SetPortal(1);
 		SetPortal(2);
 		SetPortal(3);
@@ -236,43 +231,58 @@ void MapMake(int index)
 
 
 	case 3: //Map3
-		// bool IsBlock[][] 에 true 넣을거 [14][31]
+			// bool IsBlock[][] 에 true 넣을거 [14][31]
+			//0
 		for (int i = 6; i <= 9; i++) { IsBlock[0][i] = true; }//0
 		for (int i = 16; i <= 19; i++) { IsBlock[0][i] = true; }//0
 		for (int i = 25; i <= 28; i++) { IsBlock[0][i] = true; }//0
+																//1
 		for (int i = 6; i <= 9; i++) { IsBlock[1][i] = true; }//1
 		for (int i = 16; i <= 19; i++) { IsBlock[1][i] = true; }//1
 		for (int i = 25; i <= 28; i++) { IsBlock[1][i] = true; }//1
+																//2
 		for (int i = 6; i <= 9; i++) { IsBlock[2][i] = true; }//2
 		for (int i = 16; i <= 19; i++) { IsBlock[2][i] = true; }//2
 		for (int i = 25; i <= 28; i++) { IsBlock[2][i] = true; }//2
+																//3
 		for (int i = 0; i <= 3; i++) { IsBlock[3][i] = true; }//3
 		for (int i = 6; i <= 13; i++) { IsBlock[3][i] = true; }//3
 		for (int i = 16; i <= 19; i++) { IsBlock[3][i] = true; }//3
 		for (int i = 25; i <= 28; i++) { IsBlock[3][i] = true; }//3
+																//4
 		for (int i = 16; i <= 19; i++) { IsBlock[4][i] = true; }//4
 		for (int i = 22; i <= 28; i++) { IsBlock[4][i] = true; }//4
+																//5
 		for (int i = 16; i <= 19; i++) { IsBlock[5][i] = true; }//5
 		for (int i = 22; i <= 28; i++) { IsBlock[5][i] = true; }//5
+																//6
 		for (int i = 12; i <= 19; i++) { IsBlock[6][i] = true; }//6
+																//7
 		for (int i = 0; i <= 9; i++) { IsBlock[7][i] = true; }//7
+															  //8
 		for (int i = 23; i <= 28; i++) { IsBlock[8][i] = true; }//8
+																//9
 		for (int i = 6; i <= 9; i++) { IsBlock[9][i] = true; }//9
 		for (int i = 22; i <= 28; i++) { IsBlock[9][i] = true; }//9
+																//10
 		for (int i = 6; i <= 9; i++) { IsBlock[10][i] = true; }//10
 		for (int i = 25; i <= 28; i++) { IsBlock[10][i] = true; }//10
+																 //11
 		for (int i = 6; i <= 9; i++) { IsBlock[11][i] = true; }//11
 		for (int i = 16; i <= 19; i++) { IsBlock[11][i] = true; }//11
 		for (int i = 25; i <= 28; i++) { IsBlock[11][i] = true; }//11
+																 //12
 		for (int i = 6; i <= 9; i++) { IsBlock[12][i] = true; }//12
 		for (int i = 16; i <= 19; i++) { IsBlock[12][i] = true; }//12
 		for (int i = 25; i <= 28; i++) { IsBlock[12][i] = true; }//12
+																 //13
 		for (int i = 6; i <= 9; i++) { IsBlock[13][i] = true; }//13
 		for (int i = 16; i <= 19; i++) { IsBlock[13][i] = true; }//13
 		for (int i = 25; i <= 28; i++) { IsBlock[13][i] = true; }//13
+																 //14
 		for (int i = 0; i <= 31; i++) { IsBlock[14][i] = true; }//14
 
-		// 포탈 설정 (IsEnable, nextMap)
+																// 포탈 설정 (IsEnable, nextMap)
 		SetPortal(0);
 		SetPortal(1);
 		SetPortal(3);
@@ -281,7 +291,7 @@ void MapMake(int index)
 
 
 	case 4: //Map4
-		// bool IsBlock[][] 에 true 넣을거 [14][31]
+			// bool IsBlock[][] 에 true 넣을거 [14][31]
 		for (int i = 0; i <= 31; i++) { IsBlock[0][i] = true; }//0
 		for (int i = 10; i <= 31; i++) { IsBlock[1][i] = true; }//1
 		for (int i = 10; i <= 31; i++) { IsBlock[2][i] = true; }//2
@@ -305,7 +315,7 @@ void MapMake(int index)
 		for (int i = 3; i <= 10; i++) { IsBlock[14][i] = true; }//14
 		for (int i = 15; i <= 24; i++) { IsBlock[14][i] = true; }//14
 
-		// 포탈 설정 (IsEnable, nextMap)
+																 // 포탈 설정 (IsEnable, nextMap)
 		SetPortal(2);
 		SetPortal(3);
 
@@ -313,7 +323,7 @@ void MapMake(int index)
 
 
 	case 5: //Map5
-		// bool IsBlock[][] 에 true 넣을거 [14][31]
+			// bool IsBlock[][] 에 true 넣을거 [14][31]
 		for (int i = 0; i <= 31; i++) { IsBlock[0][i] = true; }//0
 		for (int i = 8; i <= 10; i++) { IsBlock[1][i] = true; }//1
 		for (int i = 21; i <= 25; i++) { IsBlock[1][i] = true; }//1
@@ -346,15 +356,43 @@ void MapMake(int index)
 		for (int i = 26; i <= 29; i++) { IsBlock[13][i] = true; }//13
 		for (int i = 0; i <= 31; i++) { IsBlock[14][i] = true; }//14
 
-		// 포탈 설정 (IsEnable, nextMap)
+																// 포탈 설정 (IsEnable, nextMap)
 		SetPortal(0);
 		SetPortal(3);
 
 		break;
 
+	case 6: //Map6
+			// bool IsBlock[][] 에 true 넣을거 [14][31]
+		for (int i = 0; i <= 6; i++) { IsBlock[0][i] = true; }//0
+		for (int i = 18; i <= 31; i++) { IsBlock[0][i] = true; }//0
+		for (int i = 4; i <= 7; i++) { IsBlock[1][i] = true; }//1
+		for (int i = 19; i <= 31; i++) { IsBlock[1][i] = true; }//1
+		for (int i = 5; i <= 8; i++) { IsBlock[2][i] = true; }//2
+		for (int i = 6; i <= 9; i++) { IsBlock[3][i] = true; }//3
+		for (int i = 2; i <= 5; i++) { IsBlock[5][i] = true; }//5
+		for (int i = 11; i <= 13; i++) { IsBlock[5][i] = true; }//5
+		for (int i = 1; i <= 4; i++) { IsBlock[6][i] = true; }//6
+		for (int i = 11; i <= 13; i++) { IsBlock[6][i] = true; }//6
+		for (int i = 0; i <= 13; i++) { IsBlock[7][i] = true; }//7
+		for (int i = 17; i <= 31; i++) { IsBlock[7][i] = true; }//7
+		for (int i = 0; i <= 13; i++) { IsBlock[8][i] = true; }//8
+		for (int i = 17; i <= 31; i++) { IsBlock[8][i] = true; }//8
+		for (int i = 10; i <= 12; i++) { IsBlock[9][i] = true; }//9
+		for (int i = 10; i <= 12; i++) { IsBlock[10][i] = true; }//10
+		for (int i = 10; i <= 12; i++) { IsBlock[11][i] = true; }//11
+		for (int i = 0; i <= 31; i++) { IsBlock[14][i] = true; }//14
+
+		break;
+	case 7: //Map7
+			// bool IsBlock[][] 에 true 넣을거 [14][31]
+		for (int i = 0; i <= 31; i++) { IsBlock[0][i] = true; }//0
+
+		break;
 	default:
 		break;
 	}
+
 }
 
 // index에 맞는 Map Block 생성
@@ -376,20 +414,6 @@ void CreateBlock(int MapIndex)
 int Collision(int x, int y)
 {
 	int count = 0;
-
-	// Player와 Goal의 충돌
-	if (Goal.IsEnable == true) // 유효한 Goal 지점이면
-	{
-		if (Goal.Y == y) // y 또는 y+1이 동일
-		{
-			if (Goal.X == x || Goal.X == (x + 1) ||
-				(Goal.X + 1) == x || (Goal.X + 1) == (x + 1)) // x 또는 x+1이 동일
-			{
-				// 충돌 처리
-				GameStatus = SUCCESS;
-			}
-		}
-	}
 
 	// Player와 Portal[i]의 충돌
 	for (int i = 0; i < 4; i++)
@@ -428,10 +452,10 @@ int Collision(int x, int y)
 
 				// 충돌 시 반응
 				Player.Life--; // Life 감소
-				
+
 				count++; // 충돌체크
 			}
-		}	
+		}
 	}
 
 	if (count > 0)
@@ -439,11 +463,11 @@ int Collision(int x, int y)
 
 	// Player와 벽의 충돌
 	if (y < Board.topY + 1 || x > Board.rightX - 1 || y > Board.bottomY - 1 || x < Board.leftX + 1)
-	{	
+	{
 		// 충돌 시 반응
 		Player.Life--; // Life 감소
 
-	    // Player 상태 초기화
+					   // Player 상태 초기화
 		Player.X = PlayerFirstX;
 		Player.Y = PlayerFirstY;
 		Player.Direction = RIGHT;
@@ -483,7 +507,7 @@ void PlayerMove(clock_t CurTime)
 					Player.Y--;
 				}
 				break;
-				
+
 			case RIGHT:
 				if (Collision(Player.X + 2, Player.Y) == 0)
 				{
@@ -551,206 +575,73 @@ void KeyControl(int key)
 {
 	int direction;
 
-
-	// START 에서의 키조작
-	if (GameStatus == START)
+	switch (key)
 	{
-		if (key == SPACE_key)
+	case SPACE:
+		//(Player.IsReady == 1) ? (Player.IsReady = 0) : (Player.IsReady = 1); // Player.IsReady 바꿈 
+		if (Player.IsReady == 1)
 		{
-			GameStatus = INIT;
-		}
-	}
-
-	// RUNNING 에서의 키조작
-	{
-		switch (key)
-		{
-		case SPACE_key:
-			//(Player.IsReady == 1) ? (Player.IsReady = 0) : (Player.IsReady = 1); // Player.IsReady 바꿈 
-			if (Player.IsReady == 1)
-			{
-				Player.OldTime = clock();
-				Player.IsReady = 0; // 준비 O -> 준비 X
-			}
-			break;
-
-		case UP_key: // ↑
-			direction = 0;
-			Player.Direction = (DIRECT)direction;
 			Player.OldTime = clock();
-			break;
-
-		case RIGHT_key: // →
-			direction = 2;
-			Player.Direction = (DIRECT)direction;
-			Player.OldTime = clock();
-			break;
-
-		case DOWN_key: // ↓
-			direction = 4;
-			Player.Direction = (DIRECT)direction;
-			Player.OldTime = clock();
-			break;
-
-		case LEFT_key: // ←
-			direction = 6;
-			Player.Direction = (DIRECT)direction;
-			Player.OldTime = clock();
-			break;
-
-		default:
-			break;
-		}
-	}
-
-	// (수정 필요)
-	// SUCCESS 에서의 키조작
-	if (GameStatus == SUCCESS)
-	{/*
-		switch (key)
-		{
-		case 'Y': case 'y':
-			if (Stage.Level < 2)
-			{
-				Stage.Level++;
-				GameStatus = INIT;
-			}
-			else
-			{
-				GameStatus = RESULT;
-			}
-			break;
-
-		case 'N': case 'n':
-			GameStatus = RESULT;
-			break;
-		}/*/
-	}
-	
-	// FAILED 에서의 키조작
-	if (GameStatus == FAILED)
-	{/*
-		switch (key)
-		{
-		case 'Y': case 'y':
-			GameStatus = INIT;
-			break;
-
-		case 'N': case 'n':
-			GameStatus = RESULT;
-			break;
-		}*/
-	}
-}
-
-// 게임 상태 별 문구 및 초기화
-void StatusPrint()
-{
-	clock_t CurTime = clock();
-
-	switch (GameStatus)
-	{
-	case START: // (수정 필요)
-		sprintf(StatString, "[Fly Ball] \n\n"
-			"\t\t===================================\n\n"
-			"\t\t주어진 벽돌을 깨는 게임입니다.\n"
-			"\t\t각 스테이지 당 Life는 3 입니다.\n"
-			"\t\t공의 이동 방향을 조작할 수 있습니다.\n"
-			"\t\t벽돌을 다 깨면 다음 스테이지로 넘어갑니다.\n"
-			"\t\t스테이지는 총 3레벨로 구성되어있습니다.\n\n"
-			"\t\t===================================\n\n"
-			"\t\t\t  - 조 작 법 -\n"
-			"\t\t이동 : 방향키 | 일시정지 : ESC\n"
-			"\t\t공 방향 조작 : \n"
-			"\t\t\tA S D \n"
-			"\t\t\tZ X C \n"
-			"\t\t-----------------------------------\n"
-			"\t\t게임 시작 : SPACE BAR | 게임 종료 : q\n\n\n\n");
-		ScreenPrint(25, 10, StatString);
-		break;
-
-	case INIT:
-
-		// 스테이지 초기화
-
-
-		// 화면 출력
-
-		if (CurTime - Stat_OldTime < PrintTime)
-		{
-			sprintf(StatString, "[INIT 화면]");
-			ScreenPrint(30, 10, StatString);
-		}
-		else
-		{
-			GameStatus = READY;
-			Stat_OldTime = CurTime;
+			Player.IsReady = 0; // 준비 O -> 준비 X
 		}
 		break;
 
-	case READY:
-		if (CurTime - Stat_OldTime < PrintTime)
-		{
-			sprintf(StatString, "[READY 화면]");
-			ScreenPrint(30, 10, StatString);
-		}
-		else
-		{
-			GameStatus = RUNNING;
-			Stat_OldTime = CurTime;
-		}
+	case '8': // ↑
+		direction = 0;
+		Player.Direction = (DIRECT)direction;
+		Player.OldTime = clock();
 		break;
 
-	case RUNNING:
-
-		if (Player.Life <= 0) // GameOver
-			GameStatus = FAILED;
-
+	case '9': // ↗
+		direction = 1;
+		Player.Direction = (DIRECT)direction;
+		Player.OldTime = clock();
 		break;
 
-	case SUCCESS:
-		/*
-		if (Stage.Level < 2)
-		{
-			sprintf(StatString, "[미션 성공] \n "
-				"\t\t\t SPACE BAR :: 다음 스테이지 \n"
-				"\t\t\t ESC :: 결과 화면");
-		}
-		else // Stage.Level == 3
-		{
-			sprintf(StatString, "[미션 성공] \n "
-				"\t\t\t SPACE BAR :: 결과 화면");
-		}
-		ScreenPrint(30, 10, StatString);
-		*/
-		sprintf(StatString, "[미션 성공] \n "
-			"\t\t\t SPACE BAR :: 다음 스테이지 \n"
-			"\t\t\t ESC :: 결과 화면");
-		ScreenPrint(30, 10, StatString);
-
+	case '6': // →
+		direction = 2;
+		Player.Direction = (DIRECT)direction;
+		Player.OldTime = clock();
 		break;
 
-	case FAILED:
-		sprintf(StatString, "[미션 실패] \n"
-			"\t\t\t SPACE BAR :: 재도전 \n"
-			"\t\t\t ESC :: 결과 화면");
-		ScreenPrint(30, 10, StatString);
+	case '3': // ↘
+		direction = 3;
+		Player.Direction = (DIRECT)direction;
+		Player.OldTime = clock();
 		break;
 
-	case RESULT:
-		sprintf(StatString, "RESULT 화면");
-		ScreenPrint(30, 10, StatString);
+	case '2': // ↓
+		direction = 4;
+		Player.Direction = (DIRECT)direction;
+		Player.OldTime = clock();
 		break;
 
+	case '1': // ↙
+		direction = 5;
+		Player.Direction = (DIRECT)direction;
+		Player.OldTime = clock();
+		break;
+
+	case '4': // ←
+		direction = 6;
+		Player.Direction = (DIRECT)direction;
+		Player.OldTime = clock();
+		break;
+
+	case '7': // ↖
+		direction = 7;
+		Player.Direction = (DIRECT)direction;
+		Player.OldTime = clock();
+		break;
+
+	default:
+		break;
 	}
 }
 
 // 프레임워크 함수
 void Init()
 {
-	// 게임 상태 초기화
-	GameStatus = START;
-
 	// Board 초기화
 	Board.topY = 4;
 	Board.bottomY = Board.topY + Board.Height;
@@ -759,7 +650,7 @@ void Init()
 
 	// Portal 초기화
 	// 상
-	Portal[0].X = 35; 
+	Portal[0].X = 35;
 	Portal[0].Y = 6;
 	// 우
 	Portal[1].X = 70;
@@ -789,7 +680,7 @@ void Init()
 	// Player 초기화
 	Player.X = PlayerFirstX;
 	Player.Y = PlayerFirstY;
-	Player.Life = 10;
+	Player.Life = 3;
 	Player.Direction = RIGHT;
 	Player.OldTime = clock();
 	Player.IsReady = 1;
@@ -806,64 +697,53 @@ void Update()
 void Render()
 {
 	ScreenClear();
-	char TheTopBar[81]; // 상단바
 
-	StatusPrint(); // 게임 상태 별 출력
+	// 상단바 출력
+	char TheTopBar[81];
+	sprintf(TheTopBar, "현 스테이지 : %d | Life : %d  \t\t    [Map%d]", 1, /*Stage.Level + 1,*/ Player.Life, MapIndex);
+	ScreenPrint(17, 2, TheTopBar);
 
-	// RUNNING 상태에서의 출력
-	if (GameStatus == RUNNING)
+	// Board 출력
+	// 각모서리
+	ScreenPrint(Board.leftX, Board.topY, "┌"); // 좌측 상단
+	ScreenPrint(Board.rightX, Board.topY, "┐"); // 우측 상단
+	ScreenPrint(Board.leftX, Board.bottomY, "└"); // 좌측 하단
+	ScreenPrint(Board.rightX, Board.bottomY, "┘"); // 우측 하단
+
+												   // 위아래벽
+	for (int i = Board.leftX + 2; i < Board.rightX; i++)
 	{
-		// 상단바 출력
-		sprintf(TheTopBar, "현 스테이지 : %d | Life : %d  \t\t    [Map%d]", 1, /*Stage.Level + 1,*/ Player.Life, MapIndex);
-		ScreenPrint(17, 2, TheTopBar);
+		ScreenPrint(i, Board.topY, "-");
+		ScreenPrint(i, Board.bottomY, "-");
+	}
+	// 좌우벽
+	for (int i = Board.topY + 1; i < Board.bottomY; i++)
+	{
+		ScreenPrint(Board.leftX, i, "│");
+		ScreenPrint(Board.rightX, i, "│");
+	}
 
-		// Board 출력
-		// 각모서리
-		ScreenPrint(Board.leftX, Board.topY, "┌"); // 좌측 상단
-		ScreenPrint(Board.rightX, Board.topY, "┐"); // 우측 상단
-		ScreenPrint(Board.leftX, Board.bottomY, "└"); // 좌측 하단
-		ScreenPrint(Board.rightX, Board.bottomY, "┘"); // 우측 하단
+	// Start, Goal 출력
+	ScreenPrint(PlayerFirstX, PlayerFirstY, "S");
+	ScreenPrint(Goal.X, Goal.Y, "G");
 
-													   // 위아래벽
-		for (int i = Board.leftX + 2; i < Board.rightX; i++)
-		{
-			ScreenPrint(i, Board.topY, "-");
-			ScreenPrint(i, Board.bottomY, "-");
-		}
-		// 좌우벽
-		for (int i = Board.topY + 1; i < Board.bottomY; i++)
-		{
-			ScreenPrint(Board.leftX, i, "│");
-			ScreenPrint(Board.rightX, i, "│");
-		}
-		/*
-		// (test) Start, Goal 출력
-		ScreenPrint(PlayerFirstX, PlayerFirstY, "S");
-		ScreenPrint(Goal.X, Goal.Y, "G");
-		*/
+	// Player 출력
+	ScreenPrint(Player.X, Player.Y, "●");
 
-		// Goal 출력
-		if (Goal.IsEnable == true)
-			ScreenPrint(Goal.X, Goal.Y, "골");
+	// Block 출력
+	for (int i = 0; i < MaxBlockCount; i++)
+	{
+		if (Block[i].X == 0 && Block[i].Y == 0) continue; // 좌표가 주어지지 않은 Block 표시 X
+		ScreenPrint(Block[i].X, Block[i].Y, "■");
+	}
 
-		// Player 출력
-		ScreenPrint(Player.X, Player.Y, "●");
+	// Portal 출력
+	for (int i = 0; i < 4; i++)
+	{
+		if (Portal[i].IsEnable == false) // 유효하지 않은 포탈이면
+			continue;
 
-		// Block 출력
-		for (int i = 0; i < MaxBlockCount; i++)
-		{
-			if (Block[i].X == 0 && Block[i].Y == 0) continue; // 좌표가 주어지지 않은 Block 표시 X
-			ScreenPrint(Block[i].X, Block[i].Y, "■");
-		}
-
-		// Portal 출력
-		for (int i = 0; i < 4; i++)
-		{
-			if (Portal[i].IsEnable == false) // 유효하지 않은 포탈이면
-				continue;
-
-			ScreenPrint(Portal[i].X, Portal[i].Y, "★");
-		}
+		ScreenPrint(Portal[i].X, Portal[i].Y, "★");
 	}
 	ScreenFlipping();
 }
@@ -874,7 +754,7 @@ void main()
 
 	Init();
 	ScreenInit();
-	
+
 	while (1)
 	{
 		if (_kbhit())
