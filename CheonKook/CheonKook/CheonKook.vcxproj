@@ -150,6 +150,7 @@
     <ClCompile Include="Games\Dodge.cpp" />
     <ClCompile Include="Games\EqualCard.cpp" />
     <ClCompile Include="Games\Header2.cpp" />
+    <ClCompile Include="Games\Intro.cpp" />
     <ClCompile Include="Games\RockSP.cpp" />
     <ClCompile Include="Games\Screen.cpp" />
     <ClCompile Include="Games\Shoot.cpp" />
@@ -164,6 +165,7 @@
     <ClCompile Include="Games\Header2.h">
       <FileType>CppHeader</FileType>
     </ClCompile>
+    <ClInclude Include="Games\Intro.h" />
     <ClInclude Include="Games\RockSP.h" />
     <ClInclude Include="Games\Screen.h" />
     <ClInclude Include="Games\Shoot.h" />

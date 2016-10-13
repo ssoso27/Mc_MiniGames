@@ -6,6 +6,7 @@
 #include "Games\Brick.h"
 #include "Games\EqualCard.h"
 #include "Games\Push.h"
+#include "Games\Intro.h"
 
 namespace MainGame
 {
@@ -52,6 +53,7 @@ namespace MainGame
 			break;
 
 		case 4: // ÆÀ ¼Ò°³
+			SH_Intro::Intro();
 			break;
 
 		default:

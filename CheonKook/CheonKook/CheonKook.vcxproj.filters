@@ -51,6 +51,9 @@
     <ClCompile Include="Games\RockSP.cpp">
       <Filter>소스 파일\Games</Filter>
     </ClCompile>
+    <ClCompile Include="Games\Intro.cpp">
+      <Filter>소스 파일\Games</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Games\Dodge.h">
@@ -78,6 +81,9 @@
       <Filter>헤더 파일\Games</Filter>
     </ClInclude>
     <ClInclude Include="Games\RockSP.h">
+      <Filter>헤더 파일\Games</Filter>
+    </ClInclude>
+    <ClInclude Include="Games\Intro.h">
       <Filter>헤더 파일\Games</Filter>
     </ClInclude>
   </ItemGroup>
