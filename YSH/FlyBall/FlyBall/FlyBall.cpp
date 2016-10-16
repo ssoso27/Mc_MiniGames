@@ -18,7 +18,7 @@
 const int PlayerFirstX = 10; // 플레이어의 시작 X좌표
 const int PlayerFirstY = 6; // 플레이어의 시작 Y좌표
 const int MaxBlockCount = 512; // Map에 들어가는 최대 Block 수
-const int MAXMAPNUM = 6; // 최대 Map 수
+const int MAXMAPNUM = 8; // 최대 Map 수
 
 						 // 전역 변수
 int MapIndex; // 현재 Map의 Index
@@ -382,7 +382,8 @@ void MapMake(int index)
 		for (int i = 10; i <= 12; i++) { IsBlock[10][i] = true; }//10
 		for (int i = 10; i <= 12; i++) { IsBlock[11][i] = true; }//11
 		for (int i = 0; i <= 31; i++) { IsBlock[14][i] = true; }//14
-
+		SetPortal(1);
+		SetPortal(2);
 		break;
 	case 7: //Map7
 			// bool IsBlock[][] 에 true 넣을거 [14][31]
@@ -404,7 +405,8 @@ void MapMake(int index)
 		for (int i = 7; i <= 12; i++) { IsBlock[13][i] = true; }//13
 		for (int i = 20; i <= 25; i++) { IsBlock[13][i] = true; }//13
 		for (int i = 0; i <= 31; i++) {	IsBlock[14][i] = true;}//14
-		
+		SetPortal(0);
+		SetPortal(1);
 		break;
 	default:
 		break;
