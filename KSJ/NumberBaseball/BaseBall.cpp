@@ -210,6 +210,9 @@
 				InBox[i].Y = 9;
 			}
 
+			// 추측 문구 초기화
+			sprintf(gueAftPrint, "%d 스트라이크, %d 볼, 남은 목숨 : %d", strike, ball, Player.life);
+
 			// 화면출력
 			if (CurTime - stat_OldTime < 3 * 1000) // 3초 동안 출력
 			{
