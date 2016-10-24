@@ -232,7 +232,7 @@
 		}
 	}
 
-	void KeyControl(int key)
+	void KeyControl(int key) // 키 입력 시 수행
 	{
 
 		if (GameStatus == START)
@@ -252,7 +252,23 @@
 			{
 				InputNumber(key - 48); // 1~9 숫자만 입력
 			}
+		}
 
+		if (GameStatus == FINISH)
+		{
+			switch (key)
+			{
+			case 'Y': case 'y':
+				GameStatus = INIT; // 게임 재시작
+				break;
+
+			case 'N': case 'n':
+				sprintf(gueAftPrint, "게임 종료. 나가려면 [Q]를 누르세요.");
+				break;
+
+			default:
+				break;
+			}
 		}
 	}
 
