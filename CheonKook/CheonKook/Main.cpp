@@ -22,7 +22,7 @@ namespace MainGame
 
 	// 전역변수
 	// 상수
-	int const distractorNum = 5; // 선택지 개수
+	int const distractorNum = 6; // 선택지 개수
 
 	// 구조체 변수
 	CHOICE Choice;
@@ -52,7 +52,11 @@ namespace MainGame
 			SH_EqualCard::EqualCard();
 			break;
 
-		case 4: // 팀 소개
+		case 4 : // 숫자 야구
+			//SJ_BaseBall::BaseBall();
+			break;
+
+		case 5: // 팀 소개
 			SH_Intro::Intro();
 			break;
 
@@ -130,6 +134,11 @@ namespace MainGame
 			Choice.Y = 16;
 			break;
 
+		case 5:
+			Choice.X = 25;
+			Choice.Y = 17;
+			break;
+
 		default:
 			break;
 		}
@@ -151,7 +160,8 @@ namespace MainGame
 			"\t\t\t ◎ 화살표 피하기\n"
 			"\t\t\t ◎ 슛골인\n"
 			"\t\t\t ◎ 같은 카드 찾기\n"
-			"\t\t\t ◎ 팀소개 (공사중)\n\n\n\n\n\n\n\n");
+			"\t\t\t ◎ 숫자 야구\n"
+			"\t\t\t ◎ 팀소개 \n\n\n\n\n\n\n");
 	}
 
 	void Update()
