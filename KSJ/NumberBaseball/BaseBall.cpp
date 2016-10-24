@@ -41,7 +41,7 @@
 
 	bool enterFlag;
 
-	clock_t stat_OldTime = clock(); // StatusPrint 에서 문구 출력용
+	clock_t stat_OldTime = clock(); // StatusPrint 에서 문구 출력용. 마지막 실행 시각.
 
 	// 구조체 & 열거형 변수
 	COMPUTER Computer;
@@ -188,7 +188,7 @@
 			break;
 
 		case INIT:
-			// 게임 초기화
+			// 게임 초기화 (void Init()에서 따왔음)
 
 			// Computer의 정답 설정
 			SetAnswer();
@@ -209,15 +209,15 @@
 			}
 
 			// 화면출력
-			if (CurTime - stat_OldTime < 3 * 1000)
+			if (CurTime - stat_OldTime < 3 * 1000) // 3초 동안 출력
 			{
 				sprintf(statPrint, "[컴퓨터 숫자 세팅 중]");
 				ScreenPrint(25, 8, statPrint);
 			}
 			else
 			{
-				GameStatus = RUNNING;
-				stat_OldTime = CurTime;
+				GameStatus = RUNNING; // 3초 출력 후, 게임 시작.
+				stat_OldTime = CurTime; // 마지막 실행 시각 = 현재 시각
 			}
 
 			break;
@@ -288,7 +288,7 @@
 			ScreenPrint(10, 2, startPrint);
 		}
 		*/
-		StatusPrint();
+		StatusPrint(); // GameStatus에 따른 문구 출력 
 
 		if (GameStatus == RUNNING)
 		{
