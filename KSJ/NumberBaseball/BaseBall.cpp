@@ -232,6 +232,9 @@
 
 		case FINISH:
 			break;
+
+		default:
+			break;
 		}
 	}
 
@@ -349,7 +352,7 @@
 					ScreenPrint(InBox[i].X, InBox[i].Y, InBoxNum);
 				}
 			}
-
+			/*
 			// 테스트용 정답 출력
 			sprintf(temp, "%d", Computer.x);
 			ScreenPrint(10, 13, temp);
@@ -357,7 +360,7 @@
 			ScreenPrint(10, 16, temp);
 			sprintf(temp, "%d", Computer.z);
 			ScreenPrint(10, 19, temp); 
-
+			*/
 			ScreenPrint(10, 10, gueAftPrint); // 추측 후 메시지 출력
 		}
 
