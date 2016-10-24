@@ -26,11 +26,32 @@ namespace SH_Intro
 		}
 
 		// 2페이지 (24 ~ 47행) // 수진언니 편집
-		sprintf(IntroPrint[24], "수진언니");
+		sprintf(IntroPrint[24], "                               제작자");
+		sprintf(IntroPrint[25], "");
+		sprintf(IntroPrint[26], "                       가위바위보     강재희");
+		sprintf(IntroPrint[27], "");
+		sprintf(IntroPrint[28], "                       벽돌깨기       양소희");
+		sprintf(IntroPrint[29], "");
+		sprintf(IntroPrint[30], "                       같은그림찾기   양소희");
+		sprintf(IntroPrint[31], "");
+		sprintf(IntroPrint[32], "                       화살표피하기   양소희");
+		sprintf(IntroPrint[33], "");
+		sprintf(IntroPrint[34], "                       슛골인         허승범");
+		sprintf(IntroPrint[35], "");
+		sprintf(IntroPrint[36], "                       숫자야구       김수진");
+		sprintf(IntroPrint[37], "");
+		sprintf(IntroPrint[38], "");
+		sprintf(IntroPrint[39], "                          도움을 주신 분들");
+		sprintf(IntroPrint[40], "");
+		sprintf(IntroPrint[41], "                              김미연님");
+		sprintf(IntroPrint[42], "");
+		sprintf(IntroPrint[43], "                              이민혁님");
+		sprintf(IntroPrint[44], "");
+		sprintf(IntroPrint[45], "                            좋은아침 분과");
 
 
 
-		sprintf(IntroPrint[47], "바브");
+		sprintf(IntroPrint[47], "                                END");
 	}
 
 	void Render()
