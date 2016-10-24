@@ -134,11 +134,13 @@
 	{
 		if (IsAnswer() == true) // 정답을 맞췄다면
 		{
-			sprintf(gueAftPrint, "승리하셨습니다.");
+			sprintf(gueAftPrint, "승리하셨습니다. 다시 하시겠습니까? [Y/N]");
+			GameStatus = FINISH; // 게임 상태 변경
 		}
 		else if (Player.life <= 0) // life가 0 이하면
 		{
-			sprintf(gueAftPrint, "게임 오버.");
+			sprintf(gueAftPrint, "게임 오버. 다시 하시겠습니까? [Y/N]");
+			GameStatus = FINISH;
 		}
 		else
 		{
@@ -290,7 +292,7 @@
 		*/
 		StatusPrint(); // GameStatus에 따른 문구 출력 
 
-		if (GameStatus == RUNNING)
+		if (GameStatus == RUNNING || GameStatus == FINISH)
 		{
 			sprintf(guidePrint, "숫자 세 개를 입력하세요. 남은 목숨 : %d \n", Player.life);
 			ScreenPrint(10, 5, guidePrint);
