@@ -3,7 +3,7 @@
 //namespace SJ_BaseBall
 //{
 	// 열거형
-	typedef enum _GAMESTATUS { START, RUNNING, FINISH } GAMESTATUS;
+	typedef enum _GAMESTATUS { START, INIT, RUNNING, FINISH } GAMESTATUS;
 
 	// 구조체
 	typedef struct _COMPUTER

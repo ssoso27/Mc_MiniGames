@@ -31,7 +31,8 @@
 //namespace SJ_BaseBall
 //{
 	// 전역 변수
-	char startPrint[400]; // 시작 화면 표시용 문자열
+	//char startPrint[400]; // 시작 화면 표시용 문자열
+	char statPrint[400]; // StatusPrint()에서 사용 문자열. 게임 상태 등을 표현.
 	char gueAftPrint[100]; // 추측 후 출력 메시지
 	char guidePrint[100]; // 현재 상태 안내 메시지
 
@@ -39,6 +40,8 @@
 	int ball; // ball 개수
 
 	bool enterFlag;
+
+	clock_t stat_OldTime = clock(); // StatusPrint 에서 문구 출력용
 
 	// 구조체 & 열거형 변수
 	COMPUTER Computer;
@@ -161,6 +164,72 @@
 		ball = 0;
 	}
 
+	void StatusPrint() // GameStatus에 따른 화면 출력 및 상태 변화
+	{
+		clock_t CurTime = clock(); // 현재 시각
+
+		switch (GameStatus)
+		{
+		case START:
+			// 시작 문구 초기화
+			sprintf(statPrint,
+				"숫 자 야 구\n\n"
+				"지금부터 숫자야구를 시작하겠습니다.\n\n"
+				"게임 규칙\n\n"
+				"정해진 세 자리 수를 맞추는 게임입니다.\n정해진 수를 예측하고 세 자리 수를 입력하면,\n"
+				"숫자와 자리가 맞을 경우 스트라이크\n"
+				"숫자는 맞는데 자리가 틀릴 경우 볼입니다.\n"
+				"ex) 정답 123, 입력한 값 132 -> 1 스트라이크 2볼\n\n"
+				"입력방법 : 숫자를 하나씩 입력하며, 전부 입력한 후엔 [Enter]를 누릅니다.\n\n"
+				"[Space Bar]키를 누르면 시작합니다.");
+
+			// 출력
+			ScreenPrint(10, 2, statPrint);
+			break;
+
+		case INIT:
+			// 게임 초기화
+
+			// Computer의 정답 설정
+			SetAnswer();
+
+			// 목숨 설정
+			Player.life = 10;
+
+			// strike, ball 개수 설정
+			strike = 0;
+			ball = 0;
+
+			// InputBox 초기화
+			for (int i = 0; i < 3; i++)
+			{
+				InBox[i].num = -1;
+				InBox[i].X = 10 + (4 * i);
+				InBox[i].Y = 9;
+			}
+
+			// 화면출력
+			if (CurTime - stat_OldTime < 3 * 1000)
+			{
+				sprintf(statPrint, "[컴퓨터 숫자 세팅 중]");
+				ScreenPrint(25, 8, statPrint);
+			}
+			else
+			{
+				GameStatus = RUNNING;
+				stat_OldTime = CurTime;
+			}
+
+			break;
+
+		case RUNNING:
+			break;
+
+		case FINISH:
+			break;
+		}
+	}
+
 	// 프레임워크 함수
 
 	void Init()
@@ -185,19 +254,8 @@
 			InBox[i].X = 10 + (4*i);
 			InBox[i].Y = 9;
 		}
-
-		// 시작 문구 초기화
-		sprintf(startPrint,
-			"숫 자 야 구\n\n"
-			"지금부터 숫자야구를 시작하겠습니다.\n\n"
-			"게임 규칙\n\n"
-			"정해진 세 자리 수를 맞추는 게임입니다.\n정해진 수를 예측하고 세 자리 수를 입력하면,\n"
-			"숫자와 자리가 맞을 경우 스트라이크\n"
-			"숫자는 맞는데 자리가 틀릴 경우 볼입니다.\n"
-			"ex) 정답 123, 입력한 값 132 -> 1 스트라이크 2볼\n\n"
-			"입력방법 : 숫자를 하나씩 입력하며 space bar나 enter키로 각각의 수를 구분한다.\n\n"
-			"enter키를 누르면 시작합니다.");
-
+	
+		// 시작 문구 초기화 -> StatusPrint()로 이동
 		
 	}
 
@@ -224,10 +282,13 @@
 		char InBoxNum[5];
 		char temp[5];
 
+		/*
 		if (GameStatus == START)
 		{
 			ScreenPrint(10, 2, startPrint);
 		}
+		*/
+		StatusPrint();
 
 		if (GameStatus == RUNNING)
 		{
@@ -257,6 +318,7 @@
 
 		ScreenFlipping();
 	}
+
 	//BaseBall
 	void main() {
 		Init();
@@ -274,7 +336,7 @@
 				if (GameStatus == START)
 				{
 					if (key == 32) // SPACE 입력 시
-						GameStatus = RUNNING;
+						GameStatus = INIT;
 				}
 
 				if (GameStatus == RUNNING)
