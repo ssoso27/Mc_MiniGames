@@ -135,7 +135,7 @@
 		}
 		else if (Player.life <= 0) // life가 0 이하면
 		{
-			sprintf(gueAftPrint, "게임 오버");
+			sprintf(gueAftPrint, "게임 오버.");
 		}
 		else
 		{
@@ -245,12 +245,12 @@
 			}
 
 			// 테스트용 정답 출력
-		/*	sprintf(temp, "%d", Computer.x);
+			sprintf(temp, "%d", Computer.x);
 			ScreenPrint(10, 13, temp);
 			sprintf(temp, "%d", Computer.y);
 			ScreenPrint(10, 16, temp);
 			sprintf(temp, "%d", Computer.z);
-			ScreenPrint(10, 19, temp); */
+			ScreenPrint(10, 19, temp); 
 
 			ScreenPrint(10, 10, gueAftPrint); // 추측 후 메시지 출력
 		}
@@ -288,6 +288,7 @@
 					{
 						InputNumber(key - 48); // 1~9 숫자만 입력
 					}
+					
 				}
 				if (key == 'q' || key == 'Q')
 					break;				
