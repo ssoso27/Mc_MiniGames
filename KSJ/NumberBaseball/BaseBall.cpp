@@ -232,6 +232,30 @@
 		}
 	}
 
+	void KeyControl(int key)
+	{
+
+		if (GameStatus == START)
+		{
+			if (key == 32) // SPACE 입력 시
+				GameStatus = INIT;
+		}
+
+		if (GameStatus == RUNNING)
+		{
+			if (key == 13) // Enter 입력시
+			{
+				enterFlag = true;
+			}
+
+			if ((key - 48) >= 1 && (key - 48) <= 9)
+			{
+				InputNumber(key - 48); // 1~9 숫자만 입력
+			}
+
+		}
+	}
+
 	// 프레임워크 함수
 
 	void Init()
@@ -335,27 +359,10 @@
 			{
 				key = _getch();
 
-				if (GameStatus == START)
-				{
-					if (key == 32) // SPACE 입력 시
-						GameStatus = INIT;
-				}
-
-				if (GameStatus == RUNNING)
-				{
-					if (key == 13) // Enter 입력시
-					{
-						enterFlag = true;
-					}
-
-					if ((key - 48) >= 1 && (key - 48) <= 9)
-					{
-						InputNumber(key - 48); // 1~9 숫자만 입력
-					}
-					
-				}
 				if (key == 'q' || key == 'Q')
-					break;				
+					break;			
+
+				KeyControl(key); // Key 입력 시 수행
 			}
 
 			Update();

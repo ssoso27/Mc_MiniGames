@@ -36,6 +36,8 @@
 	bool IsAnswer();
 	void SetAnswer();
 	void ResetVari();
+	void KeyControl();
+	void StatusPrint();
 
 	// 프레임워크 함수
 	void Init();
