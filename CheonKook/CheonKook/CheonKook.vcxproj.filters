@@ -54,6 +54,9 @@
     <ClCompile Include="Games\Intro.cpp">
       <Filter>소스 파일\Games</Filter>
     </ClCompile>
+    <ClCompile Include="Games\BaseBall.cpp">
+      <Filter>소스 파일\Games</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Games\Dodge.h">
@@ -85,6 +88,9 @@
     </ClInclude>
     <ClInclude Include="Games\Intro.h">
       <Filter>헤더 파일\Games</Filter>
+    </ClInclude>
+    <ClInclude Include="Games\BaseBall.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

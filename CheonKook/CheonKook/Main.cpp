@@ -7,6 +7,7 @@
 #include "Games\EqualCard.h"
 #include "Games\Push.h"
 #include "Games\Intro.h"
+#include "Games\BaseBall.h"
 
 namespace MainGame
 {
@@ -53,7 +54,7 @@ namespace MainGame
 			break;
 
 		case 4 : // 숫자 야구
-			//SJ_BaseBall::BaseBall();
+			SJ_BaseBall::BaseBall();
 			break;
 
 		case 5: // 팀 소개

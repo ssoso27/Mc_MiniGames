@@ -146,6 +146,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Games\BaseBall.cpp" />
     <ClCompile Include="Games\Brick.cpp" />
     <ClCompile Include="Games\Dodge.cpp" />
     <ClCompile Include="Games\EqualCard.cpp" />
@@ -158,6 +159,7 @@
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Games\BaseBall.h" />
     <ClInclude Include="Games\Brick.h" />
     <ClInclude Include="Games\Dodge.h" />
     <ClInclude Include="Games\EqualCard.h" />
