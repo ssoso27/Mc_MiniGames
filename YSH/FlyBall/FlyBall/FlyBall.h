@@ -54,6 +54,12 @@ typedef struct _STARTP
 	int whereMap; // 어떤 맵에 있는가?
 } STARTP;
 
+typedef struct _STAGE
+{
+	int level; // 현재 레벨
+	int createMapCount; // 생성 맵 개수
+} STAGE;
+
 // 함수원형
 void PlayerMove(clock_t );
 void KeyControl(int);
