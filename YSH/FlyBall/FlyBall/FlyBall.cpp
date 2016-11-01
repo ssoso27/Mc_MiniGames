@@ -711,6 +711,10 @@ void StatusPrint()
 			break;
 
 		case RUNNING:
+			if (Player.Life <= 0)
+			{
+				GameStatus = FAILED; // 게임 오버
+			}
 			break;
 
 		case SUCCESS:
@@ -719,9 +723,13 @@ void StatusPrint()
 			break;
 
 		case FAILED:
+			sprintf(StatString, "[FAILED 화면]");
+			ScreenPrint(30, 10, StatString);
 			break;
 
 		case RESULT:
+			sprintf(StatString, "[RESULT 화면]");
+			ScreenPrint(30, 10, StatString);
 			break;
 
 		default:
