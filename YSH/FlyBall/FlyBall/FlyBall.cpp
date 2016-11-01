@@ -441,8 +441,8 @@ int Collision(int x, int y)
 
 		if (Portal[i].Y == y) // y 또는 y+1이 동일
 		{
-			if (Portal[i].X == x || Portal[i].X == (x + 1) ||
-				(Portal[i].X + 1) == x || (Portal[i].X + 1) == (x + 1)) // x 또는 x+1이 동일
+			if (Portal[i].X == (x+1) || Portal[i].X == (x + 2) ||
+				(Portal[i].X + 1) == (x+1) || (Portal[i].X + 1) == (x + 2)) // x 또는 x+1이 동일
 			{
 				// 충돌 시 반응
 				// Portal[i].nextMap에 따른 맵 이동
@@ -458,8 +458,8 @@ int Collision(int x, int y)
 	{
 		if (Block[i].Y == y) // y 또는 y+1이 동일
 		{
-			if (Block[i].X == x || Block[i].X == (x + 1) ||
-				(Block[i].X + 1) == x || (Block[i].X + 1) == (x + 1)) // x 또는 x+1이 동일
+			if (Block[i].X == (x+1) || Block[i].X == (x + 1) ||
+				(Block[i].X + 1) == (x+2) || (Block[i].X + 1) == (x + 2)) // x 또는 x+1이 동일
 			{
 				// Player 상태 초기화
 				Player.X = PlayerFirstX;
@@ -645,7 +645,7 @@ void Init()
 	// Player 초기화
 	Player.X = PlayerFirstX;
 	Player.Y = PlayerFirstY;
-	Player.Life = 3;
+	Player.Life = 10;
 	Player.Direction = M_RIGHT;
 	Player.OldTime = clock();
 	Player.IsReady = 1;
@@ -693,7 +693,7 @@ void Render()
 	ScreenPrint(Goal.X, Goal.Y, "G");
 
 	// Player 출력
-	ScreenPrint(Player.X, Player.Y, "●");
+	ScreenPrint(Player.X, Player.Y, "-●-");
 
 	// Block 출력
 	for (int i = 0; i < MaxBlockCount; i++)
