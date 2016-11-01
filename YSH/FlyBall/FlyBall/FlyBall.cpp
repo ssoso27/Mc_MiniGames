@@ -34,9 +34,8 @@ STARTP StartP;
 // 배열
 bool IsBlock[Board.Height][Board.Width / 2] = { false, }; // Block 생성 위치 판별
 
-														  // 함수
-
-														  // Start, Goal 지점 Map 세팅
+// 함수
+// Start, Goal 지점 Map 세팅
 void SetStartGoal()
 {
 	srand((unsigned)time(NULL));
@@ -56,7 +55,7 @@ void MapReset()
 	// Player 리셋
 	Player.X = PlayerFirstX;
 	Player.Y = PlayerFirstY;
-	Player.Direction = RIGHT;
+	Player.Direction = M_RIGHT;
 	Player.OldTime = clock();
 	Player.IsReady = 1;
 
@@ -465,7 +464,7 @@ int Collision(int x, int y)
 				// Player 상태 초기화
 				Player.X = PlayerFirstX;
 				Player.Y = PlayerFirstY;
-				Player.Direction = RIGHT;
+				Player.Direction = M_RIGHT;
 				Player.OldTime = clock();
 				Player.IsReady = 1;
 
@@ -489,7 +488,7 @@ int Collision(int x, int y)
 					   // Player 상태 초기화
 		Player.X = PlayerFirstX;
 		Player.Y = PlayerFirstY;
-		Player.Direction = RIGHT;
+		Player.Direction = M_RIGHT;
 		Player.OldTime = clock();
 		Player.IsReady = 1;
 
@@ -511,7 +510,7 @@ void PlayerMove(clock_t CurTime)
 			// 방향에 따른 좌표 변화 
 			switch (Player.Direction)
 			{
-			case TOP:
+			case M_TOP:
 				if (Collision(Player.X, Player.Y - 1) == 0) // 이동할 좌표에서 충돌이 안 일어나면 
 				{
 					Player.Y--; // 이동한다
@@ -519,57 +518,28 @@ void PlayerMove(clock_t CurTime)
 				// 충돌이 일어났을 경우, Collision에서 충돌 처리
 				break;
 
-			case TOP_RIGHT:
-				if (Collision(Player.X + 1, Player.Y - 1) == 0)
-				{
-					Player.X++;
-					Player.Y--;
-				}
-				break;
-
-			case RIGHT:
+			case M_RIGHT:
 				if (Collision(Player.X + 2, Player.Y) == 0)
 				{
 					Player.X += 2;
 				}
 				break;
 
-			case BOT_RIGHT:
-				if (Collision(Player.X + 1, Player.Y + 1) == 0)
-				{
-					Player.X++;
-					Player.Y++;
-				}
-				break;
-
-			case BOTTOM:
+			case M_BOTTOM:
 				if (Collision(Player.X, Player.Y + 1) == 0)
 				{
 					Player.Y++;
 				}
 				break;
-
-			case BOT_LEFT:
-				if (Collision(Player.X - 1, Player.Y + 1) == 0)
-				{
-					Player.X--;
-					Player.Y++;
-				}
-				break;
-
-			case LEFT:
+				
+			case M_LEFT:
 				if (Collision(Player.X - 2, Player.Y) == 0)
 				{
 					Player.X -= 2;
 				}
 				break;
 
-			case TOP_LEFT:
-				if (Collision(Player.X - 1, Player.Y - 1) == 0)
-				{
-					Player.X--;
-					Player.Y--;
-				}
+			default:
 				break;
 
 			}
@@ -577,7 +547,7 @@ void PlayerMove(clock_t CurTime)
 		if (Player.X < 0 || Player.X >BOARD_WIDTH || Player.Y < 0 || Player.Y > BOARD_HEIGH) // 벽에 충돌
 		{
 			Player.IsReady = 1;
-			Player.Direction = RIGHT;
+			Player.Direction = M_RIGHT;
 			Player.X = PlayerFirstX;
 			Player.Y = PlayerFirstY;
 		}
@@ -606,49 +576,25 @@ void KeyControl(int key)
 		break;
 
 	case '8': // ↑
-		direction = 0;
-		Player.Direction = (DIRECT)direction;
-		Player.OldTime = clock();
-		break;
-
-	case '9': // ↗
-		direction = 1;
+		direction = M_TOP;
 		Player.Direction = (DIRECT)direction;
 		Player.OldTime = clock();
 		break;
 
 	case '6': // →
-		direction = 2;
-		Player.Direction = (DIRECT)direction;
-		Player.OldTime = clock();
-		break;
-
-	case '3': // ↘
-		direction = 3;
+		direction = M_RIGHT;
 		Player.Direction = (DIRECT)direction;
 		Player.OldTime = clock();
 		break;
 
 	case '2': // ↓
-		direction = 4;
-		Player.Direction = (DIRECT)direction;
-		Player.OldTime = clock();
-		break;
-
-	case '1': // ↙
-		direction = 5;
+		direction = M_BOTTOM;
 		Player.Direction = (DIRECT)direction;
 		Player.OldTime = clock();
 		break;
 
 	case '4': // ←
-		direction = 6;
-		Player.Direction = (DIRECT)direction;
-		Player.OldTime = clock();
-		break;
-
-	case '7': // ↖
-		direction = 7;
+		direction = M_LEFT;
 		Player.Direction = (DIRECT)direction;
 		Player.OldTime = clock();
 		break;
@@ -700,7 +646,7 @@ void Init()
 	Player.X = PlayerFirstX;
 	Player.Y = PlayerFirstY;
 	Player.Life = 3;
-	Player.Direction = RIGHT;
+	Player.Direction = M_RIGHT;
 	Player.OldTime = clock();
 	Player.IsReady = 1;
 	Player.MoveTime = 170;

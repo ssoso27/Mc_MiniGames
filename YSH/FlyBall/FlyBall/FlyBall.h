@@ -4,7 +4,7 @@
 #define BOARD_HEIGH 24
 
 // 열거형
-typedef enum _DIRECT { TOP, TOP_RIGHT, RIGHT, BOT_RIGHT, BOTTOM, BOT_LEFT, LEFT, TOP_LEFT } DIRECT; // 방향 설정. 시계방향. 
+typedef enum _DIRECT { M_TOP, M_RIGHT, M_BOTTOM, M_LEFT } DIRECT; // 방향 설정. 시계방향. 
 typedef enum _GAMESTATUS{ START, INIT, READY, RUNNING, SUCCESS, FAILED, RESULT } GAMESTATUS;
 
 // 구조체
