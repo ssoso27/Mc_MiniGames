@@ -57,7 +57,7 @@ typedef struct _STARTP
 typedef struct _STAGE
 {
 	int level; // 현재 레벨
-	int createMapCount; // 생성 맵 개수
+	//int createMapCount; // 생성 맵 개수
 } STAGE;
 
 // 함수원형

@@ -2,8 +2,8 @@
 #include "Screen.h"
 #include "FlyBall.h"
 
-	// 구조체 변수 & 열거형
-	enum ControlKeys
+// 구조체 변수 & 열거형
+enum ControlKeys
 {
 	UP = 72,
 	DOWN = 80,
@@ -13,6 +13,8 @@
 	ESC = 27
 };
 
+// 배열
+int createMapCount[3] = { 4 , 6 , 8 }; // 스테이지별 맵 개수
 
 // 상수
 const int PlayerFirstX = 10; // 플레이어의 시작 X좌표
@@ -45,11 +47,11 @@ void SetStartGoal()
 {
 	srand((unsigned)time(NULL));
 
-	StartP.whereMap = rand() % MAXMAPNUM;
+	StartP.whereMap = rand() % createMapCount[Stage.level]; 
 
 	do
 	{
-		Goal.whereMap = rand() % MAXMAPNUM;
+		Goal.whereMap = rand() % createMapCount[Stage.level];
 	} while (StartP.whereMap == Goal.whereMap);
 
 }
@@ -226,8 +228,11 @@ void MapMake(int index)
 		for (int i = 14; i <= 17; i++) { IsBlock[13][i] = true; }//13
 		for (int i = 0; i <= 31; i++) { IsBlock[14][i] = true; }//14
 
-																// 포탈 설정 (IsEnable, nextMap)
-		SetPortal(1);
+		// 포탈 설정 (IsEnable, nextMap)
+		if (Stage.level != 0)
+		{
+			SetPortal(1);
+		}
 		SetPortal(2);
 		SetPortal(3);
 
@@ -286,9 +291,12 @@ void MapMake(int index)
 			//14
 		for (int i = 0; i <= 31; i++) { IsBlock[14][i] = true; }
 
-																// 포탈 설정 (IsEnable, nextMap)
+		// 포탈 설정 (IsEnable, nextMap)
 		SetPortal(0);
-		SetPortal(1);
+		if (Stage.level != 0)
+		{
+			SetPortal(1);
+		}
 		SetPortal(3);
 
 		break;
@@ -319,7 +327,11 @@ void MapMake(int index)
 		for (int i = 3; i <= 10; i++) { IsBlock[14][i] = true; }//14
 		for (int i = 15; i <= 24; i++) { IsBlock[14][i] = true; }//14
 
-																 // 포탈 설정 (IsEnable, nextMap)
+		 // 포탈 설정 (IsEnable, nextMap)
+		if (Stage.level != 1)
+		{
+			SetPortal(1);
+		}
 		SetPortal(2);
 		SetPortal(3);
 
@@ -360,8 +372,12 @@ void MapMake(int index)
 		for (int i = 26; i <= 29; i++) { IsBlock[13][i] = true; }//13
 		for (int i = 0; i <= 31; i++) { IsBlock[14][i] = true; }//14
 
-																// 포탈 설정 (IsEnable, nextMap)
+		// 포탈 설정 (IsEnable, nextMap)
 		SetPortal(0);
+		if (Stage.level != 1)
+		{
+			SetPortal(1);
+		}
 		SetPortal(3);
 
 		break;
@@ -386,9 +402,10 @@ void MapMake(int index)
 		for (int i = 10; i <= 12; i++) { IsBlock[10][i] = true; }//10
 		for (int i = 10; i <= 12; i++) { IsBlock[11][i] = true; }//11
 		for (int i = 0; i <= 31; i++) { IsBlock[14][i] = true; }//14
-		SetPortal(1);
 		SetPortal(2);
+		SetPortal(3);
 		break;
+
 	case 7: //Map7
 			// bool IsBlock[][] 에 true 넣을거 [14][31]
 		for (int i = 0; i <= 31; i++) { IsBlock[0][i] = true; }//0
@@ -410,8 +427,9 @@ void MapMake(int index)
 		for (int i = 20; i <= 25; i++) { IsBlock[13][i] = true; }//13
 		for (int i = 0; i <= 31; i++) {	IsBlock[14][i] = true;}//14
 		SetPortal(0);
-		SetPortal(1);
+		SetPortal(3);
 		break;
+
 	default:
 		break;
 	}
@@ -727,7 +745,7 @@ void Init()
 	Goal.Y = 18;
 	SetStartGoal();
 
-	// Map 초기화
+	// Map 초기화 // MapIndex 범위 제한 필요
 	MapIndex = StartP.whereMap;
 	CreateBlock(MapIndex);
 
