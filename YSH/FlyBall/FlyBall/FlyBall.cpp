@@ -661,13 +661,44 @@ void KeyControl(int key)
 	// SUCCESS 상태에서
 	if (GameStatus == SUCCESS)
 	{
+		switch (key)
+		{
+		case 'Y': case 'y':
+			if (Stage.level != 2)
+			{
+				Stage.level++;
+				GameStatus = INIT;
+			}else
+			{
+				GameStatus = RESULT;
+			}
+			break;
 
+		case 'N': case 'n':
+			GameStatus = RESULT;
+			break;
+
+		default:
+			break;
+		}
 	}
 
 	// FAILED 상태에서
 	if (GameStatus == FAILED)
 	{
+		switch (key)
+		{
+		case 'Y': case 'y':
+			GameStatus = INIT;
+			break;
 
+		case 'N': case 'n':
+			GameStatus = RESULT;
+			break;
+
+		default:
+			break;
+		}
 	}
 }
 
@@ -684,6 +715,31 @@ void StatusPrint()
 			break;
 
 		case INIT:
+			// 초기화
+			for (int i = 0; i < 4; i++)
+			{
+				Portal[i].IsEnable = false; // 모든 Portal 비활성화
+			}
+
+			// Start, Goal 지점 초기화
+			Goal.X = 70;
+			Goal.Y = 18;
+			SetStartGoal();
+
+			// Map 초기화 
+			MapIndex = StartP.whereMap;
+			CreateBlock(MapIndex);
+
+
+			// Player 초기화
+			Player.X = PlayerFirstX;
+			Player.Y = PlayerFirstY;
+			Player.Life = 15;
+			Player.Direction = M_RIGHT;
+			Player.OldTime = clock();
+			Player.IsReady = 1;
+			Player.MoveTime = 170;
+
 			// 화면 출력
 			if (CurTime - Stat_OldTime < PrintTime)
 			{
@@ -774,7 +830,7 @@ void Init()
 	Goal.Y = 18;
 	SetStartGoal();
 
-	// Map 초기화 // MapIndex 범위 제한 필요
+	// Map 초기화
 	MapIndex = StartP.whereMap;
 	CreateBlock(MapIndex);
 
@@ -782,7 +838,7 @@ void Init()
 	// Player 초기화
 	Player.X = PlayerFirstX;
 	Player.Y = PlayerFirstY;
-	Player.Life = 10;
+	Player.Life = 15;
 	Player.Direction = M_RIGHT;
 	Player.OldTime = clock();
 	Player.IsReady = 1;
