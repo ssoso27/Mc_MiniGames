@@ -462,6 +462,19 @@ int Collision(int x, int y)
 {
 	int count = 0;
 
+	// Player와 Goal의 충돌
+	if (Goal.Y == y) // y 또는 y+1이 동일
+	{
+		if (Goal.X == (x + 1) || Goal.X == (x + 2) ||
+			(Goal.X + 1) == (x + 1) || (Goal.X + 1) == (x + 2)) // x 또는 x+1이 동일
+		{
+			// 충돌 시 반응
+			GameStatus = SUCCESS; // 미션 성공
+
+			return 1; // 충돌 O
+		}
+	}
+
 	// Player와 Portal[i]의 충돌
 	for (int i = 0; i < 4; i++)
 	{
@@ -701,6 +714,8 @@ void StatusPrint()
 			break;
 
 		case SUCCESS:
+			sprintf(StatString, "[SUCCESS 화면]");
+			ScreenPrint(30, 10, StatString);
 			break;
 
 		case FAILED:
