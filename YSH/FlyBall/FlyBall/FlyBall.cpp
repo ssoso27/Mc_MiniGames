@@ -20,16 +20,21 @@ const int PlayerFirstY = 6; // 플레이어의 시작 Y좌표
 const int MaxBlockCount = 512; // Map에 들어가는 최대 Block 수
 const int MAXMAPNUM = 8; // 최대 Map 수
 
-						 // 전역 변수
+// 전역 변수
 int MapIndex; // 현재 Map의 Index
+char StatString[500]; // 화면 출력 문구 저장용 char[]
+int PrintTime = 3 * 1000; 
+clock_t Stat_OldTime = clock(); // PrintTime의 OldTime
 
-			  // 구조체 변수
+// 구조체 변수
 BLOCK Block[MaxBlockCount];
 BOARD Board;
 PLAYER Player;
 PORTAL Portal[4]; // 상, 우, 하, 좌
 GOAL Goal;
 STARTP StartP;
+GAMESTATUS GameStatus;
+STAGE Stage;
 
 // 배열
 bool IsBlock[Board.Height][Board.Width / 2] = { false, }; // Block 생성 위치 판별
@@ -564,49 +569,134 @@ void KeyControl(int key)
 {
 	int direction;
 
-	switch (key)
+	// START 상태에서
+	if (GameStatus == START)
 	{
-	case SPACE:
-		//(Player.IsReady == 1) ? (Player.IsReady = 0) : (Player.IsReady = 1); // Player.IsReady 바꿈 
-		if (Player.IsReady == 1)
+		if (key == SPACE)
 		{
-			Player.OldTime = clock();
-			Player.IsReady = 0; // 준비 O -> 준비 X
+			GameStatus = INIT;
 		}
-		break;
+	}
 
-	case UP: // ↑
-		direction = M_TOP;
-		Player.Direction = (DIRECT)direction;
-		Player.OldTime = clock();
-		break;
+	// RUNNING 상태에서
+	if (GameStatus == RUNNING)
+	{
+		switch (key)
+		{
+		case SPACE:
+			//(Player.IsReady == 1) ? (Player.IsReady = 0) : (Player.IsReady = 1); // Player.IsReady 바꿈 
+			if (Player.IsReady == 1)
+			{
+				Player.OldTime = clock();
+				Player.IsReady = 0; // 준비 O -> 준비 X
+			}
+			break;
 
-	case RIGHT: // →
-		direction = M_RIGHT;
-		Player.Direction = (DIRECT)direction;
-		Player.OldTime = clock();
-		break;
+		case UP: // ↑
+			direction = M_TOP;
+			Player.Direction = (DIRECT)direction;
+			Player.OldTime = clock();
+			break;
 
-	case DOWN: // ↓
-		direction = M_BOTTOM;
-		Player.Direction = (DIRECT)direction;
-		Player.OldTime = clock();
-		break;
+		case RIGHT: // →
+			direction = M_RIGHT;
+			Player.Direction = (DIRECT)direction;
+			Player.OldTime = clock();
+			break;
 
-	case LEFT: // ←
-		direction = M_LEFT;
-		Player.Direction = (DIRECT)direction;
-		Player.OldTime = clock();
-		break;
+		case DOWN: // ↓
+			direction = M_BOTTOM;
+			Player.Direction = (DIRECT)direction;
+			Player.OldTime = clock();
+			break;
 
-	default:
-		break;
+		case LEFT: // ←
+			direction = M_LEFT;
+			Player.Direction = (DIRECT)direction;
+			Player.OldTime = clock();
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	// SUCCESS 상태에서
+	if (GameStatus == SUCCESS)
+	{
+
+	}
+
+	// FAILED 상태에서
+	if (GameStatus == FAILED)
+	{
+
 	}
 }
+
+// 상태에 따른 출력 & 변화
+void StatusPrint()
+{
+	clock_t CurTime = clock();
+
+	switch (GameStatus)
+	{
+		case START:
+			sprintf(StatString, "[시작화면]");
+			ScreenPrint(25, 10, StatString);
+			break;
+
+		case INIT:
+			// 화면 출력
+			if (CurTime - Stat_OldTime < PrintTime)
+			{
+				sprintf(StatString, "[INIT 화면]");
+				ScreenPrint(30, 10, StatString);
+			}
+			else
+			{
+				GameStatus = READY;
+				Stat_OldTime = CurTime;
+			}
+			break;
+
+		case READY:
+			if (CurTime - Stat_OldTime < PrintTime)
+			{
+				sprintf(StatString, "[READY 화면]");
+				ScreenPrint(30, 10, StatString);
+			}
+			else
+			{
+				GameStatus = RUNNING;
+				Stat_OldTime = CurTime;
+			}
+			break;
+
+		case RUNNING:
+			break;
+
+		case SUCCESS:
+			break;
+
+		case FAILED:
+			break;
+
+		case RESULT:
+			break;
+
+		default:
+			break;
+	}
+}
+
 
 // 프레임워크 함수
 void Init()
 {
+	// Stage 초기화
+	Stage.level = 0;
+
 	// Board 초기화
 	Board.topY = 4;
 	Board.bottomY = Board.topY + Board.Height;
@@ -663,52 +753,59 @@ void Render()
 {
 	ScreenClear();
 
-	// 상단바 출력
 	char TheTopBar[81];
-	sprintf(TheTopBar, "현 스테이지 : %d | Life : %d  \t\t    [Map%d]", 1, /*Stage.Level + 1,*/ Player.Life, MapIndex);
-	ScreenPrint(17, 2, TheTopBar);
+		
+	StatusPrint(); // 상태별 화면 출력
 
-	// Board 출력
-	// 각모서리
-	ScreenPrint(Board.leftX, Board.topY, "┌"); // 좌측 상단
-	ScreenPrint(Board.rightX, Board.topY, "┐"); // 우측 상단
-	ScreenPrint(Board.leftX, Board.bottomY, "└"); // 좌측 하단
-	ScreenPrint(Board.rightX, Board.bottomY, "┘"); // 우측 하단
-
-												   // 위아래벽
-	for (int i = Board.leftX + 2; i < Board.rightX; i++)
+	// 게임 화면
+	if (GameStatus == RUNNING)
 	{
-		ScreenPrint(i, Board.topY, "-");
-		ScreenPrint(i, Board.bottomY, "-");
-	}
-	// 좌우벽
-	for (int i = Board.topY + 1; i < Board.bottomY; i++)
-	{
-		ScreenPrint(Board.leftX, i, "│");
-		ScreenPrint(Board.rightX, i, "│");
-	}
+		// 상단바 출력
+		sprintf(TheTopBar, "현 스테이지 : %d | Life : %d  \t\t    [Map%d]", Stage.level + 1, Player.Life, MapIndex);
+		ScreenPrint(17, 2, TheTopBar);
 
-	// Start, Goal 출력
-	ScreenPrint(PlayerFirstX, PlayerFirstY, "S");
-	ScreenPrint(Goal.X, Goal.Y, "G");
+		// Board 출력
+		// 각모서리
+		ScreenPrint(Board.leftX, Board.topY, "┌"); // 좌측 상단
+		ScreenPrint(Board.rightX, Board.topY, "┐"); // 우측 상단
+		ScreenPrint(Board.leftX, Board.bottomY, "└"); // 좌측 하단
+		ScreenPrint(Board.rightX, Board.bottomY, "┘"); // 우측 하단
 
-	// Player 출력
-	ScreenPrint(Player.X, Player.Y, "-●-");
+													   // 위아래벽
+		for (int i = Board.leftX + 2; i < Board.rightX; i++)
+		{
+			ScreenPrint(i, Board.topY, "-");
+			ScreenPrint(i, Board.bottomY, "-");
+		}
+		// 좌우벽
+		for (int i = Board.topY + 1; i < Board.bottomY; i++)
+		{
+			ScreenPrint(Board.leftX, i, "│");
+			ScreenPrint(Board.rightX, i, "│");
+		}
 
-	// Block 출력
-	for (int i = 0; i < MaxBlockCount; i++)
-	{
-		if (Block[i].X == 0 && Block[i].Y == 0) continue; // 좌표가 주어지지 않은 Block 표시 X
-		ScreenPrint(Block[i].X, Block[i].Y, "■");
-	}
+		// Start, Goal 출력
+		ScreenPrint(PlayerFirstX, PlayerFirstY, "S");
+		ScreenPrint(Goal.X, Goal.Y, "G");
 
-	// Portal 출력
-	for (int i = 0; i < 4; i++)
-	{
-		if (Portal[i].IsEnable == false) // 유효하지 않은 포탈이면
-			continue;
+		// Player 출력
+		ScreenPrint(Player.X, Player.Y, "-●-");
 
-		ScreenPrint(Portal[i].X, Portal[i].Y, "★");
+		// Block 출력
+		for (int i = 0; i < MaxBlockCount; i++)
+		{
+			if (Block[i].X == 0 && Block[i].Y == 0) continue; // 좌표가 주어지지 않은 Block 표시 X
+			ScreenPrint(Block[i].X, Block[i].Y, "■");
+		}
+
+		// Portal 출력
+		for (int i = 0; i < 4; i++)
+		{
+			if (Portal[i].IsEnable == false) // 유효하지 않은 포탈이면
+				continue;
+
+			ScreenPrint(Portal[i].X, Portal[i].Y, "★");
+		}
 	}
 	ScreenFlipping();
 }
