@@ -7,8 +7,8 @@
 {
 	UP = 72,
 	DOWN = 80,
-	//LEFT = 75,
-	//RIGHT = 77,
+	LEFT = 75,
+	RIGHT = 77,
 	SPACE = 32,
 	ESC = 27
 };
@@ -575,25 +575,25 @@ void KeyControl(int key)
 		}
 		break;
 
-	case '8': // ก่
+	case UP: // ก่
 		direction = M_TOP;
 		Player.Direction = (DIRECT)direction;
 		Player.OldTime = clock();
 		break;
 
-	case '6': // กๆ
+	case RIGHT: // กๆ
 		direction = M_RIGHT;
 		Player.Direction = (DIRECT)direction;
 		Player.OldTime = clock();
 		break;
 
-	case '2': // ก้
+	case DOWN: // ก้
 		direction = M_BOTTOM;
 		Player.Direction = (DIRECT)direction;
 		Player.OldTime = clock();
 		break;
 
-	case '4': // ก็
+	case LEFT: // ก็
 		direction = M_LEFT;
 		Player.Direction = (DIRECT)direction;
 		Player.OldTime = clock();
