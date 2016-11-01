@@ -75,6 +75,12 @@ void MapReset()
 		}
 	}
 
+	for (int i = 0; i < MaxBlockCount; i++)
+	{
+		Block[i].X = 0;
+		Block[i].Y = 0;
+	}
+
 	// Portal 리셋
 	for (int i = 0; i < 4; i++)
 	{
@@ -802,9 +808,11 @@ void Render()
 			ScreenPrint(Board.rightX, i, "│");
 		}
 
-		// Start, Goal 출력
-		ScreenPrint(PlayerFirstX, PlayerFirstY, "S");
-		ScreenPrint(Goal.X, Goal.Y, "G");
+		// Goal 출력
+		if (Goal.IsEnable)
+		{
+			ScreenPrint(Goal.X, Goal.Y, "G");
+		}
 
 		// Player 출력
 		ScreenPrint(Player.X, Player.Y, "-●-");
