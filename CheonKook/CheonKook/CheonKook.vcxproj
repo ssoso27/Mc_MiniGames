@@ -150,7 +150,7 @@
     <ClCompile Include="Games\Brick.cpp" />
     <ClCompile Include="Games\Dodge.cpp" />
     <ClCompile Include="Games\EqualCard.cpp" />
-    <ClCompile Include="Games\Header2.cpp" />
+    <ClCompile Include="Games\FlyBall.cpp" />
     <ClCompile Include="Games\Intro.cpp" />
     <ClCompile Include="Games\RockSP.cpp" />
     <ClCompile Include="Games\Screen.cpp" />
@@ -163,10 +163,8 @@
     <ClInclude Include="Games\Brick.h" />
     <ClInclude Include="Games\Dodge.h" />
     <ClInclude Include="Games\EqualCard.h" />
+    <ClInclude Include="Games\FlyBall.h" />
     <ClInclude Include="Games\Header.h" />
-    <ClCompile Include="Games\Header2.h">
-      <FileType>CppHeader</FileType>
-    </ClCompile>
     <ClInclude Include="Games\Intro.h" />
     <ClInclude Include="Games\RockSP.h" />
     <ClInclude Include="Games\Screen.h" />

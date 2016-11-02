@@ -8,6 +8,7 @@
 #include "Games\Push.h"
 #include "Games\Intro.h"
 #include "Games\BaseBall.h"
+#include "Games\FlyBall.h"
 
 namespace MainGame
 {
@@ -23,7 +24,7 @@ namespace MainGame
 
 	// 전역변수
 	// 상수
-	int const distractorNum = 6; // 선택지 개수
+	int const distractorNum = 7; // 선택지 개수
 
 	// 구조체 변수
 	CHOICE Choice;
@@ -38,7 +39,6 @@ namespace MainGame
 		{
 		case 0: // 벽돌깨기
 			SH_Brick::Brick();
-			//SB_Push::Push();
 			break;
 
 		case 1: // 화살표 피하기
@@ -57,7 +57,11 @@ namespace MainGame
 			SJ_BaseBall::BaseBall();
 			break;
 
-		case 5: // 팀 소개
+		case 5: // 플라이 볼
+			SH_FlyBall::FlyBall();
+			break;
+
+		case 6: // 팀 소개
 			SH_Intro::Intro();
 			break;
 
@@ -140,6 +144,11 @@ namespace MainGame
 			Choice.Y = 17;
 			break;
 
+		case 6:
+			Choice.X = 25;
+			Choice.Y = 18;
+			break;
+
 		default:
 			break;
 		}
@@ -162,7 +171,8 @@ namespace MainGame
 			"\t\t\t ◎ 슛골인\n"
 			"\t\t\t ◎ 같은 카드 찾기\n"
 			"\t\t\t ◎ 숫자 야구\n"
-			"\t\t\t ◎ 팀소개 \n\n\n\n\n\n\n");
+			"\t\t\t ◎ 플라이 볼\n"
+			"\t\t\t ◎ 팀소개 \n\n\n\n\n\n");
 	}
 
 	void Update()

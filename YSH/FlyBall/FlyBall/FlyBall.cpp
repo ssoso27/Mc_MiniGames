@@ -630,27 +630,39 @@ void KeyControl(int key)
 			break;
 
 		case UP: // ก่
-			direction = M_TOP;
-			Player.Direction = (DIRECT)direction;
-			Player.OldTime = clock();
+			if (Player.IsReady == 0)
+			{
+				direction = M_TOP;
+				Player.Direction = (DIRECT)direction;
+				Player.OldTime = clock();
+			}
 			break;
 
 		case RIGHT: // กๆ
-			direction = M_RIGHT;
-			Player.Direction = (DIRECT)direction;
-			Player.OldTime = clock();
+			if (Player.IsReady == 0)
+			{
+				direction = M_RIGHT;
+				Player.Direction = (DIRECT)direction;
+				Player.OldTime = clock();
+			}
 			break;
 
 		case DOWN: // ก้
-			direction = M_BOTTOM;
-			Player.Direction = (DIRECT)direction;
-			Player.OldTime = clock();
+			if (Player.IsReady == 0)
+			{
+				direction = M_BOTTOM;
+				Player.Direction = (DIRECT)direction;
+				Player.OldTime = clock();
+			}
 			break;
 
 		case LEFT: // ก็
-			direction = M_LEFT;
-			Player.Direction = (DIRECT)direction;
-			Player.OldTime = clock();
+			if (Player.IsReady == 0)
+			{
+				direction = M_LEFT;
+				Player.Direction = (DIRECT)direction;
+				Player.OldTime = clock();
+			}
 			break;
 
 		default:
