@@ -490,7 +490,7 @@ namespace SH_Brick
 		Bar.Life = 3;
 		Bar.Length = 3;
 		Bar.OldTime = clock();
-		Bar.MoveTime = 30;
+		Bar.MoveTime = 33;
 
 		// 공 초기화
 		Ball.X = Bar.X[1];

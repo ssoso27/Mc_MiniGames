@@ -109,12 +109,12 @@ namespace SH_Dodge
 	{
 		if (Stage == 2)
 		{
-			Star.X = rand() % BOARD_WIDTH;
+			Star.X = rand() % (BOARD_WIDTH-2);
 			Star.Y = rand() % ((BOARD_HEIGHT - 4) + 2);
 		}
 		else
 		{
-			Star.X = rand() % BOARD_WIDTH;
+			Star.X = rand() % (BOARD_WIDTH-2);
 			Star.Y = Player.Y;
 		}
 	}
