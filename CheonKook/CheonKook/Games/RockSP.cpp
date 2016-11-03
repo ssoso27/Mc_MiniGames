@@ -3,6 +3,7 @@
 
 namespace JH_RockSP
 {
+	clock_t G_OldTime = clock(); // 게임 실행속도 제한
 
 	char print[500];
 
@@ -184,6 +185,7 @@ using namespace JH_RockSP;
 	void main() {
 
 		int key;
+		clock_t CurTime;
 
 		srand((unsigned)time(NULL));
 
@@ -209,6 +211,16 @@ using namespace JH_RockSP;
 
 			Update();
 			Render();
+
+			while (1)
+			{
+				CurTime = clock();
+				if (CurTime - G_OldTime > DelayT)
+				{
+					G_OldTime = CurTime;
+					break;
+				}
+			}
 		}
 
 	}

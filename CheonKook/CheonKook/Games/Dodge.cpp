@@ -32,6 +32,7 @@ namespace SH_Dodge
 	char StatString[500]; // 게임 상태 String
 	int PrintTime = 3 * 1000; // 게임 상태 표시 시간
 	clock_t Stat_OldTime = clock(); // PrintTime의 OldTime
+	clock_t G_OldTime = clock(); // 게임 실행속도 제한
 
 									// 화면에 표시될 모양 
 
@@ -525,6 +526,7 @@ namespace SH_Dodge
 	void Dodge()
 	{
 		int Key;
+		clock_t CurTime;
 
 		ScreenInit();
 		Init();
@@ -571,6 +573,16 @@ namespace SH_Dodge
 
 			Update();
 			Render();
+
+			while (1)
+			{
+				CurTime = clock();
+				if (CurTime - G_OldTime > DelayT)
+				{
+					G_OldTime = CurTime;
+					break;
+				}
+			}
 
 		}
 	}

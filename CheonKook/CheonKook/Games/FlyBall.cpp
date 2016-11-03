@@ -25,6 +25,7 @@ namespace SH_FlyBall
 	const int MAXMAPNUM = 8; // 최대 Map 수
 
 	// 전역 변수
+	clock_t G_OldTime = clock(); // 게임 실행속도 제한
 	int MapIndex; // 현재 Map의 Index
 	char StatString[500]; // 화면 출력 문구 저장용 char[]
 	int PrintTime = 3 * 1000;
@@ -956,6 +957,7 @@ namespace SH_FlyBall
 	void FlyBall()
 	{
 		int key;
+		clock_t CurTime;
 
 		Init();
 		ScreenInit();
@@ -974,11 +976,20 @@ namespace SH_FlyBall
 				}
 
 				KeyControl(key);
-
 			}
 
 			Update();
 			Render();
+
+			while (1)
+			{
+				CurTime = clock();
+				if (CurTime - G_OldTime > DelayT)
+				{
+					G_OldTime = CurTime;
+					break;
+				}
+			}
 		}
 	}
 }

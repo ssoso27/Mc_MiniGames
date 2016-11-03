@@ -32,6 +32,7 @@ namespace SH_EqualCard
 	char StatString[500]; // 화면 출력 문구
 	double PrintTime = 2.0 * 1000; // 화면 출력 시간
 	clock_t Stat_OldTime = clock(); // PrintTime의 OldTime
+	clock_t G_OldTime = clock(); // 게임 실행속도 제한
 
 	// Card 관련
 	int CardCountArray[3] = { 12, 16, 16 };
@@ -668,6 +669,7 @@ namespace SH_EqualCard
 	void EqualCard()
 	{
 		int key;
+		clock_t CurTime;
 
 		Init();
 		ScreenInit();
@@ -691,6 +693,16 @@ namespace SH_EqualCard
 
 			Update();
 			Render();
+
+			while (1)
+			{
+				CurTime = clock();
+				if (CurTime - G_OldTime > DelayT)
+				{
+					G_OldTime = CurTime;
+					break;
+				}
+			}
 		}
 
 	}

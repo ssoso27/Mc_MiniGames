@@ -34,6 +34,7 @@ namespace SH_Brick
 	char StatString[500]; // 화면 출력 문구 저장용 char[]
 	int PrintTime = 3 * 1000;
 	clock_t Stat_OldTime = clock(); // PrintTime의 OldTime
+	clock_t G_OldTime = clock(); // 게임 실행속도 제한
 
 	// 플레이 관련
 
@@ -577,6 +578,7 @@ namespace SH_Brick
 	void Brick()
 	{
 		int key;
+		clock_t CurTime;
 
 		ScreenInit();
 		Init();
@@ -667,6 +669,16 @@ namespace SH_Brick
 
 			Update();
 			Render();
+
+			while (1)
+			{
+				CurTime = clock();
+				if (CurTime - G_OldTime > DelayT)
+				{
+					G_OldTime = CurTime;
+					break;
+				}
+			}
 		}
 	}
 }

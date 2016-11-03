@@ -33,9 +33,6 @@
     <ClCompile Include="Games\Shoot.cpp">
       <Filter>소스 파일\Games</Filter>
     </ClCompile>
-    <ClCompile Include="Games\Tetris.cpp">
-      <Filter>소스 파일\Games</Filter>
-    </ClCompile>
     <ClCompile Include="Games\Brick.cpp">
       <Filter>소스 파일\Games</Filter>
     </ClCompile>
@@ -68,9 +65,6 @@
     <ClInclude Include="Games\Shoot.h">
       <Filter>헤더 파일\Games</Filter>
     </ClInclude>
-    <ClInclude Include="Games\Tetris.h">
-      <Filter>헤더 파일\Games</Filter>
-    </ClInclude>
     <ClInclude Include="Games\Brick.h">
       <Filter>헤더 파일\Games</Filter>
     </ClInclude>
@@ -86,10 +80,10 @@
     <ClInclude Include="Games\Intro.h">
       <Filter>헤더 파일\Games</Filter>
     </ClInclude>
-    <ClInclude Include="Games\BaseBall.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Games\FlyBall.h">
+      <Filter>헤더 파일\Games</Filter>
+    </ClInclude>
+    <ClInclude Include="Games\BaseBall.h">
       <Filter>헤더 파일\Games</Filter>
     </ClInclude>
   </ItemGroup>

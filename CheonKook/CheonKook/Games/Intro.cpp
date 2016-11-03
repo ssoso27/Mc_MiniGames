@@ -9,6 +9,7 @@ namespace SH_Intro
 	bool upFlag = true; // 화면이 올라가는가?
 	clock_t OldTime;
 	clock_t PrintTime;
+	clock_t G_OldTime = clock(); // 게임 실행속도 제한
 
 	void Init()
 	{
@@ -86,6 +87,7 @@ namespace SH_Intro
 	void Intro()
 	{
 		int key;
+		clock_t CurTime;
 
 		Init();
 		ScreenInit();
@@ -102,6 +104,16 @@ namespace SH_Intro
 			}
 
 			Render();
+
+			while (1)
+			{
+				CurTime = clock();
+				if (CurTime - G_OldTime > DelayT)
+				{
+					G_OldTime = CurTime;
+					break;
+				}
+			}
 		}
 	}
 }

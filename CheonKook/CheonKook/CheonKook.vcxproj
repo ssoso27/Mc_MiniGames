@@ -155,7 +155,6 @@
     <ClCompile Include="Games\RockSP.cpp" />
     <ClCompile Include="Games\Screen.cpp" />
     <ClCompile Include="Games\Shoot.cpp" />
-    <ClCompile Include="Games\Tetris.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -169,7 +168,6 @@
     <ClInclude Include="Games\RockSP.h" />
     <ClInclude Include="Games\Screen.h" />
     <ClInclude Include="Games\Shoot.h" />
-    <ClInclude Include="Games\Tetris.h" />
     <ClInclude Include="Main.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -14,3 +14,5 @@
 #define DOWN 80
 */
 #pragma warning(disable:4996)
+
+const int DelayT = 33;

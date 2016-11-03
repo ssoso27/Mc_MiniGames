@@ -12,7 +12,7 @@ namespace SB_Shoot
 		RIGHT = 77
 	};
 
-
+	clock_t G_OldTime = clock(); // 게임 실행속도 제한
 	GameState p_GameState = START; // 최초의 상태 : START
 	int p_Goal, p_Stage = -1, p_GameStartTime; // GoalIn? , 현 스테이지, 게임 시작 시간
 
@@ -188,7 +188,7 @@ namespace SB_Shoot
 			break;
 
 		case READY: // READY 상태
-			sprintf(StateString, "[READY] %d 스테이지 \n \t\t\t\t\t\t목표 Goal : %d\n \t\t\t\t\t\t제한 시간 : %d초", p_Stage, p_GoalCount, p_LimitTime / 1000);
+			sprintf(StateString, "[READY] %d 스테이지 \n \t\t\t\t\t\t목표 Goal : %d\n \t\t\t\t\t\t제한 시간 : %d초", p_Stage + 1, p_GoalCount, p_StageInfo[p_Stage].LimitTime / 1000);
 			if (CurTime - p_OldTime > 3000)
 			{
 				p_OldTime = CurTime;
@@ -198,7 +198,7 @@ namespace SB_Shoot
 			break;
 
 		case RUNNING: // RUNNING 상태
-			if (CurTime - p_GameStartTime > p_StageInfo[p_Stage].LimitTime) // 제한시간 LimitTime을 넘김
+			if (CurTime - p_GameStartTime > p_StageInfo[p_Stage].LimitTime || BallCount >= p_GoalCount) // 제한시간 LimitTime을 넘김 또는 미션 성공
 			{
 				p_GameState = STOP; // STOP 상태로 넘어감 -> 판별
 			}
@@ -220,7 +220,7 @@ namespace SB_Shoot
 		case SUCCESS: // SUCCESS 상태. 미션 성공
 			if (p_Stage < 3)
 			{
-				sprintf(StateString, "스테이지 %d 미션 성공. 다음 단계? (Y/N)", p_Stage);
+				sprintf(StateString, "스테이지 %d 미션 성공. 다음 단계? (Y/N)", p_Stage + 1);
 			}
 			else // 모든 스테이지 클리어
 			{
@@ -234,7 +234,7 @@ namespace SB_Shoot
 			break;
 		case FAILED: // FAILED 상태. 미션 실패
 			sprintf(StateString, "스테이지 %d 미션 실패.\n"
-				"\t\t아무 키나 누르면, 결과창이 나옵니다.", p_Stage); // Y,N 입력. Stage 레벨 그대로.
+				"\t\t아무 키나 누르면, 결과창이 나옵니다.", p_Stage + 1); // Y,N 입력. Stage 레벨 그대로.
 			if (CurTime - p_OldTime > 3000)
 			{
 				p_OldTime = CurTime;
@@ -317,6 +317,7 @@ namespace SB_Shoot
 	void Shoot()
 	{
 		int Key, Remain;
+		clock_t CurTime;
 
 		ScreenInit();
 		Init(); // 초기화
@@ -327,13 +328,17 @@ namespace SB_Shoot
 			{
 				Key = _getch();
 				if (p_GameState == RESULT) // RESULT 키입력 -> 종료
+				{
+					p_GameState = START;
 					break;
+				}
 
 				// RESULT 상태가 아닐 시
 
 				if (Key == 'q' || Key == 'Q')
 				{
 					p_Stage = -1;
+					p_GameState = START;
 					break;
 				}
 
@@ -456,6 +461,16 @@ namespace SB_Shoot
 
 			Update();//데이터 갱신 
 			Render(); //화면 출력 
+
+			while (1)
+			{
+				CurTime = clock();
+				if (CurTime - G_OldTime > DelayT)
+				{
+					G_OldTime = CurTime;
+					break;
+				}
+			}
 
 		}
 

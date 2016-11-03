@@ -42,6 +42,7 @@ namespace SJ_BaseBall
 	bool enterFlag;
 
 	clock_t stat_OldTime = clock(); // StatusPrint 에서 문구 출력용. 마지막 실행 시각.
+	clock_t G_OldTime = clock(); // 게임 실행속도 제한
 
 	// 구조체 & 열거형 변수
 	COMPUTER Computer;
@@ -372,6 +373,7 @@ namespace SJ_BaseBall
 		ScreenInit();
 
 		int key;
+		clock_t CurTime;
 
 		while (1)
 		{
@@ -388,6 +390,16 @@ namespace SJ_BaseBall
 
 			Update();
 			Render();
+
+			while (1)
+			{
+				CurTime = clock();
+				if (CurTime - G_OldTime > DelayT)
+				{
+					G_OldTime = CurTime;
+					break;
+				}
+			}
 		}
 
 	}

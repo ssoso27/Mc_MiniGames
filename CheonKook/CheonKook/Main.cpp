@@ -30,6 +30,7 @@ namespace MainGame
 	CHOICE Choice;
 
 	// 출력 관련
+	clock_t G_OldTime = clock(); // 게임 실행속도 제한
 	char mainPrint[200]; // 기본 출력 문구
 
 	// 함수
@@ -194,6 +195,7 @@ namespace MainGame
 	void MainGame()
 	{
 		int key;
+		clock_t CurTime;
 
 		Init();
 		ScreenInit();
@@ -213,6 +215,16 @@ namespace MainGame
 
 			Update();
 			Render();
+
+			while (1)
+			{
+				CurTime = clock();
+				if (CurTime - G_OldTime > DelayT)
+				{
+					G_OldTime = CurTime;
+					break;
+				}
+			}
 		}
 
 		ScreenRelease();
