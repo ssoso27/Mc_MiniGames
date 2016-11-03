@@ -690,6 +690,7 @@ namespace SH_FlyBall
 				break;
 
 			case 'N': case 'n':
+				MapReset();
 				GameStatus = RESULT;
 				break;
 
@@ -725,8 +726,19 @@ namespace SH_FlyBall
 		switch (GameStatus)
 		{
 		case START:
-			sprintf(StatString, "[시작화면]");
-			ScreenPrint(25, 10, StatString);
+			sprintf(StatString, "\t\t\t  [플라이 볼] \n\n"
+				"\t\t===================================\n\n"
+				"\t\t벽에 부딪히지 않고 목표에 도달하는 게임입니다.\n"
+				"\t\t공의 몸체(●)가 부딪히면 라이프가 감소합니다.\n"
+				"\t\t포탈(★)을 통해 Map을 이동할 수 있습니다.\n"
+				"\t\t골인지점(G)에 도달하면 미션 성공입니다.\n"
+				"\t\t스테이지는 총 3레벨로 구성되어있습니다.\n\n"
+				"\t\t===================================\n\n"
+				"\t\t\t  - 조 작 법 -\n\n"
+				"\t\t이동 : 방향키 | 이동 시작 : SPACE BAR\n"
+				"\t\t-----------------------------------\n"
+				"\t\t게임 시작 : SPACE BAR | 게임 종료 : q\n\n\n\n");
+			ScreenPrint(0, 3, StatString);
 			break;
 
 		case INIT:
@@ -771,8 +783,8 @@ namespace SH_FlyBall
 		case READY:
 			if (CurTime - Stat_OldTime < PrintTime)
 			{
-				sprintf(StatString, "[READY 화면]");
-				ScreenPrint(30, 10, StatString);
+				sprintf(StatString, "[스테이지%d - Map0~%d]", Stage.level+1, createMapCount[Stage.level] - 1);
+				ScreenPrint(25, 10, StatString);
 			}
 			else
 			{
@@ -789,18 +801,29 @@ namespace SH_FlyBall
 			break;
 
 		case SUCCESS:
-			sprintf(StatString, "[SUCCESS 화면]");
-			ScreenPrint(30, 10, StatString);
+			if (Stage.level < 2)
+			{
+				sprintf(StatString, "%d 스테이지 CLEAR \n\n"
+					"\t\t\t다음 스테이지? [Y/N]", Stage.level + 1);
+			}
+			else
+			{
+				sprintf(StatString, "모든 스테이지 CLEAR \n\n"
+					"\t\t\t게임 결과창 [Y]");
+			}
+			ScreenPrint(25, 10, StatString);
 			break;
 
 		case FAILED:
-			sprintf(StatString, "[FAILED 화면]");
-			ScreenPrint(30, 10, StatString);
+			sprintf(StatString, " %d 스테이지 GAME OVER\n\n"
+				"\t\t\t     재도전? [Y/N]", Stage.level + 1);
+			ScreenPrint(25, 10, StatString);
 			break;
 
 		case RESULT:
-			sprintf(StatString, "[RESULT 화면]");
-			ScreenPrint(30, 10, StatString);
+			sprintf(StatString, "[게임 종료]\n\n"
+				"\t\t\t 나가려면 Q를 누르세요.");
+			ScreenPrint(30, 10, StatString); 
 			break;
 
 		default:
@@ -944,7 +967,11 @@ namespace SH_FlyBall
 				key = _getch();
 
 				if (key == 'q' || key == 'Q')
+				{	
+					Stage.level = 0;
+					GameStatus = START;
 					break;
+				}
 
 				KeyControl(key);
 
