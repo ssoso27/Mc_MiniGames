@@ -1,5 +1,6 @@
 #include "Header.h"
 #include "..\Main.h"
+#include "RockSP.h"
 
 namespace JH_RockSP
 {
@@ -19,15 +20,8 @@ namespace JH_RockSP
 	bool IsRPrint; // result값 출력 판별
 	clock_t RPrintOldTime; // result print한 마지막 시각
 
-
-	typedef struct _CHOICE {
-
-		int select;
-		int x;
-		int y;
-
-	}CHOICE;
-
+	// 구조체 변수
+	GAMESTATUS GameStatus;
 	CHOICE Choice;
 
 	enum ControlKeys
@@ -41,15 +35,45 @@ namespace JH_RockSP
 	};
 
 	void Init() {
-		sprintf(print, " \t---------\t\t---------\t\t---------\n"
-			"\t   rock   \t\t scissor \t\t  paper \n"
-			"\t---------\t\t---------\t\t---------\n");
+		GameStatus = START;
 
 		Choice.select = 0;
 
 		sprintf(FinalScore, "Score : 0");
 
 	}//화면초기화
+
+	void StatusPrint()
+	{
+		switch (GameStatus)
+		{
+		case START:
+			sprintf(print, "\t\t\t   [가위바위보] \n\n"
+				"\t\t===================================\n\n"
+				"\t\t   가위바위보 게임입니다.\n\n"
+				"\t\t   누적 3회 승리 시, \n"
+				"\t\t   본 게임에 들어갈 수 있습니다. \n"
+				"\t\t===================================\n\n"
+				"\t\t\t  - 조 작 법 -\n\n"
+				"\t\t선택 : 방향키 | 패 내기 : SPACE BAR\n"
+				"\t\t-----------------------------------\n\n"
+				"\t\t모든 게임은 Q를 누르면 종료됩니다.\n"
+				"\t\t\n"
+				"\t\t게임 시작 : SPACE BAR | 게임 종료 : Q\n\n\n\n");
+			ScreenPrint(0, 3, print);
+			break;
+
+		case RUNNING:
+			sprintf(print, " \t---------\t\t---------\t\t---------\n"
+				"\t   rock   \t\t scissor \t\t  paper \n"
+				"\t---------\t\t---------\t\t---------\n");
+			ScreenPrint(0, 0, print);
+			break;
+
+		default:
+			break;
+		}
+	}
 
 	void AssignCoord()
 	{
@@ -84,21 +108,24 @@ namespace JH_RockSP
 
 		ScreenClear();
 
-		if (IsRPrint == true)
+		StatusPrint();
+
+		if (GameStatus == RUNNING)
 		{
-			ScreenPrint(10, 12, result); // 시간 제한 두기
-			ScreenPrint(10, 10, ComputerResult);
-
-			if (CurTime - RPrintOldTime >= 3 * 1000) // 출력 시간이 3초가 넘으면
+			if (IsRPrint == true)
 			{
-				IsRPrint = false; // 더이상 띄우지 않는다
+				ScreenPrint(10, 12, result); // 시간 제한 두기
+				ScreenPrint(10, 10, ComputerResult);
+
+				if (CurTime - RPrintOldTime >= 3 * 1000) // 출력 시간이 3초가 넘으면
+				{
+					IsRPrint = false; // 더이상 띄우지 않는다
+				}
 			}
+
+			ScreenPrint(68, 1, FinalScore);
+			ScreenPrint(Choice.x, Choice.y, "▲");
 		}
-
-		ScreenPrint(0, 0, print);
-
-		ScreenPrint(68, 1, FinalScore);
-		ScreenPrint(Choice.x, Choice.y, "▲");
 
 		ScreenFlipping();
 	}
@@ -148,35 +175,44 @@ namespace JH_RockSP
 
 	void KeyControl(int key)
 	{
-		switch (key)
+
+		// START 상태에서의 키조작
+		if (GameStatus == START)
 		{
-		case LEFT:
-		{
-			if (Choice.select >= 1)
-				Choice.select--;
-			else
-				Choice.select = 2;
-			break;
+			if (key == SPACE)
+			{
+				GameStatus = RUNNING;
+				return;
+			}
 		}
 
-		case RIGHT:
+		// RUNNING 상태에서의 키조작
+		if (GameStatus == RUNNING)
 		{
-			if (Choice.select <= 1)
-				Choice.select++;
-			else
-				Choice.select = 0;
-			break;
-		}
+			switch (key)
+			{
+				case LEFT:				
+					if (Choice.select >= 1)
+						Choice.select--;
+					else
+						Choice.select = 2;
+					break;				
 
-		case SPACE:
-		{
+				case RIGHT:				
+					if (Choice.select <= 1)
+						Choice.select++;
+					else
+						Choice.select = 0;
+					break;
+				
 
-			SelectRSP();
-			break;
-		}
-		default:
-			break;
-
+				case SPACE:
+					SelectRSP();
+					break;
+				
+				default:
+					break;
+			}
 		}
 	}
 }
@@ -200,8 +236,7 @@ using namespace JH_RockSP;
 
 				key = _getch();
 
-				if (key == 75 || key == 77 || key == 32)
-					KeyControl(key);
+				KeyControl(key);
 
 			}
 
