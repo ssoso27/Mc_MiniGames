@@ -57,6 +57,7 @@ namespace SH_FlyBall
 			Goal.whereMap = rand() % createMapCount[Stage.level];
 		} while (StartP.whereMap == Goal.whereMap);
 
+
 	}
 
 	// 이전 Map 정보 리셋
@@ -317,10 +318,10 @@ namespace SH_FlyBall
 			for (int i = 10; i <= 31; i++) { IsBlock[1][i] = true; }//1
 			for (int i = 10; i <= 31; i++) { IsBlock[2][i] = true; }//2
 			for (int i = 0; i <= 7; i++) { IsBlock[3][i] = true; }//3
-			for (int i = 10; i <= 31; i++) { IsBlock[3][i] = true; }//3
-			for (int i = 10; i <= 31; i++) { IsBlock[4][i] = true; }//4
-			for (int i = 10; i <= 31; i++) { IsBlock[5][i] = true; }//5
-			for (int i = 3; i <= 31; i++) { IsBlock[6][i] = true; }//6
+			for (int i = 10; i <= 27; i++) { IsBlock[3][i] = true; }//3
+			for (int i = 10; i <= 26; i++) { IsBlock[4][i] = true; }//4
+			for (int i = 10; i <= 25; i++) { IsBlock[5][i] = true; }//5
+			for (int i = 3; i <= 25; i++) { IsBlock[6][i] = true; }//6
 			for (int i = 6; i <= 10; i++) { IsBlock[7][i] = true; }//7
 			for (int i = 0; i <= 3; i++) { IsBlock[8][i] = true; }//8
 			for (int i = 6; i <= 10; i++) { IsBlock[8][i] = true; }//8
@@ -682,6 +683,7 @@ namespace SH_FlyBall
 				if (Stage.level != 2)
 				{
 					Stage.level++;
+					MapReset();
 					GameStatus = INIT;
 				}
 				else
