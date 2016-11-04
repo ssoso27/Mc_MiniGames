@@ -556,8 +556,9 @@ namespace SH_EqualCard
 			break;
 
 		case RESULT:
-			sprintf(StatString, "[게임 종료]\n\n"
-				"\t\t\t 나가려면 Q를 누르세요.");
+			sprintf(StatString, "게임 종료. 수고하셨습니다. \n"
+				"\t\t\t %d 스테이지까지 플레이하셨습니다. \n"
+				"\t\t\t 나가려면 Q를 누르세요.", Stage.Level + 1);
 			ScreenPrint(30, 10, StatString);
 			break;
 

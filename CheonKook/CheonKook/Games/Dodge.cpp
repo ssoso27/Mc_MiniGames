@@ -388,7 +388,8 @@ namespace SH_Dodge
 
 		case RESULT:
 			sprintf(StatString, "[ 게임 결과 ]\n\n"
-				"\t\t\t 획득한 Star 개수 : %d", Star.SumCatch);
+				"\t\t\t 획득한 Star 개수 : %d\n"
+				"\t\t\t 나가려면 Q를 누르세요. ", Star.SumCatch);
 			ScreenPrint(30, 10, StatString);
 
 			break;

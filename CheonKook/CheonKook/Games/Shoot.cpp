@@ -241,7 +241,7 @@ namespace SB_Shoot
 			}
 			break;
 		case RESULT: // RESULT 상태. 게임 결과
-			sprintf(StateString, "[게임 결과 화면]\n\n\t\t\t가장 최근 스테이지에서 넣은 공 수 : %d\n\t\t\t최종 스테이지 : %d", BallCount, p_Stage);
+			sprintf(StateString, "[게임 결과 화면]\n\n\t\t\t가장 최근 스테이지에서 넣은 공 수 : %d\n\t\t\t최종 스테이지 : %d\n\t\t\t나가려면 Q를 누르세요.", BallCount, p_Stage + 2);
 			if (CurTime - p_OldTime > 3000)
 			{
 				p_OldTime = CurTime;
@@ -327,13 +327,6 @@ namespace SB_Shoot
 			if (_kbhit()) // 키 입력?
 			{
 				Key = _getch();
-				if (p_GameState == RESULT) // RESULT 키입력 -> 종료
-				{
-					p_GameState = START;
-					break;
-				}
-
-				// RESULT 상태가 아닐 시
 
 				if (Key == 'q' || Key == 'Q')
 				{
@@ -341,7 +334,7 @@ namespace SB_Shoot
 					p_GameState = START;
 					break;
 				}
-
+				
 				// START 상태에서의 키 조작
 				if (p_GameState == START)
 				{
