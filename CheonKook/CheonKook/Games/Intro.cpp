@@ -15,7 +15,7 @@ namespace SH_Intro
 	{
 		// clock_t 초기화
 		OldTime = clock();
-		PrintTime = 1 * 1000;
+		PrintTime = 0.5 * 1000;
 
 		// 출력 시작 행
 		startIndex = 0;
@@ -27,7 +27,9 @@ namespace SH_Intro
 		}
 
 		// 2페이지 (24 ~ 47행) // 수진언니 편집
-		sprintf(IntroPrint[24], "                               제작자");
+		sprintf(IntroPrint[22], "                               제작자");
+		sprintf(IntroPrint[23], "");
+		sprintf(IntroPrint[24], "                       플라잉볼       양소희");
 		sprintf(IntroPrint[25], "");
 		sprintf(IntroPrint[26], "                       가위바위보     강재희");
 		sprintf(IntroPrint[27], "");
